@@ -1,0 +1,26 @@
+========================================================================
+                      STRUCTURE VISUALIZER
+Path type: SOVEREIGN COMMUNITY TRUST & COMMODITY POOL
+========================================================================
+
+               +-------------------------------------------+
+               |        SOVEREIGN COMMUNITY MEMBERS        |
+               |  (Sovereign Representative, Co-Fiduciar...)  |
+               +-------------------------------------------+
+                                     |
+                                     v (Elect / Form)
+               +-------------------------------------------+
+               |          The Sovereign Peoples Trust      |
+               |  (Trustee/Rep: Sovereign Representative Fiduciary) |
+               |  (Contract Clause: Art. I, Sec. 10)       |
+               +-------------------------------------------+
+                                     |
+                                     v (Manages / Pools Reserves)
+               +-------------------------------------------+
+               |          Sovereign Commodity Pool         |
+               |  (50.0% Gold Bullion / 50.0% Silver)       |
+               |  (Backs Sovereign Liberty Credits)        |
+               +-------------------------------------------+
+                                     |
+                                     v (Distributes)
+                    [Commodity Dividend Resolution]

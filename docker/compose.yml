@@ -1,0 +1,12 @@
+services:
+  legal-peripherals-mcp:
+    build: .
+    environment:
+      - TRANSPORT=streamable-http
+      - HOST=0.0.0.0
+      - PORT=8000
+      - SOSTOOL=True
+      - EINTOOL=True
+      - STATUTETOOL=True
+    ports:
+      - "8000:8000"

@@ -1,0 +1,17 @@
+=== Form SS-4 Draft (Application for Employer Identification Number) ===
+Document Type: SS-4 draft
+1. Legal Name: The Sovereign Peoples Trust
+2. Trade Name: N/A
+3. Responsible Party: Sovereign Representative Fiduciary (SSN: XXX-XX-XXXX)
+4. Type of Entity: Common Law Trust
+5. Mailing Address: Common Law Jurisdiction, USA
+6. County and State: USA, WY
+7. Reason for Applying: To open a banking/financial account for the non-statutory Trust
+8. First Date Wages Paid: N/A
+9. Max Employees: 0
+10. Closing Month of Tax Year: December
+
+----------------------------------------
+Filing Status: FILING IMMEDIATELY
+Filing Timestamp: 2026-05-25T19:15:53.196763-04:00
+Filing Mode: Active Hours Direct Electronic Submit.

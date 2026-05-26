@@ -1,0 +1,1416 @@
+[
+  {
+    "domain": "Project Analysis",
+    "score": 74,
+    "grade": "C",
+    "findings": [
+      "Detected ecosystem marker: agent-utilities \u2192 Agent-Utilities Ecosystem",
+      "Protocol support: MCP"
+    ],
+    "justifications": [
+      {
+        "criterion": "has_pyproject",
+        "points": 10,
+        "evidence": "pyproject.toml and requirements.txt",
+        "reasoning": "Both pyproject.toml and requirements.txt exist, fulfilling mandatory Python project requirements"
+      },
+      {
+        "criterion": "project_type_detected",
+        "points": 10,
+        "evidence": "Agent-Utilities Ecosystem",
+        "reasoning": "Identified 1 ecosystem marker(s) in dependencies"
+      },
+      {
+        "criterion": "externalized_prompts",
+        "points": 0,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp",
+        "reasoning": "No prompts/ directory found. Prompts may be hardcoded in source."
+      },
+      {
+        "criterion": "observability",
+        "points": 0,
+        "evidence": "dependency list",
+        "reasoning": "No observability tools (logfire, sentry, opentelemetry) found"
+      },
+      {
+        "criterion": "testing_suite",
+        "points": 10,
+        "evidence": "tests dir: True, pytest dep: True",
+        "reasoning": "Tests directory exists, pytest in dependencies"
+      },
+      {
+        "criterion": "agents_md",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/AGENTS.md (2395 bytes)",
+        "reasoning": "AGENTS.md exists with comprehensive content"
+      },
+      {
+        "criterion": "pre_commit_hooks",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.pre-commit-config.yaml",
+        "reasoning": "Pre-commit configuration found for automated code quality checks"
+      },
+      {
+        "criterion": "gitignore",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.gitignore",
+        "reasoning": ".gitignore exists to prevent committing build artifacts and secrets"
+      },
+      {
+        "criterion": "env_template",
+        "points": 10,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.env.example",
+        "reasoning": "Environment template exists for onboarding and secret management"
+      },
+      {
+        "criterion": "protocol_support",
+        "points": 4,
+        "evidence": "MCP",
+        "reasoning": "1 communication protocol(s) detected"
+      }
+    ],
+    "details": {
+      "has_pyproject": true,
+      "has_requirements": true,
+      "dep_count": 6,
+      "project_types": [
+        "Agent-Utilities Ecosystem"
+      ],
+      "has_agent_skills": false
+    }
+  },
+  {
+    "domain": "Dependency Audit",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "dependency_freshness",
+        "points": 100,
+        "evidence": "source=/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/pyproject.toml total=6 major=0 minor=0 patch=0 not_installed=0",
+        "reasoning": "Audited 6 deps (6 installed, 0 constraint-only). 0 major, 0 minor, 0 patch updates."
+      }
+    ],
+    "packages": {
+      "pytest-cov": {
+        "current": "7.1.0",
+        "constraint": "Any",
+        "installed": "7.1.0",
+        "latest": "7.1.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Pytest plugin for measuring coverage."
+      },
+      "pytest-asyncio": {
+        "current": "1.3.0",
+        "constraint": "Any",
+        "installed": "1.3.0",
+        "latest": "1.3.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Pytest support for asyncio"
+      },
+      "agent-utilities": {
+        "current": "0.16.0",
+        "constraint": "0.16.0",
+        "installed": "0.16.0",
+        "latest": "0.16.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "Agent Utilities for Pydantic AI Agents"
+      },
+      "pytest-xdist": {
+        "current": "3.8.0",
+        "constraint": "3.6.0",
+        "installed": "3.8.0",
+        "latest": "3.8.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
+      },
+      "pytest": {
+        "current": "9.0.3",
+        "constraint": "Any",
+        "installed": "9.0.3",
+        "latest": "9.0.3",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "pytest: simple powerful testing with Python"
+      },
+      "playwright": {
+        "current": "1.60.0",
+        "constraint": "1.40.0",
+        "installed": "1.60.0",
+        "latest": "1.60.0",
+        "status": "up-to-date",
+        "version_source": "installed",
+        "summary": "A high-level API to automate web browsers"
+      }
+    }
+  },
+  {
+    "domain": "Codebase Optimization",
+    "score": 87,
+    "grade": "B",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "code_quality",
+        "points": 87,
+        "evidence": "{\"file_count\": 19, \"total_lines\": 1014, \"function_count\": 41, \"avg_complexity\": 3.73, \"max_complexity\": 14, \"avg_function_length\": 20.6, \"max_function_length\": 108, \"max_nesting_depth\": 5, \"duplication_ratio\": 0.0, \"long_functions\": 6, \"complex_functions\": 3, \"deep_nesting_functions\": 1, \"parse_errors\": 0, \"structural_issues\": 0, \"truly_monolithic\": 0}",
+        "reasoning": "Analyzed 19 files, 41 functions. Avg CC=3.7, max length=108, duplication=0.0%, 0 structural issues (0 monolithic)."
+      }
+    ],
+    "metrics": {
+      "file_count": 19,
+      "total_lines": 1014,
+      "function_count": 41,
+      "avg_complexity": 3.73,
+      "max_complexity": 14,
+      "avg_function_length": 20.6,
+      "max_function_length": 108,
+      "max_nesting_depth": 5,
+      "duplication_ratio": 0.0,
+      "long_functions": 6,
+      "complex_functions": 3,
+      "deep_nesting_functions": 1,
+      "parse_errors": 0,
+      "structural_issues": 0,
+      "truly_monolithic": 0
+    },
+    "top_complex": [
+      {
+        "name": "test_mcp_tools_routing",
+        "line": 19,
+        "length": 61,
+        "complexity": 14,
+        "nesting_depth": 0,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
+      },
+      {
+        "name": "run_enhancer",
+        "line": 13,
+        "length": 108,
+        "complexity": 12,
+        "nesting_depth": 3,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
+      },
+      {
+        "name": "handle_sos_lookup",
+        "line": 7,
+        "length": 74,
+        "complexity": 12,
+        "nesting_depth": 5,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
+      },
+      {
+        "name": "test_handle_statute_rules_delaware_corporation",
+        "line": 8,
+        "length": 16,
+        "complexity": 7,
+        "nesting_depth": 0,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py"
+      },
+      {
+        "name": "handle_ein_draft",
+        "line": 43,
+        "length": 57,
+        "complexity": 6,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
+      }
+    ],
+    "top_long": [
+      {
+        "name": "run_enhancer",
+        "line": 13,
+        "length": 108,
+        "complexity": 12,
+        "nesting_depth": 3,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
+      },
+      {
+        "name": "get_mcp_instance",
+        "line": 22,
+        "length": 80,
+        "complexity": 5,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py"
+      },
+      {
+        "name": "handle_sos_lookup",
+        "line": 7,
+        "length": 74,
+        "complexity": 12,
+        "nesting_depth": 5,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
+      },
+      {
+        "name": "test_mcp_tools_routing",
+        "line": 19,
+        "length": 61,
+        "complexity": 14,
+        "nesting_depth": 0,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
+      },
+      {
+        "name": "handle_ein_draft",
+        "line": 43,
+        "length": 57,
+        "complexity": 6,
+        "nesting_depth": 1,
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
+      }
+    ],
+    "structural_issues": [],
+    "flat_directories": []
+  },
+  {
+    "domain": "Security Analysis",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "security_posture",
+        "points": 100,
+        "evidence": "high=0 med=0 low=0 attack_surface={\"subprocess_calls\": 0, \"file_io_calls\": 2, \"network_endpoints\": 0, \"eval_exec_usage\": 0, \"sql_usage\": 0}",
+        "reasoning": "Scanned 19 files. Found 0 security findings. High: -0pts, Med: -0pts, Low: -0pts."
+      }
+    ],
+    "vulnerabilities": [],
+    "attack_surface": {
+      "subprocess_calls": 0,
+      "file_io_calls": 2,
+      "network_endpoints": 0,
+      "eval_exec_usage": 0,
+      "sql_usage": 0
+    }
+  },
+  {
+    "domain": "Test Coverage",
+    "score": 80,
+    "grade": "B",
+    "findings": [
+      "Test suite lacks intent diversity (only one type)",
+      "6 potential doc-test drift items"
+    ],
+    "justifications": [
+      {
+        "criterion": "test_coverage_quality",
+        "points": 80,
+        "evidence": "{\"test_file_count\": 8, \"test_count\": 21, \"source_file_count\": 19, \"test_to_source_ratio\": 1.11, \"intent_distribution\": {\"unit\": 21}, \"tests_without_assertions\": 0, \"concept_traced_tests\": 3, \"drift_items\": 6}",
+        "reasoning": "21 tests across 8 files. Ratio: 1.11. Intent: {'unit': 21}. 0 without assertions, 6 drift items."
+      }
+    ],
+    "metrics": {
+      "test_file_count": 8,
+      "test_count": 21,
+      "source_file_count": 19,
+      "test_to_source_ratio": 1.11,
+      "intent_distribution": {
+        "unit": 21
+      },
+      "tests_without_assertions": 0,
+      "concept_traced_tests": 3,
+      "drift_items": 6
+    },
+    "tests": [
+      {
+        "name": "test_init_dynamics",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_init_dynamics.py",
+        "line": 5,
+        "length": 4,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_statute_rules_delaware_corporation",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "line": 8,
+        "length": 16,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_statute_rules_texas_llc",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "line": 28,
+        "length": 12,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_statute_rules_fallback",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "line": 44,
+        "length": 12,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_concept_parity",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_concept_parity.py",
+        "line": 5,
+        "length": 3,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_startup",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_startup.py",
+        "line": 5,
+        "length": 5,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_sos_lookup_texas",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "line": 8,
+        "length": 9,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_sos_lookup_delaware",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "line": 21,
+        "length": 9,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_sos_lookup_wyoming",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "line": 34,
+        "length": 9,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_sos_lookup_nevada",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "line": 47,
+        "length": 8,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_sos_lookup_fallback",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "line": 59,
+        "length": 10,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_is_irs_active",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "line": 10,
+        "length": 15,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_get_next_filing_time",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "line": 28,
+        "length": 10,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_ein_draft_active_hours",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "line": 42,
+        "length": 23,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_ein_draft_off_hours",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "line": 69,
+        "length": 19,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_handle_ein_draft_bypass_override",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "line": 92,
+        "length": 17,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_api_client_basic_mock",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "line": 7,
+        "length": 4,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "LEGAL-001",
+        "has_assertions": true
+      },
+      {
+        "name": "test_api_client_endpoints",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "line": 14,
+        "length": 7,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "LEGAL-001",
+        "has_assertions": true
+      },
+      {
+        "name": "test_api_client_full_endpoints",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "line": 24,
+        "length": 18,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_server_registration",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
+        "line": 7,
+        "length": 8,
+        "intent": "unit",
+        "markers": [
+          "concept"
+        ],
+        "concept_id": "LEGAL-002",
+        "has_assertions": true
+      },
+      {
+        "name": "test_mcp_tools_routing",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
+        "line": 19,
+        "length": 61,
+        "intent": "unit",
+        "markers": [
+          "concept",
+          "asyncio"
+        ],
+        "concept_id": "",
+        "has_assertions": true
+      }
+    ],
+    "drift": [
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "\ud83d\uddfa\ufe0f system architecture",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "\u2699\ufe0f environment variables",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "\ud83d\ude80 deployment & installation",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "option 1: bare-metal setup (pip)",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "option 2: containerized setup (docker)",
+        "detail": "Feature heading in README has no corresponding test"
+      },
+      {
+        "type": "untested_feature",
+        "source": "README.md",
+        "feature": "\ud83e\uddea running the test suite",
+        "detail": "Feature heading in README has no corresponding test"
+      }
+    ]
+  },
+  {
+    "domain": "Documentation & Governance",
+    "score": 86,
+    "grade": "B",
+    "findings": [
+      "README.md missing sections: overview, usage|quick start",
+      "README.md is short (129 lines) \u2014 consider expanding",
+      "README missing: Has a Table of Contents",
+      "README missing: Has usage examples with code blocks",
+      "README missing: References /docs directory material"
+    ],
+    "justifications": [
+      {
+        "criterion": "documentation_quality",
+        "points": 86,
+        "evidence": "{\"README.md\": {\"exists\": true, \"missing\": [\"overview\", \"usage|quick start\"]}, \"AGENTS.md\": {\"exists\": true, \"missing\": []}, \"STANDARDS.md\": {\"exists\": false, \"missing\": []}, \"CONTRIBUTING.md\": {\"exists\": false, \"missing\": []}, \"CHANGELOG.md\": {\"exists\": true, \"missing\": []}, \"LICENSE\": {\"exists\": true, \"missing\": []}, \"docs/\": {\"exists\": true, \"missing\": []}}",
+        "reasoning": "Audited 6 standard docs + docs/ directory. 1 broken references, 5 docs present. README industry grade: D (68.8%)."
+      }
+    ],
+    "doc_results": {
+      "README.md": {
+        "exists": true,
+        "size": 5444,
+        "headings": [
+          "\u2696\ufe0f Legal Peripherals MCP Server",
+          "\ud83d\uddfa\ufe0f System Architecture",
+          "\ud83d\udee0\ufe0f MCP Tools Mapping",
+          "\u2699\ufe0f Environment Variables",
+          "\ud83d\ude80 Deployment & Installation",
+          "Option 1: Bare-Metal Setup (pip)",
+          "Option 2: Containerized Setup (Docker)",
+          "\ud83e\uddea Running the Test Suite",
+          "Run tests with detailed verbose output"
+        ],
+        "missing_sections": [
+          "overview",
+          "usage|quick start"
+        ],
+        "heading_count": 9,
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "project_overview"
+      },
+      "AGENTS.md": {
+        "exists": true,
+        "size": 2223,
+        "headings": [
+          "Legal Peripherals MCP Agent Specs",
+          "Tech Stack & Architecture",
+          "Commands",
+          "Quality & Linting",
+          "Execution & Run",
+          "Testing Suite",
+          "Project Structure",
+          "File Tree",
+          "Concept Registry",
+          "When Stuck"
+        ],
+        "missing_sections": [],
+        "heading_count": 10,
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "agentic_metadata"
+      },
+      "STANDARDS.md": {
+        "exists": false,
+        "missing_sections": [],
+        "size": 0,
+        "headings": [],
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "standards"
+      },
+      "CONTRIBUTING.md": {
+        "exists": false,
+        "missing_sections": [],
+        "size": 0,
+        "headings": [],
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "contributing"
+      },
+      "CHANGELOG.md": {
+        "exists": true,
+        "size": 863,
+        "headings": [
+          "Changelog",
+          "[Unreleased]",
+          "Added",
+          "[0.15.0] - 2026-05-25",
+          "Added"
+        ],
+        "missing_sections": [],
+        "heading_count": 5,
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "changelog"
+      },
+      "LICENSE": {
+        "exists": true,
+        "size": 1080,
+        "headings": [],
+        "missing_sections": [],
+        "heading_count": 0,
+        "stale": true,
+        "last_modified": "unknown",
+        "category": "license"
+      },
+      "docs/": {
+        "exists": true,
+        "file_count": 3,
+        "files": [
+          "docs/concepts.md",
+          "docs/overview.md",
+          "docs/index.md"
+        ]
+      }
+    },
+    "drift": [
+      {
+        "type": "broken_reference",
+        "doc": "AGENTS.md",
+        "reference": "CONCEPT:ECO-4.0",
+        "detail": "Referenced file 'CONCEPT:ECO-4.0' not found in project"
+      },
+      {
+        "type": "info",
+        "doc": "README.md",
+        "reference": "-r",
+        "detail": "README references 1 install commands"
+      }
+    ],
+    "readme_grade": {
+      "score": 22,
+      "max_score": 32,
+      "percentage": 68.8,
+      "grade": "D",
+      "criteria": {
+        "has_title": true,
+        "has_badges": true,
+        "has_description": true,
+        "has_toc": false,
+        "has_installation": true,
+        "has_usage": false,
+        "has_api_docs": false,
+        "has_architecture": true,
+        "has_contributing": false,
+        "has_license": false,
+        "has_code_blocks": true,
+        "has_docs_refs": false,
+        "no_broken_links": true,
+        "reasonable_length": false,
+        "has_cli_api_details": true,
+        "has_mcp_configs": true,
+        "has_agent_configs": true,
+        "has_env_var_docs": true,
+        "has_mcp_tool_table": true,
+        "has_deployment_docs": true
+      },
+      "findings": [
+        "README.md is short (129 lines) \u2014 consider expanding",
+        "README missing: Has a Table of Contents",
+        "README missing: Has usage examples with code blocks",
+        "README missing: References /docs directory material"
+      ]
+    }
+  },
+  {
+    "domain": "Architecture & Design Patterns",
+    "score": 85,
+    "grade": "B",
+    "findings": [
+      "No discernible layer architecture (no domain/service/adapter separation)"
+    ],
+    "justifications": [
+      {
+        "criterion": "architecture_quality",
+        "points": 85,
+        "evidence": "{\"layers\": 0, \"di_ratio\": 0.0, \"solid_violations\": 0}",
+        "reasoning": "Analyzed 19 files. 0/5 architecture layers present, DI ratio: 0%, 0 SOLID violations."
+      }
+    ],
+    "analysis": {
+      "solid_findings": [],
+      "layer_architecture": {
+        "has_domain_layer": false,
+        "has_adapter_layer": false,
+        "has_port_interfaces": false,
+        "has_service_layer": false,
+        "has_model_layer": false
+      },
+      "dependency_injection": {
+        "total_classes": 2,
+        "di_classes": 0,
+        "di_ratio": 0.0
+      },
+      "event_driven": {
+        "event_classes": 0,
+        "callback_patterns": 0,
+        "observer_patterns": 0,
+        "signal_patterns": 0
+      },
+      "file_count": 19
+    }
+  },
+  {
+    "domain": "Concept Traceability",
+    "score": 86,
+    "grade": "B",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "concept_traceability",
+        "points": 86,
+        "evidence": "{\"total_concepts\": 5, \"well_traced\": 3, \"orphans\": 2, \"drift\": 0, \"code_concepts\": 9, \"doc_concepts\": 11, \"test_concepts\": 24, \"decorator_concepts\": 24, \"tests_missing_markers\": 0, \"functions_missing_docstrings\": 12, \"registry_concepts\": 4, \"unimplemented_concepts\": 0}",
+        "reasoning": "5 unique concepts found. 3 fully traced (code+docs+tests), 2 orphans, 0 drifted. 0 tests without concept markers. 12 functions without concept docstrings."
+      }
+    ],
+    "metrics": {
+      "total_concepts": 5,
+      "well_traced": 3,
+      "orphans": 2,
+      "drift": 0,
+      "code_concepts": 9,
+      "doc_concepts": 11,
+      "test_concepts": 24,
+      "decorator_concepts": 24,
+      "tests_missing_markers": 0,
+      "functions_missing_docstrings": 12,
+      "registry_concepts": 4,
+      "unimplemented_concepts": 0
+    },
+    "concept_map": {
+      "LEGAL-001": {
+        "code": 4,
+        "docs": 3,
+        "test": 2,
+        "test_decorator": 11,
+        "test_docstring": 0
+      },
+      "LEGAL-003": {
+        "code": 2,
+        "docs": 3,
+        "test": 0,
+        "test_decorator": 3,
+        "test_docstring": 0
+      },
+      "LEGAL-007": {
+        "code": 1,
+        "docs": 0,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      },
+      "LEGAL-002": {
+        "code": 2,
+        "docs": 3,
+        "test": 1,
+        "test_decorator": 7,
+        "test_docstring": 0
+      },
+      "ECO-4.0": {
+        "code": 0,
+        "docs": 2,
+        "test": 0,
+        "test_decorator": 0,
+        "test_docstring": 0
+      }
+    },
+    "orphans": [
+      {
+        "concept_id": "LEGAL-007",
+        "present_in": [
+          "code"
+        ],
+        "missing_from": [
+          "docs",
+          "test"
+        ]
+      },
+      {
+        "concept_id": "ECO-4.0",
+        "present_in": [
+          "docs"
+        ],
+        "missing_from": [
+          "code",
+          "test"
+        ]
+      }
+    ],
+    "drift": [],
+    "tests_missing_markers": [],
+    "functions_missing_docstrings": [
+      {
+        "function": "run_enhancer",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py",
+        "line": 13,
+        "length": 108
+      },
+      {
+        "function": "get_mcp_instance",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "line": 22,
+        "length": 80
+      },
+      {
+        "function": "draft_ein_form",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "line": 49,
+        "length": 31
+      },
+      {
+        "function": "lookup_statute_rules",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "line": 83,
+        "length": 15
+      },
+      {
+        "function": "request",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/api_client.py",
+        "line": 15,
+        "length": 17
+      },
+      {
+        "function": "get_client",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/auth.py",
+        "line": 10,
+        "length": 15
+      },
+      {
+        "function": "handle_statute_rules",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_statute.py",
+        "line": 34,
+        "length": 45
+      },
+      {
+        "function": "is_irs_active",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "line": 10,
+        "length": 16
+      },
+      {
+        "function": "get_next_filing_time",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "line": 28,
+        "length": 13
+      },
+      {
+        "function": "handle_ein_draft",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "line": 43,
+        "length": 57
+      },
+      {
+        "function": "handle_sos_lookup",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py",
+        "line": 7,
+        "length": 74
+      },
+      {
+        "function": "mock_ctx",
+        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/conftest.py",
+        "line": 5,
+        "length": 12
+      }
+    ],
+    "unimplemented_concepts": []
+  },
+  {
+    "domain": "Linting & Formatting",
+    "score": 100,
+    "grade": "A",
+    "findings": [
+      "Total lint findings: 0 (high/error: 0, medium/warning: 0, low: 0)"
+    ],
+    "justifications": [
+      {
+        "criterion": "lint_compliance",
+        "points": 100,
+        "evidence": "ruff=0, bandit=0, mypy=0",
+        "reasoning": "0 total findings across 3 tools. High/error: -0pts, Med/warning: -0pts, Low: -0pt."
+      }
+    ],
+    "tool_results": {
+      "ruff": {
+        "available": true,
+        "finding_count": 0,
+        "returncode": 1
+      },
+      "bandit": {
+        "available": true,
+        "finding_count": 0,
+        "returncode": 1
+      },
+      "mypy": {
+        "available": true,
+        "finding_count": 0,
+        "returncode": 1
+      }
+    },
+    "all_findings": []
+  },
+  {
+    "domain": "Pre-Commit Compliance",
+    "score": 97,
+    "grade": "A",
+    "findings": [
+      "1 hook(s) may be outdated: ruff-pre-commit"
+    ],
+    "justifications": [
+      {
+        "criterion": "precommit_compliance",
+        "points": 97,
+        "evidence": "{\"total_hooks\": 2, \"passed\": 0, \"failed\": 0, \"skipped\": 0, \"outdated_hooks\": 1, \"pytest_hooks_skipped\": 0, \"exit_code\": 0}",
+        "reasoning": "Ran pre-commit with 2 hooks: 0 passed, 0 failed, 0 skipped. 1 potentially outdated. 0 pytest hooks deferred to CE-016."
+      }
+    ],
+    "hook_results": [
+      {
+        "hook": "ruff.................................................(no files to",
+        "status": "check)skipped"
+      },
+      {
+        "hook": "ruff-format..........................................(no files to",
+        "status": "check)skipped"
+      }
+    ],
+    "pytest_hooks_skipped": [],
+    "outdated_hooks": [
+      {
+        "repo": "https://github.com/astral-sh/ruff-pre-commit",
+        "current_rev": "v0.3.4",
+        "issue": "Pre-1.0 version \u2014 check for updates"
+      }
+    ],
+    "metrics": {
+      "total_hooks": 2,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "outdated_hooks": 1,
+      "pytest_hooks_skipped": 0,
+      "exit_code": 0
+    }
+  },
+  {
+    "domain": "Test Execution",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "test_execution",
+        "points": 100,
+        "evidence": "{\"frameworks_detected\": 1, \"total_passed\": 21, \"total_failed\": 0, \"total_errors\": 0, \"pass_rate\": 1.0, \"timeout\": 300}",
+        "reasoning": "Executed 1 framework(s). 21 passed, 0 failed, 0 errors. Pass rate: 100%."
+      }
+    ],
+    "framework_results": [
+      {
+        "language": "python",
+        "framework": "pytest",
+        "command": [
+          "python",
+          "-m",
+          "pytest",
+          "--tb=line",
+          "-q",
+          "--timeout=300",
+          "--no-header"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "parsed": {
+          "passed": 21,
+          "failed": 0,
+          "errors": 0,
+          "warnings": 26,
+          "skipped": 0,
+          "failures": []
+        }
+      }
+    ],
+    "metrics": {
+      "frameworks_detected": 1,
+      "total_passed": 21,
+      "total_failed": 0,
+      "total_errors": 0,
+      "pass_rate": 1.0,
+      "timeout": 300
+    }
+  },
+  {
+    "domain": "Directory Organization",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "directory_organization",
+        "points": 100,
+        "evidence": "{\"total_source_files\": 35, \"total_directories\": 9, \"max_depth\": 3, \"avg_depth\": 1.2, \"crowded_dirs_20plus\": 0, \"severely_crowded_40plus\": 0, \"monolithic_dirs\": 0, \"empty_dirs\": 0, \"avg_files_per_dir\": 3.9, \"rogue_scripts\": 0}",
+        "reasoning": "35 files across 9 directories. Max depth: 3, avg files/dir: 3.9. 0 crowded, 0 severely crowded, 0 monolithic, 0 rogue scripts."
+      }
+    ],
+    "metrics": {
+      "total_source_files": 35,
+      "total_directories": 9,
+      "max_depth": 3,
+      "avg_depth": 1.2,
+      "crowded_dirs_20plus": 0,
+      "severely_crowded_40plus": 0,
+      "monolithic_dirs": 0,
+      "empty_dirs": 0,
+      "avg_files_per_dir": 3.9,
+      "rogue_scripts": 0
+    },
+    "crowded_dirs": [],
+    "monolithic_dirs": [],
+    "suggestions": [],
+    "rogue_scripts": []
+  },
+  {
+    "domain": "Version Sync Analysis",
+    "score": 60,
+    "grade": "D",
+    "findings": [
+      "Found 2 file(s) with version '0.15.0' that are NOT tracked in .bumpversion.cfg:",
+      "  - .specify/results.json",
+      "  - .specify/reports/code_enhancement_report.md"
+    ],
+    "justifications": [
+      {
+        "criterion": "bumpversion_exists",
+        "points": 20,
+        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.bumpversion.cfg",
+        "reasoning": ".bumpversion.cfg found"
+      },
+      {
+        "criterion": "current_version_defined",
+        "points": 20,
+        "evidence": "0.15.0",
+        "reasoning": "Current version tracked is 0.15.0"
+      },
+      {
+        "criterion": "files_tracked",
+        "points": 20,
+        "evidence": "1 files tracked",
+        "reasoning": "Found 1 files tracked in .bumpversion.cfg"
+      },
+      {
+        "criterion": "version_drift_check",
+        "points": 0,
+        "evidence": "2 untracked files",
+        "reasoning": "Version definitions found in codebase that are missing from .bumpversion.cfg"
+      }
+    ],
+    "details": {
+      "tracked_files": [
+        "pyproject.toml"
+      ],
+      "drifted_files": [
+        ".specify/results.json",
+        ".specify/reports/code_enhancement_report.md"
+      ]
+    }
+  },
+  {
+    "domain": "Changelog Audit",
+    "score": 75,
+    "grade": "C",
+    "findings": [
+      "CHANGELOG.md exists but could not be parsed \u2014 check format compliance",
+      "No changelog entries within the last 30 days",
+      "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'"
+    ],
+    "justifications": [
+      {
+        "criterion": "changelog_quality",
+        "points": 75,
+        "evidence": "{\"exists\": true, \"parseable\": false, \"version_count\": 0, \"has_drift\": false, \"dep_deltas_found\": 0}",
+        "reasoning": "CHANGELOG.md exists. 0 versions tracked. 0 dependency changelogs analyzed."
+      }
+    ],
+    "format_validation": {
+      "exists": true,
+      "parseable": false,
+      "has_unreleased": false,
+      "version_count": 0,
+      "uses_semver": true,
+      "valid_categories": true,
+      "has_dates": true,
+      "has_header": true,
+      "issues": [
+        "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'"
+      ]
+    },
+    "version_drift": {
+      "has_drift": false,
+      "changelog_version": null,
+      "pyproject_version": "0.15.0"
+    },
+    "dependency_deltas": {}
+  },
+  {
+    "domain": "Pytest Quality",
+    "score": 84,
+    "grade": "B",
+    "findings": [
+      "Test directory lacks subdirectory organization (consider unit/, integration/, e2e/)",
+      "Low fixture usage: only 10% of tests use fixtures",
+      "No @pytest.mark.parametrize usage \u2014 consider data-driven tests"
+    ],
+    "justifications": [
+      {
+        "criterion": "pytest_quality",
+        "points": 84,
+        "evidence": "{\"test_files\": 8, \"total_tests\": 21, \"descriptive_name_ratio\": 0.95, \"generic_names\": 0, \"fixture_usage_ratio\": 0.1, \"parametrize_users\": 0, \"conftest_fixtures\": 1, \"no_assertion_tests\": 0, \"weak_assertion_tests\": 1, \"duplicate_groups\": 0, \"large_files\": 0, \"over_mocked_tests\": 0, \"very_long_tests\": 0, \"subscores\": {\"naming\": 20, \"structure\": 17, \"fixtures\": 7, \"assertions\": 20, \"ai_slop\": 20}}",
+        "reasoning": "21 tests across 8 files. Naming: 20/20, Structure: 17/20, Fixtures: 7/20, Assertions: 20/20, AI Slop: 20/20."
+      }
+    ],
+    "metrics": {
+      "test_files": 8,
+      "total_tests": 21,
+      "descriptive_name_ratio": 0.95,
+      "generic_names": 0,
+      "fixture_usage_ratio": 0.1,
+      "parametrize_users": 0,
+      "conftest_fixtures": 1,
+      "no_assertion_tests": 0,
+      "weak_assertion_tests": 1,
+      "duplicate_groups": 0,
+      "large_files": 0,
+      "over_mocked_tests": 0,
+      "very_long_tests": 0,
+      "subscores": {
+        "naming": 20,
+        "structure": 17,
+        "fixtures": 7,
+        "assertions": 20,
+        "ai_slop": 20
+      }
+    },
+    "conftest": {
+      "conftest_count": 1,
+      "total_shared_fixtures": 1,
+      "has_root_conftest": true
+    },
+    "duplicates": [],
+    "large_files": []
+  },
+  {
+    "domain": "Environment Variables",
+    "score": 100,
+    "grade": "A",
+    "findings": [],
+    "justifications": [
+      {
+        "criterion": "env_var_documentation",
+        "points": 100,
+        "evidence": "{\"total_vars\": 7, \"python_vars\": 7, \"dockerfile_vars\": 0, \"compose_vars\": 0, \"dotenv_vars\": 7, \"readme_documented\": 7, \"readme_undocumented\": 0, \"documentation_coverage\": 1.0}",
+        "reasoning": "Found 7 unique env vars across 18 occurrences. README documents 7/7. Has .env.example."
+      }
+    ],
+    "metrics": {
+      "total_vars": 7,
+      "python_vars": 7,
+      "dockerfile_vars": 0,
+      "compose_vars": 0,
+      "dotenv_vars": 7,
+      "readme_documented": 7,
+      "readme_undocumented": 0,
+      "documentation_coverage": 1.0
+    },
+    "variables": {
+      "SOSTOOL": {
+        "name": "SOSTOOL",
+        "sources": [
+          "legal_peripherals_mcp/mcp_server.py:35",
+          ".env:1",
+          ".env.example:2"
+        ],
+        "defaults": [
+          "True"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "EINTOOL": {
+        "name": "EINTOOL",
+        "sources": [
+          "legal_peripherals_mcp/mcp_server.py:47",
+          ".env:2",
+          ".env.example:3"
+        ],
+        "defaults": [
+          "True"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "STATUTETOOL": {
+        "name": "STATUTETOOL",
+        "sources": [
+          "legal_peripherals_mcp/mcp_server.py:81",
+          ".env:3",
+          ".env.example:4"
+        ],
+        "defaults": [
+          "True"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "LEGAL_PERIPHERALS_BASE_URL": {
+        "name": "LEGAL_PERIPHERALS_BASE_URL",
+        "sources": [
+          "legal_peripherals_mcp/auth.py:12",
+          ".env.example:10"
+        ],
+        "defaults": [
+          "http://localhost:8000"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "LEGAL_PERIPHERALS_TOKEN": {
+        "name": "LEGAL_PERIPHERALS_TOKEN",
+        "sources": [
+          "legal_peripherals_mcp/auth.py:13",
+          ".env.example:11"
+        ],
+        "defaults": [],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "LEGAL_PERIPHERALS_SSL_VERIFY": {
+        "name": "LEGAL_PERIPHERALS_SSL_VERIFY",
+        "sources": [
+          "legal_peripherals_mcp/auth.py:14",
+          ".env.example:12"
+        ],
+        "defaults": [
+          "True"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      },
+      "BYPASS_IRS_FILING_HOURS": {
+        "name": "BYPASS_IRS_FILING_HOURS",
+        "sources": [
+          "legal_peripherals_mcp/mcp/mcp_ein.py:62",
+          ".env:4",
+          ".env.example:7"
+        ],
+        "defaults": [
+          "True",
+          "False"
+        ],
+        "source_types": [
+          "dotenv",
+          "python"
+        ]
+      }
+    },
+    "readme_coverage": {
+      "documented": [
+        "BYPASS_IRS_FILING_HOURS",
+        "EINTOOL",
+        "LEGAL_PERIPHERALS_BASE_URL",
+        "LEGAL_PERIPHERALS_SSL_VERIFY",
+        "LEGAL_PERIPHERALS_TOKEN",
+        "SOSTOOL",
+        "STATUTETOOL"
+      ],
+      "undocumented": [],
+      "coverage": 1.0
+    }
+  }
+]

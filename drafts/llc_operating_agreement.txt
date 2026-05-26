@@ -1,0 +1,36 @@
+========================================================================
+              LIMITED LIABILITY COMPANY OPERATING AGREEMENT
+                                OF
+                       Liberty Holdings LLC
+========================================================================
+
+1. FORMATION:
+   This Limited Liability Company is formed pursuant to the LLC Act of the
+   State of DE.
+
+2. SOLE MEMBER:
+   The SOLE MEMBER of this Limited Liability Company is:
+   The Liberty Family Trust (formed with Trustee Sovereign Representative)
+
+3. CAPITAL CONTRIBUTIONS & PERCENTAGE INTEREST:
+   The Trust holds a 100% membership interest in Liberty Holdings LLC.
+   Sec. 18-502 states a member is obligated to perform any promise to contribute cash, property, or services, even if unable because of death, disability, or other reason.
+
+4. MANAGEMENT & VOTING:
+   Management of the Company is vested solely in the Member.
+   Under DGCL / LLC Act, voting is based on member percentage interest (majority in interest wins) unless otherwise provided in the Operating Agreement.
+
+5. INDEMNIFICATION:
+   Delaware LLC Act Sec. 18-108 allows maximum freedom of contract, enabling broad indemnification of members/managers for any and all claims except willful misconduct or bad faith.
+
+6. TEMPLATE REFERENCE:
+=== DELAWARE LLC OPERATING AGREEMENT TEMPLATE ===
+This Operating Agreement is made by the members...
+1. Formation...
+2. Management: Vested in Managers/Members...
+3. Voting: Majority in Interest...
+
+7. EXECUTED BY MEMBER:
+   Member: The Liberty Family Trust
+   By: ___________________________ (Sovereign Representative, Trustee)
+   Dated: 2026-05-25

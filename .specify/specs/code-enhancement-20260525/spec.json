@@ -1,0 +1,137 @@
+{
+  "feature_id": "code-enhancement-20260525",
+  "title": "Code Enhancement: legal-peripherals-mcp",
+  "created": "2026-05-25T22:13:48.023168+00:00",
+  "overview": "Automated code enhancement review for legal-peripherals-mcp. Covers 16 analysis domains.",
+  "user_stories": [
+    {
+      "role": "developer",
+      "action": "address Project Analysis findings (grade: C, score: 74)",
+      "value": "improve project project analysis from C to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Version Sync Analysis findings (grade: D, score: 60)",
+      "value": "improve project version sync analysis from D to at least B (80+)"
+    },
+    {
+      "role": "developer",
+      "action": "address Changelog Audit findings (grade: C, score: 75)",
+      "value": "improve project changelog audit from C to at least B (80+)"
+    }
+  ],
+  "functional_requirements": [
+    {
+      "id": "FR-001",
+      "description": "Test suite lacks intent diversity (only one type)",
+      "testable": true
+    },
+    {
+      "id": "FR-002",
+      "description": "6 potential doc-test drift items",
+      "testable": true
+    },
+    {
+      "id": "FR-003",
+      "description": "README.md missing sections: overview, usage|quick start",
+      "testable": true
+    },
+    {
+      "id": "FR-004",
+      "description": "README.md is short (129 lines) \u2014 consider expanding",
+      "testable": true
+    },
+    {
+      "id": "FR-005",
+      "description": "README missing: Has a Table of Contents",
+      "testable": true
+    },
+    {
+      "id": "FR-006",
+      "description": "README missing: Has usage examples with code blocks",
+      "testable": true
+    },
+    {
+      "id": "FR-007",
+      "description": "README missing: References /docs directory material",
+      "testable": true
+    },
+    {
+      "id": "FR-008",
+      "description": "No discernible layer architecture (no domain/service/adapter separation)",
+      "testable": true
+    },
+    {
+      "id": "FR-009",
+      "description": "Total lint findings: 0 (high/error: 0, medium/warning: 0, low: 0)",
+      "testable": true
+    },
+    {
+      "id": "FR-010",
+      "description": "1 hook(s) may be outdated: ruff-pre-commit",
+      "testable": true
+    },
+    {
+      "id": "FR-011",
+      "description": "Found 2 file(s) with version '0.15.0' that are NOT tracked in .bumpversion.cfg:",
+      "testable": true
+    },
+    {
+      "id": "FR-012",
+      "description": "  - .specify/results.json",
+      "testable": true
+    },
+    {
+      "id": "FR-013",
+      "description": "  - .specify/reports/code_enhancement_report.md",
+      "testable": true
+    },
+    {
+      "id": "FR-014",
+      "description": "CHANGELOG.md exists but could not be parsed \u2014 check format compliance",
+      "testable": true
+    },
+    {
+      "id": "FR-015",
+      "description": "No changelog entries within the last 30 days",
+      "testable": true
+    },
+    {
+      "id": "FR-016",
+      "description": "keepachangelog not installed \u2014 pip install 'universal-skills[code-enhancer]'",
+      "testable": true
+    },
+    {
+      "id": "FR-017",
+      "description": "Test directory lacks subdirectory organization (consider unit/, integration/, e2e/)",
+      "testable": true
+    },
+    {
+      "id": "FR-018",
+      "description": "Low fixture usage: only 10% of tests use fixtures",
+      "testable": true
+    },
+    {
+      "id": "FR-019",
+      "description": "No @pytest.mark.parametrize usage \u2014 consider data-driven tests",
+      "testable": true
+    }
+  ],
+  "success_criteria": [
+    {
+      "metric": "Overall GPA",
+      "current": 3.19,
+      "target": 3.0
+    },
+    {
+      "metric": "Domains at B or above",
+      "current": 13,
+      "target": 16
+    },
+    {
+      "metric": "Actionable findings",
+      "current": 19,
+      "target": 0
+    }
+  ]
+}

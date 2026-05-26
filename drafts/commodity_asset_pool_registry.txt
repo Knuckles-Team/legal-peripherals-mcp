@@ -1,0 +1,30 @@
+========================================================================
+                     COMMODITY ASSET POOL REGISTRY
+                                   OF
+                     Sovereign Commodity Pool
+========================================================================
+
+1. ESTABLISHMENT OF COMMODITY POOL:
+   Pursuant to the Constitutional Trust Indenture of The Sovereign Peoples Trust, there is
+   hereby established a private Commodity Asset Pool to defend community wealth
+   against inflationary fiat currency depreciation.
+
+2. CAPITAL POOLING & CONVERSION TO METALS:
+   - All community funds and capital contributed to the Pool shall be converted into
+     physical gold and silver bullion.
+   - Allocation Ratio:
+     * 50.0% Physical Gold Bullion (held in secure vaults)
+     * 50.0% Physical Silver Bullion (held in secure vaults)
+
+3. LOCAL ECONOMIC CREDIT PROTOCOL:
+   - To facilitate community trade, the Pool issues local fractionally backed
+     credits, denominated in "Sovereign Liberty Credits" (SLC).
+   - Each SLC is backed 100% by the physical gold/silver reserves stored in
+     the vault at a fixed exchange rate.
+   - Members can redeem SLC for physical bullion coordinates upon demand.
+
+4. CURRENT POOL STANDINGS:
+   Reserves: Physical Gold Bullion & Physical Silver Bullion
+   Assigned Asset Managers:
+   - Sovereign Representative Fiduciary (Primary Custodian)
+   - Sovereign Representative, Co-Fiduciary A, Co-Fiduciary B (Co-Custodian Board)

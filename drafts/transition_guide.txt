@@ -1,0 +1,28 @@
+========================================================================
+                      TRANSITION & FILING GUIDE
+========================================================================
+
+You have successfully drafted the necessary legal documents to shift ownership of your
+existing LLC (Liberty Holdings LLC) to your Trust (The Liberty Family Trust). Follow these step-by-step
+filing guidelines to complete the transfer:
+
+Step 1: Execute Legal Documents
+- Assignor (Sovereign Representative) and Trustee (Sovereign Representative) must sign and date the
+  Assignment of Membership Interest.
+- The Trustee must sign the Amended & Restated Operating Agreement.
+- File both documents securely with your corporate records.
+
+Step 2: Secretary of State Filing (if applicable)
+- In the State of DE, verify if the state requires reporting members or managers.
+- If member lists are filed publicly, submit an Amendment of Certificate/Articles to
+  designate The Liberty Family Trust as the sole managing member.
+
+Step 3: Update Bank / Financial Institution Accounts
+- Present the signed Assignment of Membership Interest and Amended Operating Agreement
+  to your bank representatives to update signing authorities and account ownership to
+  the Trust name.
+
+Step 4: Notify the IRS (Form 8822-B)
+- Since the LLC is now solely owned by the Trust, file Form 8822-B (Change of Address or
+  Responsible Party) with the IRS if there has been a change in the active responsible party
+  or primary mailing coordinates.
