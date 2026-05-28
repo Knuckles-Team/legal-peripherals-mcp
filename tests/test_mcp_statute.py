@@ -1,7 +1,9 @@
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
-from unittest.mock import MagicMock, AsyncMock
 
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
+
 
 @pytest.mark.concept("LEGAL-003")
 @pytest.mark.asyncio
@@ -19,7 +21,9 @@ async def test_handle_statute_rules_delaware_corporation():
     assert "DELAWARE CERTIFICATE OF INCORPORATION TEMPLATE" in res_voting
 
     # Test indemnification topic
-    res_indem = await handle_statute_rules("DE", "Corporation", "indemnification", ctx=mock_ctx)
+    res_indem = await handle_statute_rules(
+        "DE", "Corporation", "indemnification", ctx=mock_ctx
+    )
     assert "DGCL Sec. 145" in res_indem
 
 
@@ -31,7 +35,9 @@ async def test_handle_statute_rules_texas_llc():
     mock_ctx.info = AsyncMock()
 
     # Test capital_contributions topic
-    res_contrib = await handle_statute_rules("TX", "LLC", "capital_contributions", ctx=mock_ctx)
+    res_contrib = await handle_statute_rules(
+        "TX", "LLC", "capital_contributions", ctx=mock_ctx
+    )
     assert "State: TX" in res_contrib
     assert "Entity Type: LLC" in res_contrib
     assert "Topic: capital_contributions" in res_contrib

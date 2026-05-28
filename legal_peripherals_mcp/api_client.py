@@ -1,4 +1,5 @@
 """CONCEPT:LEGAL-001 Dynamic client facade orchestration and resource mappings."""
+
 import requests
 from agent_utilities.base_utilities import get_logger
 

@@ -1,12 +1,13 @@
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
-from unittest.mock import MagicMock, AsyncMock
-from datetime import datetime
 
 
 @pytest.mark.concept("LEGAL-002")
 def test_mcp_server_registration():
     """CONCEPT:LEGAL-002 Test that tools register successfully."""
     from legal_peripherals_mcp.mcp_server import get_mcp_instance
+
     mcp = get_mcp_instance()
     assert mcp is not None
 
@@ -19,6 +20,7 @@ def test_mcp_server_registration():
 async def test_mcp_tools_routing():
     """Verify that all tools route correctly."""
     from legal_peripherals_mcp.mcp_server import get_mcp_instance
+
     mcp = get_mcp_instance()
 
     # Extract registered tools from _components dict values
@@ -33,18 +35,14 @@ async def test_mcp_tools_routing():
 
     # Test sos_entity_lookup for TX
     tx_res = await tools["sos_entity_lookup"].fn(
-        state="TX",
-        entity_name="Antigravity LLC",
-        ctx=mock_ctx
+        state="TX", entity_name="Antigravity LLC", ctx=mock_ctx
     )
     assert "TX" in tx_res
     assert "Antigravity LLC" in tx_res
 
     # Test sos_entity_lookup fallback for CA
     ca_res = await tools["sos_entity_lookup"].fn(
-        state="CA",
-        entity_name="Antigravity LLC",
-        ctx=mock_ctx
+        state="CA", entity_name="Antigravity LLC", ctx=mock_ctx
     )
     assert "CA" in ca_res
     assert "LLM fallback" in ca_res
@@ -62,17 +60,14 @@ async def test_mcp_tools_routing():
         first_date_wages_paid="2026-06-01",
         max_employees=5,
         closing_month_tax_year="December",
-        ctx=mock_ctx
+        ctx=mock_ctx,
     )
     assert "Antigravity LLC" in ein_res
     assert "SS-4 draft" in ein_res
 
     # Test lookup_statute_rules
     statute_res = await tools["lookup_statute_rules"].fn(
-        state="DE",
-        entity_type="Corporation",
-        topic="voting",
-        ctx=mock_ctx
+        state="DE", entity_type="Corporation", topic="voting", ctx=mock_ctx
     )
     assert "DE" in statute_res
     assert "Corporation" in statute_res

@@ -1,4 +1,5 @@
 """CONCEPT:LEGAL-002 Form SS-4 EIN preparer and off-hours filing scheduler."""
+
 import asyncio
 import os
 import re
@@ -13,11 +14,21 @@ logger = get_logger(__name__)
 EIN_TIMEOUT_SECONDS = int(os.getenv("EIN_TIMEOUT_SECONDS", "30"))
 
 # Valid business types accepted by IRS Form SS-4.
-VALID_BUSINESS_TYPES = frozenset({
-    "LLC", "Corporation", "S Corporation", "Partnership",
-    "Sole Proprietor", "Trust", "Estate", "Non-Profit",
-    "Church", "Government", "Other",
-})
+VALID_BUSINESS_TYPES = frozenset(
+    {
+        "LLC",
+        "Corporation",
+        "S Corporation",
+        "Partnership",
+        "Sole Proprietor",
+        "Trust",
+        "Estate",
+        "Non-Profit",
+        "Church",
+        "Government",
+        "Other",
+    }
+)
 
 
 class EINDraftError(Exception):
@@ -53,9 +64,7 @@ def _validate_ein_inputs(
             f"Invalid SSN format: '{responsible_party_ssn}'. Expected NNN-NN-NNNN."
         )
     if max_employees < 0:
-        raise EINDraftError(
-            f"max_employees must be >= 0, got {max_employees}."
-        )
+        raise EINDraftError(f"max_employees must be >= 0, got {max_employees}.")
 
 
 def is_irs_active(dt: datetime) -> bool:
@@ -112,7 +121,9 @@ async def handle_ein_draft(
     """Draft IRS Form SS-4 and schedule filing based on IRS operational hours."""
     # Input validation
     try:
-        _validate_ein_inputs(legal_name, business_type, responsible_party_ssn, max_employees)
+        _validate_ein_inputs(
+            legal_name, business_type, responsible_party_ssn, max_employees
+        )
     except EINDraftError as exc:
         logger.warning("EIN draft validation failed: %s", exc)
         return f"Error: {exc}"

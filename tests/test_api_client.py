@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 from legal_peripherals_mcp.api_client import Api
 
 

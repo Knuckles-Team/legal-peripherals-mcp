@@ -1,4 +1,5 @@
 """Main FastMCP server and tool registration."""
+
 import os
 import sys
 from typing import Any
@@ -11,8 +12,8 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from legal_peripherals_mcp.auth import get_client
-from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
+from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
 
 __version__ = "0.15.0"
@@ -33,18 +34,19 @@ def get_mcp_instance() -> Any:
 
     # Tool registration
     if to_boolean(os.getenv("SOSTOOL", "True")):
+
         @mcp.tool()
         async def sos_entity_lookup(
-            state: str,
-            entity_name: str,
-            entity_id: str | None = None,
-            ctx: Any = None
+            state: str, entity_name: str, entity_id: str | None = None, ctx: Any = None
         ) -> str:
             """Perform Secretary of State entity lookup across 50 states (scrapers for TX, DE, WY, NV, resilient fallback for others)."""
             client = get_client()
-            return await handle_sos_lookup(state, entity_name, entity_id, client=client, ctx=ctx)
+            return await handle_sos_lookup(
+                state, entity_name, entity_id, client=client, ctx=ctx
+            )
 
     if to_boolean(os.getenv("EINTOOL", "True")):
+
         @mcp.tool()
         async def draft_ein_form(
             legal_name: str,
@@ -58,7 +60,7 @@ def get_mcp_instance() -> Any:
             first_date_wages_paid: str = "",
             max_employees: int = 0,
             closing_month_tax_year: str = "December",
-            ctx: Any = None
+            ctx: Any = None,
         ) -> str:
             """Draft IRS Form SS-4 and schedule EIN filing with off-hours compliance (Mon-Fri 7:00 AM - 10:00 PM EST)."""
             client = get_client()
@@ -75,16 +77,14 @@ def get_mcp_instance() -> Any:
                 max_employees=max_employees,
                 closing_month_tax_year=closing_month_tax_year,
                 client=client,
-                ctx=ctx
+                ctx=ctx,
             )
 
     if to_boolean(os.getenv("STATUTETOOL", "True")):
+
         @mcp.tool()
         async def lookup_statute_rules(
-            state: str,
-            entity_type: str,
-            topic: str,
-            ctx: Any = None
+            state: str, entity_type: str, topic: str, ctx: Any = None
         ) -> str:
             """Query state statutory default rules and retrieve corporate/LLC charter templates."""
             client = get_client()
@@ -93,7 +93,7 @@ def get_mcp_instance() -> Any:
                 entity_type=entity_type,
                 topic=topic,
                 client=client,
-                ctx=ctx
+                ctx=ctx,
             )
 
     for mw in middlewares:
