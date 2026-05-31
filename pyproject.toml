@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "legal-peripherals-mcp"
-version = "0.23.0"
+version = "0.24.0"
 description = "Legal Peripherals MCP Server for Secretary of State, EIN, and Statutes automation!"
 readme = "README.md"
 classifiers = [
@@ -16,7 +16,7 @@ classifiers = [
 ]
 requires-python = ">=3.11, <3.14"
 dependencies = [
-    "agent-utilities>=0.32.0",
+    "agent-utilities>=0.34.0",
     "playwright>=1.40.0",
 ]
 [[project.authors]]
@@ -27,9 +27,9 @@ email = "knucklessg1@gmail.com"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=0.32.0", ]
-agent = [ "agent-utilities[agent,logfire]>=0.32.0", ]
-all = [ "agent-utilities[mcp,agent,logfire]>=0.32.0", ]
+mcp = [ "agent-utilities[mcp]>=0.34.0", ]
+agent = [ "agent-utilities[agent,logfire]>=0.34.0", ]
+all = [ "agent-utilities[mcp,agent,logfire]>=0.34.0", ]
 test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", ]
 
 [project.scripts]
