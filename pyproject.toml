@@ -16,7 +16,7 @@ classifiers = [
 ]
 requires-python = ">=3.11, <3.14"
 dependencies = [
-    "agent-utilities>=0.34.4",
+    "agent-utilities>=0.36.0",
     "playwright>=1.40.0",
 ]
 [[project.authors]]
@@ -27,9 +27,9 @@ email = "knucklessg1@gmail.com"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=0.34.4", ]
-agent = [ "agent-utilities[agent,logfire]>=0.34.4", ]
-all = [ "agent-utilities[mcp,agent,logfire]>=0.34.4", ]
+mcp = [ "agent-utilities[mcp]>=0.36.0", ]
+agent = [ "agent-utilities[agent,logfire]>=0.36.0", ]
+all = [ "agent-utilities[mcp,agent,logfire]>=0.36.0", ]
 test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", ]
 
 [project.scripts]
