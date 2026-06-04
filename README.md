@@ -21,7 +21,7 @@ graph TD
     subgraph Core Features [Legal Peripherals Engine]
         MCP -->|SOSTOOL| SOS[Secretary of State Lookup]
         MCP -->|EINTOOL| EIN[IRS Form SS-4 EIN Engine]
-        MCP -->|STATUTETOOL| STATUTE[Statute & Charter Templates]
+        MCP -->|STATUTETOOL| STATUTE["Statute & Charter Templates"]
     end
 
     subgraph State Scraping Layer
@@ -33,7 +33,7 @@ graph TD
     end
 
     subgraph IRS Filing Layer
-        EIN -->|Check EST Time| activeCheck{Is Monday-Friday<br/>7:00 AM - 10:00 PM EST?}
+        EIN -->|Check EST Time| activeCheck{"Is Monday-Friday<br/>7:00 AM - 10:00 PM EST?"}
         activeCheck -->|Yes / Override| fileNow[FILING IMMEDIATELY]
         activeCheck -->|No| queueLater[QUEUED FOR SCHEDULING]
     end
