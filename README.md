@@ -8,6 +8,10 @@
 
 A premium Model Context Protocol (MCP) server powered by **FastMCP** that exposes highly robust tools for automating legal operations and filing compliance. This server handles state-level Secretary of State (SOS) entities, off-hours compliant IRS Form SS-4 EIN drafting/scheduling, and corporate/LLC charter templates lookup.
 
+> **Documentation** — Installation, deployment, usage across the API and MCP
+> interfaces, and the optional agent server are maintained in the
+> [official documentation](https://knuckles-team.github.io/legal-peripherals-mcp/).
+
 ---
 
 ## 🗺️ System Architecture
@@ -127,3 +131,22 @@ We maintain 100% logic coverage using `pytest` to verify off-hours filing comput
 # Run tests with detailed verbose output
 pytest -v
 ```
+
+---
+
+## Documentation
+
+The complete documentation is published as the
+[official documentation site](https://knuckles-team.github.io/legal-peripherals-mcp/)
+and is the recommended reference for installation, deployment, and day-to-day
+operation.
+
+| Page | Contents |
+|---|---|
+| [Installation](https://knuckles-team.github.io/legal-peripherals-mcp/installation/) | pip, source, extras, prebuilt Docker image |
+| [Deployment](https://knuckles-team.github.io/legal-peripherals-mcp/deployment/) | run the MCP server, the agent server, Compose, Caddy + Technitium, env config |
+| [Usage](https://knuckles-team.github.io/legal-peripherals-mcp/usage/) | the MCP tools, the `Api` client, example prompts |
+| [Overview](https://knuckles-team.github.io/legal-peripherals-mcp/overview/) | the three core domains and how they fit together |
+| [Concepts](https://knuckles-team.github.io/legal-peripherals-mcp/concepts/) | concept registry (`CONCEPT:LEGAL-*`) |
+
+`AGENTS.md` is the canonical contributor/agent guidance.
