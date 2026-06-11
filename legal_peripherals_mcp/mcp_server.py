@@ -98,13 +98,18 @@ def get_mcp_instance() -> Any:
 
     for mw in middlewares:
         mcp.add_middleware(mw)
-    return mcp
+    return mcp, args, middlewares
 
 
 def mcp_server() -> None:
-    mcp = get_mcp_instance()
+    mcp, args, _middlewares = get_mcp_instance()
     print(f"Legal Peripherals MCP v{__version__}", file=sys.stderr)
-    mcp.run(transport="stdio")
+    if args.transport == "streamable-http":
+        mcp.run(transport="streamable-http", host=args.host, port=args.port)
+    elif args.transport == "sse":
+        mcp.run(transport="sse", host=args.host, port=args.port)
+    else:
+        mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":
