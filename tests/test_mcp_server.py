@@ -8,7 +8,7 @@ def test_mcp_server_registration():
     """CONCEPT:LEGAL-002 Test that tools register successfully."""
     from legal_peripherals_mcp.mcp_server import get_mcp_instance
 
-    mcp = get_mcp_instance()
+    mcp, _args, _middlewares = get_mcp_instance()
     assert mcp is not None
 
     # Verify tool registry count is greater than zero
@@ -21,7 +21,7 @@ async def test_mcp_tools_routing():
     """Verify that all tools route correctly."""
     from legal_peripherals_mcp.mcp_server import get_mcp_instance
 
-    mcp = get_mcp_instance()
+    mcp, _args, _middlewares = get_mcp_instance()
 
     # Extract registered tools from _components dict values
     tools = {t.name: t for t in mcp._local_provider._components.values()}
