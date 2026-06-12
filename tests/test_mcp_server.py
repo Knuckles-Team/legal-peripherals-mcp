@@ -33,19 +33,21 @@ async def test_mcp_tools_routing():
     mock_ctx = MagicMock()
     mock_ctx.info = AsyncMock()
 
-    # Test sos_entity_lookup for TX
+    # Test sos_entity_lookup for TX — with no API token configured it must
+    # report unavailability honestly and fabricate NO record.
     tx_res = await tools["sos_entity_lookup"].fn(
         state="TX", entity_name="Antigravity LLC", ctx=mock_ctx
     )
     assert "TX" in tx_res
-    assert "Antigravity LLC" in tx_res
+    assert "unavailable" in tx_res.lower()
+    assert "none was fabricated" in tx_res
 
-    # Test sos_entity_lookup fallback for CA
+    # Same honest behavior for a non-primary state.
     ca_res = await tools["sos_entity_lookup"].fn(
         state="CA", entity_name="Antigravity LLC", ctx=mock_ctx
     )
     assert "CA" in ca_res
-    assert "LLM fallback" in ca_res
+    assert "unavailable" in ca_res.lower()
 
     # Test draft_ein_form scheduling or instant filing
     ein_res = await tools["draft_ein_form"].fn(

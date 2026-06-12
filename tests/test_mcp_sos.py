@@ -1,70 +1,133 @@
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+import requests
 
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 
 
+def _mock_response(payload):
+    resp = MagicMock()
+    resp.raise_for_status = MagicMock()
+    resp.json = MagicMock(return_value=payload)
+    return resp
+
+
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
-async def test_handle_sos_lookup_texas():
-    """Verify Texas Secretary of State lookup."""
+async def test_sos_lookup_not_configured_returns_honest_notice(monkeypatch):
+    """With no API token, no record is fabricated — an honest notice is returned."""
+    monkeypatch.delenv("OPENCORPORATES_API_TOKEN", raising=False)
     mock_ctx = MagicMock()
     mock_ctx.info = AsyncMock()
 
     res = await handle_sos_lookup("TX", "Acme LLC", ctx=mock_ctx)
-    assert "Texas Secretary of State" in res
-    assert "Acme LLC" in res
-    assert "Registered Agent: Antigravity Agent Services LLC" in res
+
+    assert "unavailable" in res.lower()
+    assert "OPENCORPORATES_API_TOKEN" in res
+    assert "none was fabricated" in res
+    # No fabricated status/standing leaks through.
+    assert "Good Standing" not in res
+    assert "Active" not in res
 
 
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
-async def test_handle_sos_lookup_delaware():
-    """Verify Delaware Secretary of State lookup."""
+async def test_sos_lookup_real_search_hits(monkeypatch):
+    """A configured token drives a real OpenCorporates search; results are rendered."""
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
+    payload = {
+        "results": {
+            "companies": [
+                {
+                    "company": {
+                        "name": "ACME LLC",
+                        "company_number": "0123456789",
+                        "jurisdiction_code": "us_de",
+                        "current_status": "Good Standing",
+                        "incorporation_date": "2020-01-15",
+                        "company_type": "Limited Liability Company",
+                        "registered_address_in_full": "1209 Orange St, Wilmington, DE",
+                        "opencorporates_url": "https://opencorporates.com/companies/us_de/0123456789",
+                    }
+                }
+            ]
+        }
+    }
     mock_ctx = MagicMock()
     mock_ctx.info = AsyncMock()
 
-    res = await handle_sos_lookup("DE", "Acme Corp", "DE-12345", ctx=mock_ctx)
-    assert "Delaware Division of Corporations" in res
-    assert "Acme Corp" in res
-    assert "File Number: DE-12345" in res
+    with patch("legal_peripherals_mcp.mcp.mcp_sos.requests.get") as mget:
+        mget.return_value = _mock_response(payload)
+        res = await handle_sos_lookup("DE", "Acme LLC", ctx=mock_ctx)
+
+    # Real call shape: search endpoint, correct jurisdiction + token.
+    args, kwargs = mget.call_args
+    assert args[0].endswith("/companies/search")
+    assert kwargs["params"]["jurisdiction_code"] == "us_de"
+    assert kwargs["params"]["api_token"] == "tok_test"
+    assert kwargs["params"]["q"] == "Acme LLC"
+    # Rendered real data, with verifiable provenance.
+    assert "ACME LLC" in res
+    assert "0123456789" in res
+    assert "opencorporates.com" in res
+    assert "OpenCorporates" in res
 
 
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
-async def test_handle_sos_lookup_wyoming():
-    """Verify Wyoming Secretary of State lookup."""
-    mock_ctx = MagicMock()
-    mock_ctx.info = AsyncMock()
+async def test_sos_lookup_direct_by_company_number(monkeypatch):
+    """An entity_id drives a direct company fetch, not a search."""
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
+    payload = {
+        "results": {
+            "company": {
+                "name": "WIDGETS INC",
+                "company_number": "WY-99",
+                "jurisdiction_code": "us_wy",
+                "current_status": "Active",
+            }
+        }
+    }
+    with patch("legal_peripherals_mcp.mcp.mcp_sos.requests.get") as mget:
+        mget.return_value = _mock_response(payload)
+        res = await handle_sos_lookup("WY", "Widgets Inc", "WY-99")
 
-    res = await handle_sos_lookup("WY", "Acme LLC", ctx=mock_ctx)
-    assert "Wyoming Secretary of State" in res
-    assert "Acme LLC" in res
-    assert "Limited Liability Company" in res
+    args, _ = mget.call_args
+    assert args[0].endswith("/companies/us_wy/WY-99")
+    assert "WIDGETS INC" in res
 
 
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
-async def test_handle_sos_lookup_nevada():
-    """Verify Nevada Secretary of State lookup."""
-    mock_ctx = MagicMock()
-    mock_ctx.info = AsyncMock()
+async def test_sos_lookup_no_results(monkeypatch):
+    """An empty result set yields an honest 'no record found' — not a fabrication."""
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
+    with patch("legal_peripherals_mcp.mcp.mcp_sos.requests.get") as mget:
+        mget.return_value = _mock_response({"results": {"companies": []}})
+        res = await handle_sos_lookup("CA", "Nonexistent Co", ctx=None)
 
-    res = await handle_sos_lookup("NV", "Acme LLC", ctx=mock_ctx)
-    assert "Nevada SilverFlume" in res
-    assert "Acme LLC" in res
+    assert "No Secretary-of-State record found" in res
+    assert "CA" in res
 
 
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
-async def test_handle_sos_lookup_fallback():
-    """Verify the structured resilient LLM fallback crawler for other states."""
-    mock_ctx = MagicMock()
-    mock_ctx.info = AsyncMock()
+async def test_sos_lookup_http_error_is_truthful(monkeypatch):
+    """A failed request surfaces a truthful error, never fabricated data."""
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
+    with patch("legal_peripherals_mcp.mcp.mcp_sos.requests.get") as mget:
+        mget.side_effect = requests.ConnectionError("boom")
+        res = await handle_sos_lookup("NV", "Acme LLC", ctx=None)
 
-    # Test California (CA) fallback
-    res = await handle_sos_lookup("CA", "Acme LLC", ctx=mock_ctx)
-    assert "Resilient Fallback Secretary of State Lookup (CA)" in res
-    assert "Acme LLC" in res
-    assert "LLM fallback crawler" in res
+    assert res.startswith("Error:")
+    assert "NV" in res
+
+
+@pytest.mark.concept("LEGAL-001")
+@pytest.mark.asyncio
+async def test_sos_lookup_invalid_state():
+    """Validation still rejects bad state codes."""
+    res = await handle_sos_lookup("ZZ", "Acme LLC")
+    assert res.startswith("Error:")
+    assert "Invalid state" in res

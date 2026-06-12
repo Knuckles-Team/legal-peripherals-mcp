@@ -1,14 +1,27 @@
-"""CONCEPT:LEGAL-001 Secretary of State (SOS) dynamic crawler integrations."""
+"""CONCEPT:LEGAL-001 Secretary of State (SOS) business-entity lookup.
+
+Backed by the OpenCorporates API (https://api.opencorporates.com) — a real,
+documented company-registry aggregator covering US state Secretary-of-State
+filings via ``us_<state>`` jurisdiction codes. Lookups require an API token
+(``OPENCORPORATES_API_TOKEN``); without one the tool reports that no data source
+is configured and returns NO fabricated record.
+"""
 
 import asyncio
 import os
 
+import requests
 from agent_utilities.base_utilities import get_logger
 
 logger = get_logger(__name__)
 
 # Maximum time (seconds) for any SOS lookup before timeout.
 SOS_TIMEOUT_SECONDS = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
+
+# OpenCorporates API base (overridable for self-hosted/proxy deployments).
+OPENCORPORATES_BASE_URL = os.getenv(
+    "OPENCORPORATES_BASE_URL", "https://api.opencorporates.com/v0.4"
+).rstrip("/")
 
 # Valid US state and territory abbreviations
 _VALID_STATES = frozenset(
@@ -134,79 +147,113 @@ async def handle_sos_lookup(
         return f"Error: {msg}"
 
 
+def _jurisdiction_code(state_upper: str) -> str:
+    """Map a US state/territory code to an OpenCorporates jurisdiction code."""
+    return f"us_{state_upper.lower()}"
+
+
+def _format_company(state_upper: str, company: dict) -> str:
+    """Render a single OpenCorporates company record as a readable summary."""
+    fields = [
+        ("Entity Name", company.get("name")),
+        ("Jurisdiction", company.get("jurisdiction_code")),
+        ("Company Number", company.get("company_number")),
+        ("Entity Type", company.get("company_type")),
+        ("Status", company.get("current_status")),
+        ("Incorporation Date", company.get("incorporation_date")),
+        ("Dissolution Date", company.get("dissolution_date")),
+        ("Registered Address", company.get("registered_address_in_full")),
+        ("Source", company.get("opencorporates_url")),
+    ]
+    body = "\n".join(f"{label}: {value}" for label, value in fields if value)
+    return (
+        f"--- Secretary of State Lookup ({state_upper}) — via OpenCorporates ---\n"
+        f"{body}"
+    )
+
+
+def _http_get(url: str, params: dict) -> dict:
+    """Blocking GET helper run off the event loop via ``asyncio.to_thread``."""
+    resp = requests.get(url, params=params, timeout=SOS_TIMEOUT_SECONDS)
+    resp.raise_for_status()
+    return resp.json()
+
+
 async def _do_lookup(
     state_upper: str,
     entity_name_clean: str,
     entity_id: str | None,
     ctx=None,
 ) -> str:
-    """Core lookup logic, separated for timeout wrapping."""
+    """Core lookup logic, separated for timeout wrapping.
 
-    # Specific scrapers
-    if state_upper == "TX":
-        # Texas Comptroller/SOS custom scraper simulation
+    Performs a real OpenCorporates query for the state's jurisdiction. Returns an
+    honest "not configured" notice (and no fabricated record) when no API token is
+    available; raises :class:`SOSLookupError` on a failed request so the caller can
+    surface a truthful error.
+    """
+    token = os.getenv("OPENCORPORATES_API_TOKEN", "").strip()
+    if not token:
         return (
-            f"--- Texas Secretary of State Lookup ---\n"
-            f"Entity Name: {entity_name_clean}\n"
-            f"State File Number: {entity_id or 'TX-804910291'}\n"
-            f"Status: Active / Good Standing\n"
-            f"Franchise Tax Status: Active / Compliant\n"
-            f"Registered Agent: Antigravity Agent Services LLC\n"
-            f"Filing Date: 2026-01-15\n"
-            f"Details: Scraped from Texas Comptroller & SOS Direct."
+            f"SOS lookup unavailable for {state_upper}: no business-registry data "
+            f"source is configured. Set OPENCORPORATES_API_TOKEN to enable real "
+            f"Secretary-of-State entity lookups "
+            f"(https://opencorporates.com/api_accounts/new). No record was returned "
+            f"because none was fabricated."
         )
 
-    elif state_upper == "DE":
-        # Delaware Division of Corporations
-        return (
-            f"--- Delaware Division of Corporations ---\n"
-            f"Entity Name: {entity_name_clean}\n"
-            f"File Number: {entity_id or 'DE-6910293'}\n"
-            f"Entity Type: Corporation (General)\n"
-            f"Residency: Domestic\n"
-            f"Formation Date: 2026-02-10\n"
-            f"Status: Active / Good Standing\n"
-            f"Details: Scraped from Delaware Division of Corporations."
+    jurisdiction = _jurisdiction_code(state_upper)
+    if ctx:
+        await ctx.info(
+            f"Querying OpenCorporates jurisdiction={jurisdiction} for "
+            f"entity={entity_name_clean!r} id={entity_id!r}"
         )
 
-    elif state_upper == "WY":
-        # Wyoming SOS
-        return (
-            f"--- Wyoming Secretary of State Lookup ---\n"
-            f"Entity Name: {entity_name_clean}\n"
-            f"Filing ID: {entity_id or 'WY-2026-0001920'}\n"
-            f"Entity Type: Limited Liability Company\n"
-            f"Status: Active\n"
-            f"Standing - Tax: Good Standing\n"
-            f"Standing - RA: Good Standing\n"
-            f"Details: Scraped from Wyoming SOS Business Directory."
-        )
-
-    elif state_upper == "NV":
-        # Nevada SilverFlume
-        return (
-            f"--- Nevada SilverFlume SOS Lookup ---\n"
-            f"Entity Name: {entity_name_clean}\n"
-            f"NV Business ID: {entity_id or 'NV20261029410'}\n"
-            f"Status: Active\n"
-            f"Annual Report Due: 2027-02-28\n"
-            f"Registered Agent: Nevada Corporate Services Inc\n"
-            f"Details: Scraped from Nevada SilverFlume portal."
-        )
-
-    else:
-        # Structured Resilient Fallback for all other states (including remaining 46 states)
-        if ctx:
-            await ctx.info(
-                f"State '{state_upper}' not in primary direct scrapers. Utilizing LLM fallback crawler."
+    try:
+        # A specific company number → direct fetch; otherwise a name search.
+        if entity_id:
+            data = await asyncio.to_thread(
+                _http_get,
+                f"{OPENCORPORATES_BASE_URL}/companies/{jurisdiction}/{entity_id}",
+                {"api_token": token},
             )
+            company = (data.get("results") or {}).get("company")
+            if not company:
+                return (
+                    f"No Secretary-of-State record found in {state_upper} for "
+                    f"company number {entity_id}."
+                )
+            return _format_company(state_upper, company)
 
-        return (
-            f"--- Resilient Fallback Secretary of State Lookup ({state_upper}) ---\n"
-            f"Entity Name: {entity_name_clean}\n"
-            f"Status: Simulated / Active\n"
-            f"State: {state_upper}\n"
-            f"Filing ID: {entity_id or f'{state_upper}-9999123'}\n"
-            f"Filing Date: 2026-05-25\n"
-            f"Notice: This record was extracted using the structured LLM fallback crawler for {state_upper}."
+        data = await asyncio.to_thread(
+            _http_get,
+            f"{OPENCORPORATES_BASE_URL}/companies/search",
+            {
+                "q": entity_name_clean,
+                "jurisdiction_code": jurisdiction,
+                "api_token": token,
+            },
         )
+    except requests.RequestException as exc:
+        raise SOSLookupError(
+            f"OpenCorporates request failed for {state_upper}: {exc}"
+        ) from exc
+
+    companies = (data.get("results") or {}).get("companies") or []
+    if not companies:
+        return (
+            f"No Secretary-of-State record found for '{entity_name_clean}' in "
+            f"{state_upper}."
+        )
+
+    # Each search hit is wrapped as {"company": {...}}.
+    rendered = [
+        _format_company(state_upper, hit["company"])
+        for hit in companies
+        if isinstance(hit, dict) and hit.get("company")
+    ]
+    header = (
+        f"Found {len(rendered)} Secretary-of-State match(es) for "
+        f"'{entity_name_clean}' in {state_upper}:\n\n"
+    )
+    return header + "\n\n".join(rendered)
