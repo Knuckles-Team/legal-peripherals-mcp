@@ -54,11 +54,18 @@ graph TD
 
 The server registers the following standard FastMCP tools, which can be dynamically enabled or disabled via environment toggles:
 
-| Tool Name | Parameters | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| `sos_entity_lookup` | `state` (str), `entity_name` (str), `entity_id` (str, optional) | `str` (JSON/text result) | Performs Secretary of State entity lookups across all 50 states (utilizes optimized scrapers for TX, DE, WY, NV and fallbacks for others). |
-| `draft_ein_form` | `legal_name` (str), `responsible_party_ssn` (str), `responsible_party_name` (str), `business_type` (str), etc. | `str` (drafted form & queue details) | Drafts IRS Form SS-4 and schedules filing with strict off-hours compliance (Mon-Fri 7:00 AM - 10:00 PM EST). Supports developer bypass override. |
-| `lookup_statute_rules` | `state` (str), `entity_type` (str), `topic` (str) | `str` (statute details & templates) | Queries state statutory default rules (director voting, indemnification, etc.) and retrieves template charter links. |
+Auto-generated — do not edit between the markers below.
+
+<!-- MCP-TOOLS-TABLE:START -->
+
+| MCP Tool | Toggle Env Var | Description |
+|----------|----------------|-------------|
+| `draft_ein_form` | — | Draft IRS Form SS-4 and schedule EIN filing with off-hours compliance (Mon-Fri 7:00 AM - 10:00 PM EST). |
+| `lookup_statute_rules` | — | Query state statutory default rules and retrieve corporate/LLC charter templates. |
+| `sos_entity_lookup` | — | Perform Secretary of State entity lookup across 50 states (scrapers for TX, DE, WY, NV, resilient fallback for others). |
+
+_3 action-routed tools (default `MCP_TOOL_MODE=condensed`). Each is enabled unless its toggle is set false; set `MCP_TOOL_MODE=verbose` (or `both`) for the 1:1 per-operation surface. Auto-generated — do not edit._
+<!-- MCP-TOOLS-TABLE:END -->
 
 ---
 
