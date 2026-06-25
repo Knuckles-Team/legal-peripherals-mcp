@@ -69,6 +69,39 @@ _3 action-routed tools (default `MCP_TOOL_MODE=condensed`). Each is enabled unle
 
 ---
 
+### MCP Configuration Examples
+
+> **Install the slim `[mcp]` extra.** All examples below install
+> `legal-peripherals-mcp[mcp]` — the MCP-server extra that pulls only the FastMCP /
+> FastAPI tooling (`agent-utilities[mcp]`). It deliberately **excludes** the heavy
+> agent runtime (the epistemic-graph engine, `pydantic-ai`, `dspy`, `llama-index`,
+> `tree-sitter`), so `uvx`/container installs are dramatically smaller and faster.
+> Use the full `[agent]` extra only when you need the integrated Pydantic AI agent
+> (see [Deployment & Installation](#-deployment--installation)).
+
+Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
+
+```json
+{
+  "mcpServers": {
+    "legal-peripherals-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "legal-peripherals-mcp[mcp]",
+        "legal-peripherals-mcp"
+      ],
+      "env": {
+        "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
+        "LEGAL_PERIPHERALS_TOKEN": "your_token_here"
+      }
+    }
+  }
+}
+```
+
+---
+
 ## ⚙️ Environment Variables
 
 Configure the server runtime using a `.env` file or direct container environment injections:
@@ -87,20 +120,34 @@ Configure the server runtime using a `.env` file or direct container environment
 
 ## 🚀 Deployment & Installation
 
+Pick the extra that matches what you want to run:
+
+| Extra | Installs | Use when |
+|-------|----------|----------|
+| `legal-peripherals-mcp[mcp]` | Slim MCP server only (`agent-utilities[mcp]` — FastMCP/FastAPI) | You only run the **MCP server** (smallest install / image) |
+| `legal-peripherals-mcp[agent]` | Full agent runtime (`agent-utilities[agent,logfire]` — Pydantic AI + the epistemic-graph engine) | You run the **integrated agent** |
+| `legal-peripherals-mcp[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
+
+```bash
+# MCP server only (recommended for tool hosting — slim deps)
+uv pip install "legal-peripherals-mcp[mcp]"
+
+# Full agent runtime (Pydantic AI + epistemic-graph engine)
+uv pip install "legal-peripherals-mcp[agent]"
+
+# Everything (development)
+uv pip install "legal-peripherals-mcp[all]"      # or: python -m pip install "legal-peripherals-mcp[all]"
+```
+
 ### Option 1: Bare-Metal Setup (pip)
 
-1. **Clone the Repository & Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Configure your Environment**:
+1. **Configure your Environment**:
    Create a `.env` file from the template:
    ```bash
    cp .env.example .env
    ```
 
-3. **Start the Server**:
+2. **Start the Server**:
    ```bash
    python -m legal_peripherals_mcp.mcp_server
    ```
@@ -109,11 +156,17 @@ Configure the server runtime using a `.env` file or direct container environment
 
 ### Option 2: Containerized Setup (Docker)
 
-To run the Legal Peripherals MCP Server as a headless background container or expose it via an orchestrator (like Portainer):
+One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `--target`:
+
+| Image tag | Build target | Contents | Entrypoint |
+|-----------|--------------|----------|------------|
+| `knucklessg1/legal-peripherals-mcp:mcp` | `--target mcp` | `legal-peripherals-mcp[mcp]` — **slim**, no engine/`pydantic-ai`/`dspy`/`llama-index`/`tree-sitter` | `legal-peripherals-mcp` |
+| `knucklessg1/legal-peripherals-mcp:latest` | `--target agent` (default) | `legal-peripherals-mcp[agent]` — **full** agent runtime + epistemic-graph engine | `legal-peripherals-agent` |
 
 1. **Build the Docker Image**:
    ```bash
-   docker build -t legal-peripherals-mcp .
+   docker build --target mcp   -t knucklessg1/legal-peripherals-mcp:mcp    docker/   # slim MCP server
+   docker build --target agent -t knucklessg1/legal-peripherals-mcp:latest docker/   # full agent
    ```
 
 2. **Run the Container**:
@@ -125,8 +178,23 @@ To run the Legal Peripherals MCP Server as a headless background container or ex
      -e EINTOOL=True \
      -e STATUTETOOL=True \
      -e BYPASS_IRS_FILING_HOURS=True \
-     legal-peripherals-mcp
+     knucklessg1/legal-peripherals-mcp:mcp
    ```
+
+> The `:mcp` tag is the **slim MCP-server image**; the default `:latest` tag is the
+> **full agent image** (`legal-peripherals-mcp[agent]`) which also bundles the Pydantic
+> AI agent and the epistemic-graph engine — use it when you run the agent, not just the
+> MCP server.
+
+### Knowledge-graph database (`epistemic-graph`)
+
+The **full agent** (`[agent]` / `:latest`) embeds the **epistemic-graph** engine (pulled in
+transitively via `agent-utilities[agent]`). For production — or to share one knowledge graph
+across multiple agents — run **epistemic-graph as its own database container** and point the
+agent at it instead of embedding it. Deployment recipes (single-node + Raft HA), connection
+config, and the full database architecture (with diagrams) are documented in the
+[epistemic-graph deployment guide](https://knuckles-team.github.io/epistemic-graph/deployment/).
+The slim `[mcp]` server does **not** require the database.
 
 ---
 
