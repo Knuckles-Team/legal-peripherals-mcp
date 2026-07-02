@@ -84,15 +84,15 @@ _3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unl
 
 ### MCP Configuration Examples
 
-> **Install the slim `[mcp]` extra.** All examples below install
-> `legal-peripherals-mcp[mcp]` — the MCP-server extra that pulls only the FastMCP /
-> FastAPI tooling (`agent-utilities[mcp]`). It deliberately **excludes** the heavy
-> agent runtime (the epistemic-graph engine, `pydantic-ai`, `dspy`, `llama-index`,
-> `tree-sitter`), so `uvx`/container installs are dramatically smaller and faster.
-> Use the full `[agent]` extra only when you need the integrated Pydantic AI agent
-> (see [Deployment & Installation](#-deployment--installation)).
+<!-- MCP-CONFIG-EXAMPLES:START -->
 
-Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
+> **Install the slim `[mcp]` extra.** All examples install `legal-peripherals-mcp[mcp]` — the
+> MCP-server extra that pulls only the FastMCP / FastAPI tooling (`agent-utilities[mcp]`).
+> It deliberately **excludes** the heavy agent runtime (`pydantic-ai`, the epistemic-graph
+> engine, `dspy`, `llama-index`), so `uvx` / container installs are far smaller. Use the
+> full `[agent]` extra only when you need the integrated Pydantic AI agent.
+
+#### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)
 
 ```json
 {
@@ -105,139 +105,97 @@ Configure your IDE's `mcp.json` to launch the MCP server via `uvx`:
         "legal-peripherals-mcp"
       ],
       "env": {
+        "MCP_TOOL_MODE": "condensed",
+        "BYPASS_IRS_FILING_HOURS": "False",
+        "EINTOOL": "True",
+        "EIN_TIMEOUT_SECONDS": "30",
         "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
-        "LEGAL_PERIPHERALS_TOKEN": "your_token_here"
+        "LEGAL_PERIPHERALS_TOKEN": "",
+        "OPENCORPORATES_API_TOKEN": "",
+        "SOSTOOL": "True",
+        "SOS_TIMEOUT_SECONDS": "30",
+        "STATUTETOOL": "True",
+        "STATUTE_TIMEOUT_SECONDS": "30"
       }
     }
   }
 }
 ```
 
----
+#### Streamable-HTTP Transport (networked / production)
 
-## ⚙️ Environment Variables
-
-Configure the server runtime using a `.env` file or direct container environment injections:
-
-| Environment Variable | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| **`SOSTOOL`** | `bool` | `True` | Toggle the `sos_entity_lookup` tool. |
-| **`EINTOOL`** | `bool` | `True` | Toggle the `draft_ein_form` tool. |
-| **`STATUTETOOL`** | `bool` | `True` | Toggle the `lookup_statute_rules` tool. |
-| **`BYPASS_IRS_FILING_HOURS`** | `bool` | `False` | Bypasses the active-hours restriction during development/testing, enabling immediate submission mockups at any hour. |
-| **`LEGAL_PERIPHERALS_BASE_URL`** | `str` | `http://localhost:8000` | The base URL of the backing legal peripherals web platform API. |
-| **`LEGAL_PERIPHERALS_TOKEN`** | `str` | `""` | The authentication token / bearer credential for the backing API. |
-| **`LEGAL_PERIPHERALS_SSL_VERIFY`** | `bool` | `True` | Toggles whether SSL verification is enforced on backing requests. |
-
----
-
-## 🚀 Deployment & Installation
-
-Pick the extra that matches what you want to run:
-
-| Extra | Installs | Use when |
-|-------|----------|----------|
-| `legal-peripherals-mcp[mcp]` | Slim MCP server only (`agent-utilities[mcp]` — FastMCP/FastAPI) | You only run the **MCP server** (smallest install / image) |
-| `legal-peripherals-mcp[agent]` | Full agent runtime (`agent-utilities[agent,logfire]` — Pydantic AI + the epistemic-graph engine) | You run the **integrated agent** |
-| `legal-peripherals-mcp[all]` | Everything (`mcp` + `agent` + `logfire`) | Development / both surfaces |
-
-```bash
-# MCP server only (recommended for tool hosting — slim deps)
-uv pip install "legal-peripherals-mcp[mcp]"
-
-# Full agent runtime (Pydantic AI + epistemic-graph engine)
-uv pip install "legal-peripherals-mcp[agent]"
-
-# Everything (development)
-uv pip install "legal-peripherals-mcp[all]"      # or: python -m pip install "legal-peripherals-mcp[all]"
+```json
+{
+  "mcpServers": {
+    "legal-peripherals-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "legal-peripherals-mcp[mcp]",
+        "legal-peripherals-mcp",
+        "--transport",
+        "streamable-http",
+        "--port",
+        "8000"
+      ],
+      "env": {
+        "TRANSPORT": "streamable-http",
+        "HOST": "0.0.0.0",
+        "PORT": "8000",
+        "MCP_TOOL_MODE": "condensed",
+        "BYPASS_IRS_FILING_HOURS": "False",
+        "EINTOOL": "True",
+        "EIN_TIMEOUT_SECONDS": "30",
+        "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
+        "LEGAL_PERIPHERALS_TOKEN": "",
+        "OPENCORPORATES_API_TOKEN": "",
+        "SOSTOOL": "True",
+        "SOS_TIMEOUT_SECONDS": "30",
+        "STATUTETOOL": "True",
+        "STATUTE_TIMEOUT_SECONDS": "30"
+      }
+    }
+  }
+}
 ```
 
-### Option 1: Bare-Metal Setup (pip)
+Alternatively, connect to a pre-deployed Streamable-HTTP instance by `url`:
 
-1. **Configure your Environment**:
-   Create a `.env` file from the template:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. **Start the Server**:
-   ```bash
-   python -m legal_peripherals_mcp.mcp_server
-   ```
-
----
-
-### Option 2: Containerized Setup (Docker)
-
-One multi-stage `docker/Dockerfile` builds two right-sized images, selected by `--target`:
-
-| Image tag | Build target | Contents | Entrypoint |
-|-----------|--------------|----------|------------|
-| `knucklessg1/legal-peripherals-mcp:mcp` | `--target mcp` | `legal-peripherals-mcp[mcp]` — **slim**, no engine/`pydantic-ai`/`dspy`/`llama-index`/`tree-sitter` | `legal-peripherals-mcp` |
-| `knucklessg1/legal-peripherals-mcp:latest` | `--target agent` (default) | `legal-peripherals-mcp[agent]` — **full** agent runtime + epistemic-graph engine | `legal-peripherals-agent` |
-
-1. **Build the Docker Image**:
-   ```bash
-   docker build --target mcp   -t knucklessg1/legal-peripherals-mcp:mcp    docker/   # slim MCP server
-   docker build --target agent -t knucklessg1/legal-peripherals-mcp:latest docker/   # full agent
-   ```
-
-2. **Run the Container**:
-   Pass your configuration variables as environment flags:
-   ```bash
-   docker run -d \
-     --name legal-peripherals-mcp-service \
-     -e SOSTOOL=True \
-     -e EINTOOL=True \
-     -e STATUTETOOL=True \
-     -e BYPASS_IRS_FILING_HOURS=True \
-     knucklessg1/legal-peripherals-mcp:mcp
-   ```
-
-> The `:mcp` tag is the **slim MCP-server image**; the default `:latest` tag is the
-> **full agent image** (`legal-peripherals-mcp[agent]`) which also bundles the Pydantic
-> AI agent and the epistemic-graph engine — use it when you run the agent, not just the
-> MCP server.
-
-### Knowledge-graph database (`epistemic-graph`)
-
-The **full agent** (`[agent]` / `:latest`) embeds the **epistemic-graph** engine (pulled in
-transitively via `agent-utilities[agent]`). For production — or to share one knowledge graph
-across multiple agents — run **epistemic-graph as its own database container** and point the
-agent at it instead of embedding it. Deployment recipes (single-node + Raft HA), connection
-config, and the full database architecture (with diagrams) are documented in the
-[epistemic-graph deployment guide](https://knuckles-team.github.io/epistemic-graph/deployment/).
-The slim `[mcp]` server does **not** require the database.
-
----
-
-## 🧪 Running the Test Suite
-
-We maintain 100% logic coverage using `pytest` to verify off-hours filing computations, bypass states, Secretary of State scrapers, and charter mappings:
-
-```bash
-# Run tests with detailed verbose output
-pytest -v
+```json
+{
+  "mcpServers": {
+    "legal-peripherals-mcp": {
+      "url": "http://localhost:8000/legal-peripherals-mcp/mcp"
+    }
+  }
+}
 ```
 
----
+Deploying the Streamable-HTTP server via Docker:
 
-## Documentation
+```bash
+docker run -d \
+  --name legal-peripherals-mcp-mcp \
+  -p 8000:8000 \
+  -e TRANSPORT=streamable-http \
+  -e HOST=0.0.0.0 \
+  -e PORT=8000 \
+  -e MCP_TOOL_MODE=condensed \
+  -e BYPASS_IRS_FILING_HOURS=False \
+  -e EINTOOL=True \
+  -e EIN_TIMEOUT_SECONDS=30 \
+  -e LEGAL_PERIPHERALS_BASE_URL=http://localhost:8000 \
+  -e LEGAL_PERIPHERALS_TOKEN="" \
+  -e OPENCORPORATES_API_TOKEN="" \
+  -e SOSTOOL=True \
+  -e SOS_TIMEOUT_SECONDS=30 \
+  -e STATUTETOOL=True \
+  -e STATUTE_TIMEOUT_SECONDS=30 \
+  knucklessg1/legal-peripherals-mcp:mcp
+```
 
-The complete documentation is published as the
-[official documentation site](https://knuckles-team.github.io/legal-peripherals-mcp/)
-and is the recommended reference for installation, deployment, and day-to-day
-operation.
-
-| Page | Contents |
-|---|---|
-| [Installation](https://knuckles-team.github.io/legal-peripherals-mcp/installation/) | pip, source, extras, prebuilt Docker image |
-| [Deployment](https://knuckles-team.github.io/legal-peripherals-mcp/deployment/) | run the MCP server, the agent server, Compose, Caddy + Technitium, env config |
-| [Usage](https://knuckles-team.github.io/legal-peripherals-mcp/usage/) | the MCP tools, the `Api` client, example prompts |
-| [Overview](https://knuckles-team.github.io/legal-peripherals-mcp/overview/) | the three core domains and how they fit together |
-| [Concepts](https://knuckles-team.github.io/legal-peripherals-mcp/concepts/) | concept registry (`CONCEPT:LEGAL-*`) |
-
-`AGENTS.md` is the canonical contributor/agent guidance.
+_Auto-generated from the code-read env surface (`MCP_TOOL_MODE` + package vars) — do not edit._
+<!-- MCP-CONFIG-EXAMPLES:END -->
 
 <!-- BEGIN GENERATED: additional-deployment-options -->
 ### Additional Deployment Options
