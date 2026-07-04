@@ -1,0 +1,14 @@
+{
+  "_comment": "Tier-1 mcp_tool source presets for legal-peripherals-mcp (AU-KG.ingest.mcp-tool-connector). Syncs Secretary-of-State business-entity records (via the OpenCorporates-backed sos lookup) into the KG as :BusinessEntity documents through the legal-peripherals-mcp MCP server. Contributed presets win over the central MCP_TOOL_PRESETS.",
+  "legal-sos-entities": {
+    "server": "legal-peripherals-mcp",
+    "tool": "legal_ingest_sos_entities",
+    "action": "list",
+    "records_path": "entities",
+    "id_field": "id",
+    "title_field": "name",
+    "text_field": "registered_address",
+    "updated_field": "incorporation_date",
+    "doc_type": "business_entity"
+  }
+}

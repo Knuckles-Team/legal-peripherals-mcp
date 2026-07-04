@@ -48,6 +48,12 @@ legal-peripherals-mcp = "legal_peripherals_mcp.prompts"
 [project.entry-points."agent_utilities.ontology_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.ontology"
 
+# CONCEPT:AU-KG.ingest.mcp-tool-connector — Tier-1 declarative source presets so
+# the KG can sync this package's records with no agent-utilities code. Resolved via
+# iter_provider_dirs; the hub globs connectors/mcp_source_presets.json.
+[project.entry-points."agent_utilities.source_connector_providers"]
+legal-peripherals-mcp = "legal_peripherals_mcp.connectors"
+
 [tool.setuptools]
 include-package-data = true
 
@@ -64,7 +70,7 @@ check_untyped_defs = true
 dev = [ "pytest-timeout>=2.4.0", ]
 
 [tool.setuptools.package-data]
-legal_peripherals_mcp = [ "mcp_config.json", "agent_data/**", "prompts/**", "skills/**", "ontology/**",]
+legal_peripherals_mcp = [ "mcp_config.json", "agent_data/**", "prompts/**", "skills/**", "ontology/**", "connectors/**",]
 
 [tool.ruff.lint]
 select = [ "E", "F", "I", "UP", "B", ]

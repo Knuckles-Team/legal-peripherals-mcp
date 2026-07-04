@@ -1,5 +1,6 @@
 """Main FastMCP server and tool registration."""
 
+import asyncio
 import sys
 from typing import Any
 
@@ -89,6 +90,57 @@ def register_statute_tools(mcp: Any) -> None:
             client=client,
             ctx=ctx,
         )
+
+
+def register_ingest_tools(mcp: Any) -> None:
+    """Register Wire-First native KG ingestion tools (tag: ingest)."""
+
+    @mcp.tool()
+    async def legal_ingest_sos_entities(
+        state: str,
+        entity_name: str,
+        limit: int = 10,
+        ctx: Any = None,
+    ) -> dict:
+        """Look up Secretary-of-State business entities and ingest them into the KG.
+
+        Lists real OpenCorporates company records for ``state`` + ``entity_name`` and
+        pushes them into epistemic-graph as typed ``:BusinessEntity`` (+ ``:Jurisdiction``
+        / ``:incorporatedIn``) nodes via the fast engine client. Best-effort: returns
+        ``{"ingested": None}`` when no engine or no OPENCORPORATES_API_TOKEN is set.
+        CONCEPT:AU-KG.ingest.enterprise-source-extractor.
+        """
+        from legal_peripherals_mcp.kg_ingest import (
+            ingest_sos_entities,
+            search_companies,
+        )
+
+        entities = await asyncio.to_thread(
+            search_companies, state, entity_name, limit=limit
+        )
+        if ctx:
+            await ctx.info(f"Fetched {len(entities)} SOS entities for ingestion")
+        result = ingest_sos_entities(entities)
+        return {"listed": len(entities), "entities": entities, "ingested": result}
+
+    @mcp.tool()
+    async def legal_ingest_filing_file(
+        file_path: str,
+        filing_type: str = "legal_document",
+        name: str = "",
+        ctx: Any = None,
+    ) -> dict:
+        """Store a drafted filing file (e.g. drafts/*.txt) as a blob + :MediaAsset in the KG.
+
+        Best-effort: returns ``{"ingested": None}`` when no engine is reachable.
+        CONCEPT:AU-KG.ingest.list-durable-media.
+        """
+        from legal_peripherals_mcp.kg_media import ingest_filing_file
+
+        result = await asyncio.to_thread(
+            ingest_filing_file, file_path, filing_type=filing_type, name=name
+        )
+        return {"file": file_path, "ingested": result}
 
 
 def get_mcp_instance() -> Any:

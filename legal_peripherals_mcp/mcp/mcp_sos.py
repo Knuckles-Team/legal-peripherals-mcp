@@ -11,7 +11,7 @@ import asyncio
 import os
 
 import requests
-from agent_utilities.base_utilities import get_logger
+from agent_utilities.base_utilities import get_logger, to_boolean
 
 logger = get_logger(__name__)
 
@@ -88,6 +88,23 @@ _VALID_STATES = frozenset(
 
 class SOSLookupError(Exception):
     """Raised when a Secretary of State entity lookup fails."""
+
+
+def _maybe_ingest_entities(companies: list[dict]) -> None:
+    """Default-on native ingestion of SOS company records (best-effort, no-op safe).
+
+    Pushes each looked-up business entity into the epistemic-graph as a
+    ``:BusinessEntity`` node. Disable with ``LEGAL_KG_INGEST=false``. Any failure
+    (no engine, no KG stack) is swallowed so the lookup itself is never impacted.
+    """
+    if not companies or not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
+        return
+    try:
+        from legal_peripherals_mcp.kg_ingest import ingest_sos_entities
+
+        ingest_sos_entities(companies)
+    except Exception as exc:  # noqa: BLE001 — ingestion is best-effort
+        logger.debug("KG ingest of SOS entities skipped: %s", exc)
 
 
 def _validate_inputs(state: str, entity_name: str) -> tuple[str, str]:
@@ -223,6 +240,7 @@ async def _do_lookup(
                     f"No Secretary-of-State record found in {state_upper} for "
                     f"company number {entity_id}."
                 )
+            _maybe_ingest_entities([company])
             return _format_company(state_upper, company)
 
         data = await asyncio.to_thread(
@@ -247,11 +265,13 @@ async def _do_lookup(
         )
 
     # Each search hit is wrapped as {"company": {...}}.
-    rendered = [
-        _format_company(state_upper, hit["company"])
+    hits = [
+        hit["company"]
         for hit in companies
         if isinstance(hit, dict) and hit.get("company")
     ]
+    _maybe_ingest_entities(hits)
+    rendered = [_format_company(state_upper, company) for company in hits]
     header = (
         f"Found {len(rendered)} Secretary-of-State match(es) for "
         f"'{entity_name_clean}' in {state_upper}:\n\n"

@@ -276,3 +276,49 @@ BFO:GenericallyDependentContinuant.""" ;
 BFO:Process.""" ;
     rdfs:subClassOf bfo:0000015 .
 
+#################################################################
+# Native-ingestion classes (legal-peripherals-mcp kg_ingest / kg_media)
+#################################################################
+
+:BusinessEntity a owl:Class ;
+    rdfs:label "Business Entity" ;
+    rdfs:comment """A Secretary-of-State / company-registry registered legal entity
+(LLC, corporation, trust, etc.) as sourced from OpenCorporates via the sos lookup.
+BFO:IndependentContinuant (object aggregate).""" ;
+    rdfs:subClassOf bfo:0000040 .
+
+:EINApplication a owl:Class ;
+    rdfs:label "EIN Application" ;
+    rdfs:comment """An IRS Form SS-4 Employer Identification Number application draft,
+produced by the ein drafting tool. A specialisation of a regulatory filing.""" ;
+    rdfs:subClassOf :RegulatoryFiling .
+
+:companyNumber a owl:DatatypeProperty ;
+    rdfs:label "company number" ;
+    rdfs:comment "Registry company/file number assigned by the jurisdiction." ;
+    rdfs:domain :BusinessEntity ;
+    rdfs:range xsd:string .
+
+:registryStatus a owl:DatatypeProperty ;
+    rdfs:label "registry status" ;
+    rdfs:comment "Current registry status (active, dissolved, inactive, …)." ;
+    rdfs:domain :BusinessEntity ;
+    rdfs:range xsd:string .
+
+:incorporationDate a owl:DatatypeProperty ;
+    rdfs:label "incorporation date" ;
+    rdfs:domain :BusinessEntity ;
+    rdfs:range xsd:date .
+
+:incorporatedIn a owl:ObjectProperty ;
+    rdfs:label "incorporated in" ;
+    rdfs:comment "Links a business entity to the jurisdiction it is registered in." ;
+    rdfs:domain :BusinessEntity ;
+    rdfs:range :Jurisdiction .
+
+:appliesForEntity a owl:ObjectProperty ;
+    rdfs:label "applies for entity" ;
+    rdfs:comment "Links an EIN application to the business entity it is filed for." ;
+    rdfs:domain :EINApplication ;
+    rdfs:range :BusinessEntity .
+

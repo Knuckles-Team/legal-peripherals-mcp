@@ -220,4 +220,32 @@ async def _do_ein_draft(
             f"Filing Mode: Off-Hours Deferred Queue."
         )
 
-    return f"{draft_pdf_info}\n----------------------------------------\n{status_msg}"
+    rendered = f"{draft_pdf_info}\n----------------------------------------\n{status_msg}"
+    _maybe_ingest_ein(
+        legal_name=legal_name,
+        trade_name=trade_name,
+        business_type=business_type,
+        county_state=county_state,
+        reason_for_applying=reason_for_applying,
+        closing_month_tax_year=closing_month_tax_year,
+        filing_status="filed" if active else "queued",
+        draft_text=rendered,
+    )
+    return rendered
+
+
+def _maybe_ingest_ein(**kwargs) -> None:
+    """Default-on native ingestion of the drafted SS-4 (best-effort, no-op safe).
+
+    Pushes the draft into the epistemic-graph as an ``:EINApplication`` node linked to
+    its ``:BusinessEntity``. Disable with ``LEGAL_KG_INGEST=false``. Any failure is
+    swallowed so drafting is never impacted.
+    """
+    if not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
+        return
+    try:
+        from legal_peripherals_mcp.kg_ingest import ingest_ein_application
+
+        ingest_ein_application(kwargs.pop("legal_name"), **kwargs)
+    except Exception as exc:  # noqa: BLE001 — ingestion is best-effort
+        logger.debug("KG ingest of EIN application skipped: %s", exc)
