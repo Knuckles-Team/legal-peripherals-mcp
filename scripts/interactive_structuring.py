@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CONCEPT:LEGAL-004 Generalized Interactive Legal Holding Company Structuring Flow.
+CONCEPT:LP-OS.config.legal Generalized Interactive Legal Holding Company Structuring Flow.
 Supports forming holding companies from scratch, shifting existing LLCs into trusts,
 and linking pre-existing trusts and LLCs with dynamic statutory default lookups,
 Secretary of State availability checks, Form SS-4 EIN drafting, and Assignment of Interest prep.

@@ -1,4 +1,4 @@
-"""CONCEPT:LEGAL-001 Secretary of State (SOS) business-entity lookup.
+"""CONCEPT:LP-OS.governance.legal Secretary of State (SOS) business-entity lookup.
 
 Backed by the OpenCorporates API (https://api.opencorporates.com) — a real,
 documented company-registry aggregator covering US state Secretary-of-State

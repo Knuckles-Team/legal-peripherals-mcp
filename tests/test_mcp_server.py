@@ -3,9 +3,9 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 
-@pytest.mark.concept("LEGAL-002")
+@pytest.mark.concept("LP-OS.governance.legal-2")
 def test_mcp_server_registration():
-    """CONCEPT:LEGAL-002 Test that tools register successfully."""
+    """CONCEPT:LP-OS.governance.legal-2 Test that tools register successfully."""
     from legal_peripherals_mcp.mcp_server import get_mcp_instance
 
     mcp, _args, _middlewares = get_mcp_instance()
@@ -15,7 +15,7 @@ def test_mcp_server_registration():
     assert len(mcp._local_provider._components) > 0
 
 
-@pytest.mark.concept("LEGAL-002")
+@pytest.mark.concept("LP-OS.governance.legal-2")
 @pytest.mark.asyncio
 async def test_mcp_tools_routing():
     """Verify that all tools route correctly."""

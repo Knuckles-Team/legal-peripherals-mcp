@@ -3,9 +3,9 @@
 > Claude Code loads this file via `CLAUDE.md` (`@AGENTS.md` import) — the two stay
 > in sync. Edit **this** file, not `CLAUDE.md`.
 
-<!-- CONCEPT:LEGAL-001 -->
-<!-- CONCEPT:LEGAL-002 -->
-<!-- CONCEPT:LEGAL-003 -->
+<!-- CONCEPT:LP-OS.governance.legal -->
+<!-- CONCEPT:LP-OS.governance.legal-2 -->
+<!-- CONCEPT:LP-OS.identity.legal -->
 
 This file acts as a machine-readable README for AI coding agents collaborating on this repository.
 
@@ -75,10 +75,10 @@ pytest -v
 
 | Concept ID | Name | Description |
 |------------|------|-------------|
-| `CONCEPT:LEGAL-001` | Secretary of State Crawlers | Dynamic business entity lookup & verifications across 50 states |
-| `CONCEPT:LEGAL-002` | IRS EIN & Off-Hours Filing | SS-4 PDF drafting and scheduling compliance operations |
-| `CONCEPT:LEGAL-003` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
-| `CONCEPT:ECO-4.0` | Ecosystem Compliance | Multi-package integration compliance standard |
+| `CONCEPT:LP-OS.governance.legal` | Secretary of State Crawlers | Dynamic business entity lookup & verifications across 50 states |
+| `CONCEPT:LP-OS.governance.legal-2` | IRS EIN & Off-Hours Filing | SS-4 PDF drafting and scheduling compliance operations |
+| `CONCEPT:LP-OS.identity.legal` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
+| `CONCEPT:AU-ECO.messaging.native-backend-abstraction` | Ecosystem Compliance | Multi-package integration compliance standard |
 
 ---
 
@@ -209,7 +209,7 @@ alone).
 Working in parallel with other sessions/worktrees? **Reserve a concept id before you write its `CONCEPT:` marker** so two sessions never collide:
 
 ```bash
-agent-utilities --json concept reserve --ns KG-2   # or a package prefix, e.g. KEY
+agent-utilities --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
 ```
 
 Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-utilities/concept_coordination/>

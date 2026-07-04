@@ -1,4 +1,4 @@
-"""CONCEPT:LEGAL-002 Form SS-4 EIN preparer and off-hours filing scheduler."""
+"""CONCEPT:LP-OS.governance.legal-2 Form SS-4 EIN preparer and off-hours filing scheduler."""
 
 import asyncio
 import os

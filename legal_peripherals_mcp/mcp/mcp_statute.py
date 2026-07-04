@@ -1,4 +1,4 @@
-"""CONCEPT:LEGAL-003 Statutory rules and dynamic charter templates lookup."""
+"""CONCEPT:LP-OS.identity.legal Statutory rules and dynamic charter templates lookup."""
 
 import asyncio
 import os

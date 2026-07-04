@@ -1,4 +1,4 @@
-"""CONCEPT:LEGAL-003 Identity credentials loader and session manager."""
+"""CONCEPT:LP-OS.identity.legal Identity credentials loader and session manager."""
 
 from agent_utilities.base_utilities import get_logger
 from agent_utilities.core.config import setting
