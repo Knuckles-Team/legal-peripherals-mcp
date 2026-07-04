@@ -42,7 +42,7 @@ legal-peripherals-mcp = "legal_peripherals_mcp.skills"
 [project.entry-points."agent_utilities.prompt_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.prompts"
 
-# CONCEPT:KG-2.325 — federate this package's OWL/RDF ontology module into the
+# CONCEPT:AU-KG.ontology.package-federation-migration — federate this package's OWL/RDF ontology module into the
 # agent-utilities hub (legal). Resolved via iter_provider_dirs like the
 # skill/prompt providers; the hub globs every *.ttl in the dir.
 [project.entry-points."agent_utilities.ontology_providers"]

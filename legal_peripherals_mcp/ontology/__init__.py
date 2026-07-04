@@ -1,4 +1,4 @@
-"""Legal Peripherals legal ontology contribution (CONCEPT:KG-2.325).
+"""Legal Peripherals legal ontology contribution (CONCEPT:AU-KG.ontology.package-federation-migration).
 
 Data-only subpackage: it carries ``legal.ttl`` (the ``owl:Ontology``
 ``http://knuckles.team/kg/legal`` module) which the agent-utilities hub federates
