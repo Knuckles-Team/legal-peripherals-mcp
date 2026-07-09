@@ -1,5 +1,6 @@
 ---
 name: legal-peripherals-statute-lookup
+skill_type: skill
 description: >-
   Query US state statutory default rules and retrieve corporate / LLC charter
   templates over the legal-peripherals-mcp MCP server. Use when the agent must

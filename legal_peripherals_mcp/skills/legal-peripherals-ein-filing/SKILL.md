@@ -1,5 +1,6 @@
 ---
 name: legal-peripherals-ein-filing
+skill_type: skill
 description: >-
   Draft an IRS Form SS-4 (Employer Identification Number application) over the
   legal-peripherals-mcp MCP server, with IRS off-hours filing-window compliance,

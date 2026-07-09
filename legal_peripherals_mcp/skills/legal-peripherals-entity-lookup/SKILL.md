@@ -1,5 +1,6 @@
 ---
 name: legal-peripherals-entity-lookup
+skill_type: skill
 description: >-
   Secretary-of-State business-entity lookup over the legal-peripherals-mcp MCP
   server — search a company registry (OpenCorporates-backed) by state + name or
