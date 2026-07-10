@@ -1,0 +1,740 @@
+connector: legal-peripherals-mcp
+ontology_source: legal
+schema_version: '1'
+resources:
+- name: BeneficiaryRole
+  label: Beneficiary Role
+  id_prefix: beneficiaryrole
+  relations: []
+- name: BusinessEntity
+  label: Business Entity
+  id_prefix: businessentity
+  relations:
+  - name: incorporatedIn
+    label: incorporated in
+    target: Jurisdiction
+    lpg_rel_type: ''
+- name: CaseLaw
+  label: Case Law
+  id_prefix: caselaw
+  relations:
+  - name: precedentFor
+    label: precedent for
+    target: CaseLaw
+    lpg_rel_type: ''
+- name: ContractClause
+  label: Contract Clause
+  id_prefix: contractclause
+  relations: []
+- name: CorporateGovernanceDoc
+  label: Corporate Governance Document
+  id_prefix: corporategovernancedoc
+  relations: []
+- name: EINApplication
+  label: EIN Application
+  id_prefix: einapplication
+  relations:
+  - name: appliesForEntity
+    label: applies for entity
+    target: BusinessEntity
+    lpg_rel_type: ''
+- name: EmploymentLawMatter
+  label: Employment Law Matter
+  id_prefix: employmentlawmatter
+  relations:
+  - name: governedByEmploymentStatute
+    label: governed by employment statute
+    target: FederalStatute
+    lpg_rel_type: ''
+  - name: involvesEmployee
+    label: involves employee
+    target: Employee
+    lpg_rel_type: ''
+- name: FederalStatute
+  label: Federal Statute
+  id_prefix: federalstatute
+  relations: []
+- name: IntellectualProperty
+  label: Intellectual Property
+  id_prefix: intellectualproperty
+  relations: []
+- name: Jurisdiction
+  label: Jurisdiction
+  id_prefix: jurisdiction
+  relations: []
+- name: LLCFormationFiling
+  label: LLC Formation Filing
+  id_prefix: llcformationfiling
+  relations: []
+- name: LegalMatter
+  label: Legal Matter
+  id_prefix: legalmatter
+  relations:
+  - name: governedByStatute
+    label: governed by statute
+    target: Statute
+    lpg_rel_type: ''
+- name: LegalPrecedent
+  label: Legal Precedent
+  id_prefix: legalprecedent
+  relations: []
+- name: LegalTrust
+  label: Legal Trust
+  id_prefix: legaltrust
+  relations:
+  - name: hasBeneficiary
+    label: Has Beneficiary
+    target: n289815b552e249d295d7549e21b324ecb1
+    lpg_rel_type: ''
+  - name: hasSettlor
+    label: Has Settlor
+    target: Person
+    lpg_rel_type: ''
+  - name: hasTrustee
+    label: Has Trustee
+    target: n289815b552e249d295d7549e21b324ecb4
+    lpg_rel_type: ''
+  - name: trustAgreement
+    label: Trust Agreement
+    target: CorporateGovernanceDoc
+    lpg_rel_type: ''
+- name: MunicipalCode
+  label: Municipal Code
+  id_prefix: municipalcode
+  relations: []
+- name: RegulatoryFiling
+  label: Regulatory Filing
+  id_prefix: regulatoryfiling
+  relations:
+  - name: filedBy
+    label: Filed By
+    target: Company
+    lpg_rel_type: ''
+- name: SettlorRole
+  label: Settlor Role
+  id_prefix: settlorrole
+  relations: []
+- name: StateStatute
+  label: State Statute
+  id_prefix: statestatute
+  relations: []
+- name: Statute
+  label: Statute
+  id_prefix: statute
+  relations:
+  - name: statuteJurisdiction
+    label: statute jurisdiction
+    target: Jurisdiction
+    lpg_rel_type: ''
+- name: TrusteeRole
+  label: Trustee Role
+  id_prefix: trusteerole
+  relations: []
+actions: []
+events:
+- name: legal-sos-entities.updated
+  resource: business_entity
+  description: "Watermark event for 'legal-sos-entities' \u2014 advances on incorporation_date (mcp_source_presets.json)."
+identity:
+  id_field:
+    business_entity: id
+  title_field:
+    business_entity: name
+  text_field:
+    business_entity: registered_address
+  updated_field:
+    business_entity: incorporation_date
+permissions:
+  acl_fields: []
+  tenant_field: null
+  read_roles: []
+schema_mappings:
+  BeneficiaryRole:
+    ontology_class: BFO_0000023
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  BusinessEntity:
+    ontology_class: BFO_0000040
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  CaseLaw:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  ContractClause:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  CorporateGovernanceDoc:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  EINApplication:
+    ontology_class: RegulatoryFiling
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  EmploymentLawMatter:
+    ontology_class: LegalMatter
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  FederalStatute:
+    ontology_class: Statute
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  IntellectualProperty:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  Jurisdiction:
+    ontology_class: Place
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  LLCFormationFiling:
+    ontology_class: RegulatoryFiling
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  LegalMatter:
+    ontology_class: BFO_0000015
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  LegalPrecedent:
+    ontology_class: CaseLaw
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  LegalTrust:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  MunicipalCode:
+    ontology_class: Statute
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  RegulatoryFiling:
+    ontology_class: BFO_0000015
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  SettlorRole:
+    ontology_class: BFO_0000023
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  StateStatute:
+    ontology_class: Statute
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  Statute:
+    ontology_class: BFO_0000031
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+  TrusteeRole:
+    ontology_class: BFO_0000023
+    fields:
+      cfrPart: xsd:string
+      citation: xsd:string
+      companyNumber: xsd:string
+      effectiveDate: xsd:date
+      employmentLawType: xsd:string
+      filingAgency: xsd:string
+      filingDeadline: xsd:date
+      filingStatus: xsd:string
+      filingType: xsd:string
+      governanceDocType: xsd:string
+      incorporationDate: xsd:date
+      ipExpirationDate: xsd:date
+      ipFilingDate: xsd:date
+      ipRegistrationNumber: xsd:string
+      ipStatus: xsd:string
+      ipType: xsd:string
+      lastAmended: xsd:date
+      matterStatus: xsd:string
+      precedentStrength: xsd:string
+      registryStatus: xsd:string
+      trustType: xsd:string
+      uscSection: xsd:string
+sync:
+- preset: legal-sos-entities
+  server: legal-peripherals-mcp
+  tool: legal_ingest_sos_entities
+  action: list
+  records_path: entities
+  id_field: id
+  title_field: name
+  text_field: registered_address
+  updated_field: incorporation_date
+  pagination: null
+  doc_type: business_entity
+  raw:
+    server: legal-peripherals-mcp
+    tool: legal_ingest_sos_entities
+    action: list
+    records_path: entities
+    id_field: id
+    title_field: name
+    text_field: registered_address
+    updated_field: incorporation_date
+    doc_type: business_entity
+provenance:
+  generated_by: scripts/generate_connector_manifests.py
+  generated_at: '2026-07-09T00:00:00Z'
+  source_artifacts:
+  - legal_peripherals_mcp/connectors/mcp_source_presets.json
+  - legal_peripherals_mcp/ontology/legal.ttl
+  integrity:
+    algorithm: urdna2015-sha256
+    hash: 8db712c22bfacd72061cf91cb7adc3e8e0966f85ebc7bbcc6e8a435884e02f1c
+    triple_count: 198
+  signer: ontology-manifest-generator
+  signature: 538418a68ed2c2dd95c12d47f18b15a21a426e2a0d90ece6cd49b5875b886527
+policy:
+  pii_fields: {}
+  tenant_boundary: null
+  rls: []
+review_todos:
+- "policy.rls / policy.tenant_boundary are unset \u2014 no row-level-security predicate has been reviewed\
+  \ for this connector."
+- "relation 'conflictsWithParty' has no declared rdfs:domain resolving to a known resource in this connector's\
+  \ ontology \u2014 not attached to any resource; verify its true domain manually."
+- "relation 'governedByDoc' has no declared rdfs:domain resolving to a known resource in this connector's\
+  \ ontology \u2014 not attached to any resource; verify its true domain manually."
+- "relation 'hasClause' has no declared rdfs:domain resolving to a known resource in this connector's\
+  \ ontology \u2014 not attached to any resource; verify its true domain manually."
+- "relation 'ownsIP' has no declared rdfs:domain resolving to a known resource in this connector's ontology\
+  \ \u2014 not attached to any resource; verify its true domain manually."
+- "schema_mappings.BeneficiaryRole.ontology_class = 'BFO_0000023' [source ttl rdfs:subClassOf] \u2014\
+  \ verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.BusinessEntity.ontology_class = 'BFO_0000040' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.CaseLaw.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf] \u2014 verify manually\
+  \ before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.ContractClause.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.CorporateGovernanceDoc.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf]\
+  \ \u2014 verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.EINApplication.ontology_class = 'RegulatoryFiling' [source ttl rdfs:subClassOf] \u2014\
+  \ verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.EmploymentLawMatter.ontology_class = 'LegalMatter' [source ttl rdfs:subClassOf] \u2014\
+  \ verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.FederalStatute.ontology_class = 'Statute' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.IntellectualProperty.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf] \u2014\
+  \ verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.Jurisdiction.ontology_class = 'Place' [source ttl rdfs:subClassOf] \u2014 verify manually\
+  \ before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.LLCFormationFiling.ontology_class = 'RegulatoryFiling' [source ttl rdfs:subClassOf]\
+  \ \u2014 verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.LegalMatter.ontology_class = 'BFO_0000015' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.LegalPrecedent.ontology_class = 'CaseLaw' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.LegalTrust.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.MunicipalCode.ontology_class = 'Statute' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.RegulatoryFiling.ontology_class = 'BFO_0000015' [source ttl rdfs:subClassOf] \u2014\
+  \ verify manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.SettlorRole.ontology_class = 'BFO_0000023' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.StateStatute.ontology_class = 'Statute' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.Statute.ontology_class = 'BFO_0000031' [source ttl rdfs:subClassOf] \u2014 verify manually\
+  \ before relying on this crosswalk for reasoning/joins."
+- "schema_mappings.TrusteeRole.ontology_class = 'BFO_0000023' [source ttl rdfs:subClassOf] \u2014 verify\
+  \ manually before relying on this crosswalk for reasoning/joins."
