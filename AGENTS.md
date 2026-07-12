@@ -7,6 +7,8 @@
 <!-- CONCEPT:LP-OS.governance.legal-2 -->
 <!-- CONCEPT:LP-OS.identity.legal -->
 <!-- CONCEPT:LP-OS.governance.compliance-ontology-suite -->
+<!-- CONCEPT:LP-OS.governance.legal-domain-suite -->
+<!-- CONCEPT:LP-OS.governance.legal-compliance-kb -->
 
 This file acts as a machine-readable README for AI coding agents collaborating on this repository.
 
@@ -64,11 +66,19 @@ pytest -v
     ├── agent_server.py
     ├── api_client.py
     ├── auth.py
+    ├── compliance_kb.py
     ├── mcp
     │   ├── __init__.py
+    │   ├── mcp_compliance.py
     │   ├── mcp_ein.py
     │   ├── mcp_sos.py
     │   └── mcp_statute.py
+    ├── ontology
+    │   ├── compliance.ttl
+    │   ├── compliance_*.ttl (8 per-framework modules)
+    │   ├── domain_*.ttl (6 legal practice-area domain modules)
+    │   └── legal.ttl
+    ├── skills (21: 3 entity-formation + 18 domain)
     └── mcp_server.py
 ```
 
@@ -80,6 +90,8 @@ pytest -v
 | `CONCEPT:LP-OS.governance.legal-2` | IRS EIN & Off-Hours Filing | SS-4 PDF drafting and scheduling compliance operations |
 | `CONCEPT:LP-OS.identity.legal` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
 | `CONCEPT:LP-OS.governance.compliance-ontology-suite` | Regulatory/Legal Compliance Ontology Suite | Shared compliance upper ontology plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC), federated into epistemic-graph and cross-linked to the shared infra/asset ontology by data classification |
+| `CONCEPT:LP-OS.governance.legal-domain-suite` | Legal Practice-Area Domain Ontology Suite | 6 broader domain modules (regulatory, employment, commercial, privacy, corporate, litigation) modeling each practice area's vocabulary, each importing compliance.ttl + legal.ttl and cross-linked into existing FLSA/HIPAA/LLC individuals; declares GDPR + CCPA as :Regulation individuals |
+| `CONCEPT:LP-OS.governance.legal-compliance-kb` | Compliance Ontology Lookup Tool | KG-native `legal_compliance_lookup` action-routed MCP tool querying the bundled ontology suite directly (no external API); backs the 18 new domain skills |
 | `CONCEPT:AU-ECO.messaging.native-backend-abstraction` | Ecosystem Compliance | Multi-package integration compliance standard |
 
 ---

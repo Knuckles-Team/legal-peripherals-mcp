@@ -26,6 +26,12 @@ graph TD
         MCP -->|SOSTOOL| SOS[Secretary of State Lookup]
         MCP -->|EINTOOL| EIN[IRS Form SS-4 EIN Engine]
         MCP -->|STATUTETOOL| STATUTE["Statute & Charter Templates"]
+        MCP -->|COMPLIANCETOOL| COMPLIANCE["Compliance + Domain Ontology Lookup"]
+    end
+
+    subgraph Ontology Suite [Compliance + Domain Modules]
+        COMPLIANCE -->|regulation_detail / gate_requirements| FRAMEWORKS["HIPAA · BSA/AML · OCC · Dodd-Frank<br/>CFPB · FLSA · Taxation · LLC"]
+        COMPLIANCE -->|list_domains / sector_lookup| DOMAINS["Regulatory · Employment · Commercial<br/>Privacy (GDPR/CCPA) · Corporate · Litigation"]
     end
 
     subgraph State Scraping Layer
@@ -63,6 +69,7 @@ Auto-generated — do not edit between the markers below.
 | MCP Tool | Toggle Env Var | Description |
 |----------|----------------|-------------|
 | `draft_ein_form` | `EINTOOL` | Draft IRS Form SS-4 and schedule EIN filing with off-hours compliance (Mon-Fri 7:00 AM - 10:00 PM EST). |
+| `legal_compliance_lookup` | `COMPLIANCETOOL` | Query the bundled compliance + domain ontology suite (KG-native, no external API). |
 | `lookup_statute_rules` | `STATUTETOOL` | Query state statutory default rules and retrieve corporate/LLC charter templates. |
 | `sos_entity_lookup` | `SOSTOOL` | Perform Secretary of State entity lookup across 50 states (scrapers for TX, DE, WY, NV, resilient fallback for others). |
 
@@ -77,7 +84,7 @@ Auto-generated — do not edit between the markers below.
 
 </details>
 
-_3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unless its `<DOMAIN>TOOL` toggle is set false; `MCP_TOOL_MODE` selects the surface (`condensed` default · `verbose` 1:1 · `both`). Auto-generated — do not edit._
+_4 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unless its `<DOMAIN>TOOL` toggle is set false; `MCP_TOOL_MODE` selects the surface (`condensed` default · `verbose` 1:1 · `both`). Auto-generated — do not edit._
 <!-- MCP-TOOLS-TABLE:END -->
 
 ---
@@ -107,6 +114,7 @@ _3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unl
       "env": {
         "MCP_TOOL_MODE": "condensed",
         "BYPASS_IRS_FILING_HOURS": "False",
+        "COMPLIANCETOOL": "True",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
         "INGESTTOOL": "",
@@ -146,6 +154,7 @@ _3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unl
         "PORT": "8000",
         "MCP_TOOL_MODE": "condensed",
         "BYPASS_IRS_FILING_HOURS": "False",
+        "COMPLIANCETOOL": "True",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
         "INGESTTOOL": "",
@@ -186,6 +195,7 @@ docker run -d \
   -e PORT=8000 \
   -e MCP_TOOL_MODE=condensed \
   -e BYPASS_IRS_FILING_HOURS=False \
+  -e COMPLIANCETOOL=True \
   -e EINTOOL=True \
   -e EIN_TIMEOUT_SECONDS=30 \
   -e INGESTTOOL="" \
@@ -251,6 +261,7 @@ Secrets are read-existing + seeded via `vault_sync` — you are only prompted fo
 | `SOSTOOL` | `True` | Tool Suite Toggles |
 | `EINTOOL` | `True` |  |
 | `STATUTETOOL` | `True` |  |
+| `COMPLIANCETOOL` | `True` |  |
 | `BYPASS_IRS_FILING_HOURS` | `False` | IRS EIN API hours simulation override (optional, True to bypass hours restriction in dev) |
 | `EIN_TIMEOUT_SECONDS` | `30` | EIN draft request timeout in seconds |
 | `SOS_TIMEOUT_SECONDS` | `30` | Secretary of State entity lookup (OpenCorporates company registry) |
@@ -290,5 +301,5 @@ Secrets are read-existing + seeded via `vault_sync` — you are only prompted fo
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 | `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_12 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_13 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
