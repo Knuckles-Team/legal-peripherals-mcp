@@ -220,7 +220,9 @@ async def _do_ein_draft(
             f"Filing Mode: Off-Hours Deferred Queue."
         )
 
-    rendered = f"{draft_pdf_info}\n----------------------------------------\n{status_msg}"
+    rendered = (
+        f"{draft_pdf_info}\n----------------------------------------\n{status_msg}"
+    )
     _maybe_ingest_ein(
         legal_name=legal_name,
         trade_name=trade_name,

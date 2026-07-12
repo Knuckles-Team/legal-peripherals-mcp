@@ -11,6 +11,8 @@
         "BYPASS_IRS_FILING_HOURS": "False",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
+        "INGESTTOOL": "",
+        "LEGAL_KG_INGEST": "",
         "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
         "LEGAL_PERIPHERALS_TOKEN": "",
         "OPENCORPORATES_API_TOKEN": "",

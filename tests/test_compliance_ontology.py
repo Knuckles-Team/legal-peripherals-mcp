@@ -13,13 +13,16 @@ asset resolves to HIPAA via :classifiedAs/:appliesToDataClass, and directly via
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 rdflib = pytest.importorskip("rdflib")
 from rdflib.namespace import OWL, RDF  # noqa: E402
 
-ONTOLOGY_DIR = Path(__file__).resolve().parent.parent / "legal_peripherals_mcp" / "ontology"
+ONTOLOGY_DIR = (
+    Path(__file__).resolve().parent.parent / "legal_peripherals_mcp" / "ontology"
+)
 UPPER_TTL = ONTOLOGY_DIR / "compliance.ttl"
 MODULE_TTLS = sorted(ONTOLOGY_DIR.glob("compliance_*.ttl"))
 
@@ -85,14 +88,14 @@ MODULE_REGULATIONS = {
 }
 
 
-def _graph(*paths: Path) -> "rdflib.Graph":
+def _graph(*paths: Path) -> Any:
     g = rdflib.Graph()
     for p in paths:
         g.parse(str(p), format="turtle")
     return g
 
 
-def _full_graph() -> "rdflib.Graph":
+def _full_graph() -> Any:
     return _graph(UPPER_TTL, *MODULE_TTLS)
 
 
@@ -137,12 +140,21 @@ def test_upper_ontology_defines_expected_classes():
 def test_upper_ontology_defines_expected_properties():
     g = _graph(UPPER_TTL)
     for prop in EXPECTED_UPPER_PROPERTIES:
-        assert (KG[prop], RDF.type, OWL.ObjectProperty) in g, f"missing property :{prop}"
+        assert (
+            KG[prop],
+            RDF.type,
+            OWL.ObjectProperty,
+        ) in g, f"missing property :{prop}"
 
 
 def test_upper_ontology_declares_canonical_individuals():
     g = _graph(UPPER_TTL)
-    for sector in ("FinanceSector", "MedicalSector", "GovernmentSector", "PrivateSector"):
+    for sector in (
+        "FinanceSector",
+        "MedicalSector",
+        "GovernmentSector",
+        "PrivateSector",
+    ):
         assert (KG[sector], RDF.type, KG.Sector) in g
     for dataclass in ("PHI", "PII", "PCI", "FinancialData", "CUI"):
         assert (KG[dataclass], RDF.type, KG.DataClassification) in g
@@ -178,14 +190,14 @@ def test_module_parses(module_path: Path):
 def test_module_imports_upper_ontology(module_path: Path):
     g = _graph(module_path)
     ontologies = list(g.subjects(RDF.type, OWL.Ontology))
-    assert len(ontologies) == 1, f"{module_path.name} must declare exactly one owl:Ontology"
+    assert (
+        len(ontologies) == 1
+    ), f"{module_path.name} must declare exactly one owl:Ontology"
     imports = set(g.objects(ontologies[0], OWL.imports))
     assert UPPER_IRI in imports, f"{module_path.name} does not import {UPPER_IRI}"
 
 
-@pytest.mark.parametrize(
-    "module_name,regulation", sorted(MODULE_REGULATIONS.items())
-)
+@pytest.mark.parametrize("module_name,regulation", sorted(MODULE_REGULATIONS.items()))
 def test_module_declares_its_regulation_tagged_sector_and_dataclass(
     module_name: str, regulation: str
 ):
@@ -194,7 +206,11 @@ def test_module_declares_its_regulation_tagged_sector_and_dataclass(
     :enforcedBy — the sector/domain-class tagging the task requires."""
     g = _graph(ONTOLOGY_DIR / module_name)
     reg_uri = KG[regulation]
-    assert (reg_uri, RDF.type, KG.Regulation) in g, f"{module_name}: {regulation} not a :Regulation"
+    assert (
+        reg_uri,
+        RDF.type,
+        KG.Regulation,
+    ) in g, f"{module_name}: {regulation} not a :Regulation"
     sectors = list(g.objects(reg_uri, KG.appliesToSector))
     assert sectors, f"{module_name}: {regulation} has no :appliesToSector"
     dataclasses = list(g.objects(reg_uri, KG.appliesToDataClass))
@@ -205,9 +221,7 @@ def test_module_declares_its_regulation_tagged_sector_and_dataclass(
         assert (authority, RDF.type, KG.RegulatoryAuthority) in g
 
 
-@pytest.mark.parametrize(
-    "module_name,regulation", sorted(MODULE_REGULATIONS.items())
-)
+@pytest.mark.parametrize("module_name,regulation", sorted(MODULE_REGULATIONS.items()))
 def test_module_obligations_have_controls(module_name: str, regulation: str):
     """Every Obligation a Regulation imposes requires at least one Control."""
     g = _graph(ONTOLOGY_DIR / module_name)
@@ -259,7 +273,9 @@ def test_full_suite_parses_as_one_graph_with_no_local_name_collisions():
             if str(s).startswith(str(KG)):
                 subject_owners.setdefault(str(s), set()).add(ttl.name)
     collisions = {s: owners for s, owners in subject_owners.items() if len(owners) > 1}
-    assert not collisions, f"local-name collisions across compliance modules: {collisions}"
+    assert (
+        not collisions
+    ), f"local-name collisions across compliance modules: {collisions}"
 
 
 # --------------------------------------------------------------------------- #
@@ -281,7 +297,9 @@ def test_asset_with_phi_dataclass_resolves_to_hipaa_via_applies_to_data_class():
         ?regulation :appliesToDataClass ?dataclass .
     }
     """
-    resolved = {row.regulation for row in g.query(query, initBindings={"asset": example_asset})}
+    resolved = {
+        row.regulation for row in g.query(query, initBindings={"asset": example_asset})
+    }
     assert KG.HIPAA in resolved
 
 

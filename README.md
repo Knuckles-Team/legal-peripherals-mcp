@@ -109,6 +109,8 @@ _3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unl
         "BYPASS_IRS_FILING_HOURS": "False",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
+        "INGESTTOOL": "",
+        "LEGAL_KG_INGEST": "",
         "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
         "LEGAL_PERIPHERALS_TOKEN": "",
         "OPENCORPORATES_API_TOKEN": "",
@@ -146,6 +148,8 @@ _3 action-routed tool(s) (default) · 1 verbose 1:1 tool(s). Each is enabled unl
         "BYPASS_IRS_FILING_HOURS": "False",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
+        "INGESTTOOL": "",
+        "LEGAL_KG_INGEST": "",
         "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
         "LEGAL_PERIPHERALS_TOKEN": "",
         "OPENCORPORATES_API_TOKEN": "",
@@ -184,6 +188,8 @@ docker run -d \
   -e BYPASS_IRS_FILING_HOURS=False \
   -e EINTOOL=True \
   -e EIN_TIMEOUT_SECONDS=30 \
+  -e INGESTTOOL="" \
+  -e LEGAL_KG_INGEST="" \
   -e LEGAL_PERIPHERALS_BASE_URL=http://localhost:8000 \
   -e LEGAL_PERIPHERALS_TOKEN="" \
   -e OPENCORPORATES_API_TOKEN="" \
@@ -272,9 +278,11 @@ Secrets are read-existing + seeded via `vault_sync` — you are only prompted fo
 | `EUNOMIA_REMOTE_URL` | — | Remote Eunomia authorization server URL |
 | `ENABLE_OTEL` | `False` | Enable OpenTelemetry export |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | — | OTLP collector endpoint |
-| `MCP_CLIENT_AUTH` | — | Outbound MCP auth (`oidc-client-credentials` for fleet calls) |
+| `MCP_CLIENT_AUTH` | — | Outbound MCP child auth: `oidc-client-credentials` | `basic` | `none` |
 | `OIDC_CLIENT_ID` | — | OIDC client id (service-account auth) |
 | `OIDC_CLIENT_SECRET` | — | OIDC client secret (service-account auth) |
+| `MCP_BASIC_AUTH_USERNAME` | — | HTTP Basic username (`MCP_CLIENT_AUTH=basic`) |
+| `MCP_BASIC_AUTH_PASSWORD` | — | HTTP Basic password (`MCP_CLIENT_AUTH=basic`) |
 | `DEBUG` | `False` | Verbose logging |
 | `PYTHONUNBUFFERED` | `1` | Unbuffered stdout (recommended in containers) |
 | `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
@@ -282,5 +290,5 @@ Secrets are read-existing + seeded via `vault_sync` — you are only prompted fo
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 | `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_12 package + 22 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_12 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
