@@ -8,5 +8,6 @@ services:
       - SOSTOOL=True
       - EINTOOL=True
       - STATUTETOOL=True
+      - COMPLIANCETOOL=True
     ports:
       - "8000:8000"

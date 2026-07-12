@@ -1,0 +1,216 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Privacy domain module — the privacy practice area (DSARs, DPAs, PIAs/DPIAs,
+# processing-activity triage, and privacy-policy gap monitoring).
+# Imports the shared upper ontology. Declares GDPR and CCPA as
+# :Regulation individuals (neither existed elsewhere in the suite) following the
+# same pattern as compliance_hipaa.ttl/compliance_flsa.ttl, cross-linked to the
+# hub's :PII/:PHI :DataClassification individuals. :PrivacyImpactAssessment
+# reuses (subclasses) compliance.ttl's :Assessment rather than redefining it.
+# :ProcessingActivity / :ConsentRecord follow the same shape a privacy-ops
+# platform (e.g. OneTrust's RoPA / Assessments / DSAR modules — see this fleet's
+# `onetrust-api` package) would model, so KG-native queries here compose with a
+# real OneTrust ingestion without translation. Key concepts/obligations/controls
+# only, not exhaustive legal text. CONCEPT:LP-OS.governance.legal-domain-privacy
+
+<http://knuckles.team/kg/legal-domain-privacy> a owl:Ontology ;
+    rdfs:label "Privacy Domain Module" ;
+    rdfs:comment """Privacy-program concepts — DSARs, DPAs, PIAs/DPIAs, processing
+activities, and consent records — plus the GDPR and CCPA Regulation individuals,
+for the privacy practice area, cross-linked to the shared PII/PHI
+DataClassification individuals.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:DataSubjectRequest a owl:Class ;
+    rdfs:label "Data Subject Request" ;
+    rdfs:comment "A DSAR — access, deletion, portability, or correction request from a data subject, with a jurisdiction-driven response-deadline clock. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:DataProcessingAgreement a owl:Class ;
+    rdfs:label "Data Processing Agreement" ;
+    rdfs:comment "A DPA between controller and processor governing how PII/PHI is processed on the other party's behalf." ;
+    rdfs:subClassOf :Contract .
+
+:PrivacyImpactAssessment a owl:Class ;
+    rdfs:label "Privacy Impact Assessment" ;
+    rdfs:comment "A PIA, or a mandatory GDPR Data Protection Impact Assessment (DPIA), evaluating a ProcessingActivity's privacy risk. Specializes compliance.ttl's :Assessment." ;
+    rdfs:subClassOf :Assessment .
+
+:ProcessingActivity a owl:Class ;
+    rdfs:label "Processing Activity" ;
+    rdfs:comment "A record of a data-processing activity (a Record of Processing Activities / RoPA entry) — the unit a use-case triage or PIA evaluates." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:ConsentRecord a owl:Class ;
+    rdfs:label "Consent Record" ;
+    rdfs:comment "A durable record of the legal basis (consent, legitimate interest, contract, legal obligation) relied on for a ProcessingActivity." ;
+    rdfs:subClassOf bfo:0000031 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:requestType a owl:DatatypeProperty ;
+    rdfs:comment "access, deletion, portability, or correction." ;
+    rdfs:domain :DataSubjectRequest ;
+    rdfs:range xsd:string .
+
+:requestDeadline a owl:DatatypeProperty ;
+    rdfs:label "request response deadline" ;
+    rdfs:comment "The statutory response-by date (e.g. GDPR 30 days, CCPA 45 days)." ;
+    rdfs:domain :DataSubjectRequest ;
+    rdfs:range xsd:date .
+
+:concernsDataSubject a owl:ObjectProperty ;
+    rdfs:domain :DataSubjectRequest ;
+    rdfs:range :Person .
+
+:processorRole a owl:DatatypeProperty ;
+    rdfs:comment "controller or processor — which half of the DPA playbook applies." ;
+    rdfs:domain :DataProcessingAgreement ;
+    rdfs:range xsd:string .
+
+:assessesActivity a owl:ObjectProperty ;
+    rdfs:label "assesses activity" ;
+    rdfs:domain :PrivacyImpactAssessment ;
+    rdfs:range :ProcessingActivity .
+
+:processesDataClass a owl:ObjectProperty ;
+    rdfs:label "processes data class" ;
+    rdfs:comment "Links a ProcessingActivity to the DataClassification(s) it handles — the join used by use-case triage to decide whether a PIA or a mandatory DPIA is required." ;
+    rdfs:domain :ProcessingActivity ;
+    rdfs:range :DataClassification .
+
+:recordsConsent a owl:ObjectProperty ;
+    rdfs:domain :ProcessingActivity ;
+    rdfs:range :ConsentRecord .
+
+:legalBasis a owl:DatatypeProperty ;
+    rdfs:comment "consent, legitimate_interest, contract, or legal_obligation." ;
+    rdfs:domain :ConsentRecord ;
+    rdfs:range xsd:string .
+
+#################################################################
+# GDPR
+#################################################################
+
+:EUDataProtectionAuthority a :RegulatoryAuthority ;
+    rdfs:label "EU/EEA Data Protection Authority" ;
+    rdfs:comment "The competent national supervisory authority (or the lead authority under one-stop-shop) enforcing the GDPR." .
+
+:GDPR a :Regulation ;
+    rdfs:label "GDPR" ;
+    rdfs:comment "EU General Data Protection Regulation (Regulation (EU) 2016/679) — data-subject rights, lawful-basis, and breach-notification requirements for personal data of EU/EEA data subjects." ;
+    :appliesToSector :PrivateSector,
+        :GovernmentSector ;
+    :appliesToDataClass :PII ;
+    :enforcedBy :EUDataProtectionAuthority ;
+    :imposesObligation :GDPRDataSubjectRightsObligation,
+        :GDPRDPIAObligation,
+        :GDPRBreachNotificationObligation ;
+    :hasReportingRequirement :GDPRBreachNotificationRequirement .
+
+:GDPRDataSubjectRightsObligation a :Obligation ;
+    rdfs:label "GDPR Data Subject Rights Obligation" ;
+    rdfs:comment "Honor access, erasure, portability, correction, and objection requests within the statutory response window (generally one month, extendable)." ;
+    :requiresControl :DSARFulfillmentControl ;
+    :violation :GDPRAdministrativeFine .
+
+:GDPRDPIAObligation a :Obligation ;
+    rdfs:label "GDPR DPIA Obligation" ;
+    rdfs:comment "Conduct a Data Protection Impact Assessment before processing likely to result in high risk to data subjects (Art. 35)." ;
+    :requiresControl :DPIAProcessControl ;
+    :violation :GDPRAdministrativeFine .
+
+:GDPRBreachNotificationObligation a :Obligation ;
+    rdfs:label "GDPR Breach Notification Obligation" ;
+    rdfs:comment "Notify the supervisory authority within 72 hours of becoming aware of a personal-data breach, and affected data subjects without undue delay when high risk." ;
+    :requiresControl :BreachNotification72HourControl ;
+    :violation :GDPRAdministrativeFine .
+
+:DSARFulfillmentControl a :Control ;
+    rdfs:label "DSAR Fulfillment Control" ;
+    rdfs:comment "Documented, system-by-system procedure to locate, verify identity for, and respond to a data-subject request within deadline." .
+
+:DPIAProcessControl a :Control ;
+    rdfs:label "DPIA Process Control" ;
+    rdfs:comment "A standing process that triages new processing activities and runs a DPIA for those crossing the high-risk threshold." .
+
+:BreachNotification72HourControl a :Control ;
+    rdfs:label "72-Hour Breach Notification Control" ;
+    rdfs:comment "Incident-response runbook meeting the GDPR 72-hour supervisory-authority notification clock." .
+
+:GDPRAdministrativeFine a :Penalty ;
+    rdfs:label "GDPR Administrative Fine" ;
+    rdfs:comment "Tiered administrative fines up to the higher of a fixed cap or a percentage of global annual turnover, depending on the provision violated." .
+
+:GDPRBreachNotificationRequirement a :ReportingRequirement ;
+    rdfs:label "GDPR 72-Hour Breach Notification Filing" ;
+    rdfs:comment "Notify the competent supervisory authority within 72 hours of breach awareness." ;
+    :triggeredByObligation :GDPRBreachNotificationObligation .
+
+#################################################################
+# CCPA / CPRA
+#################################################################
+
+:CaliforniaPrivacyProtectionAgency a :RegulatoryAuthority ;
+    rdfs:label "California Privacy Protection Agency" ;
+    rdfs:comment "The state agency enforcing the CCPA as amended by the CPRA." .
+
+:CCPA a :Regulation ;
+    rdfs:label "CCPA" ;
+    rdfs:comment "California Consumer Privacy Act, as amended by the CPRA — consumer rights to know, delete, correct, and opt out of the sale/sharing of personal information." ;
+    :appliesToSector :PrivateSector ;
+    :appliesToDataClass :PII ;
+    :enforcedBy :CaliforniaPrivacyProtectionAgency ;
+    :imposesObligation :CCPAConsumerRightsObligation,
+        :CCPAOptOutObligation .
+
+:CCPAConsumerRightsObligation a :Obligation ;
+    rdfs:label "CCPA Consumer Rights Obligation" ;
+    rdfs:comment "Respond to verified consumer requests to know, delete, or correct personal information within 45 days (extendable)." ;
+    :requiresControl :DSARFulfillmentControl ;
+    :violation :CCPACivilPenalty .
+
+:CCPAOptOutObligation a :Obligation ;
+    rdfs:label "CCPA Opt-Out / Do-Not-Sell-or-Share Obligation" ;
+    rdfs:comment "Provide a clear and conspicuous mechanism for consumers to opt out of the sale or sharing of their personal information, and honor Global Privacy Control signals." ;
+    :requiresControl :DoNotSellMechanismControl ;
+    :violation :CCPACivilPenalty .
+
+:DoNotSellMechanismControl a :Control ;
+    rdfs:label "Do-Not-Sell-or-Share Mechanism Control" ;
+    rdfs:comment "A working 'Do Not Sell or Share My Personal Information' link/API honoring opt-out and Global Privacy Control signals." .
+
+:CCPACivilPenalty a :Penalty ;
+    rdfs:label "CCPA Civil Penalty" ;
+    rdfs:comment "Per-violation civil penalties (higher tier for violations involving a minor's data), plus a limited private right of action for certain data breaches." .
+
+#################################################################
+# canonical / illustrative individuals — the DataClassification cross-link
+#################################################################
+
+:ExampleMarketingProcessingActivity a :ProcessingActivity ;
+    rdfs:label "Example: Marketing Analytics Processing Activity" ;
+    rdfs:comment "Illustrative ProcessingActivity handling PII, resolving to both GDPR and CCPA via :processesDataClass / the shared :PII individual." ;
+    :processesDataClass :PII .
+
+:CCPAOptOutComplianceRequirement a :ComplianceRequirement ;
+    rdfs:label "Do-Not-Sell-or-Share Mechanism Requirement" ;
+    rdfs:comment "Any ProcessingActivity that sells/shares PII must satisfy the DoNotSellMechanismControl before it may launch." ;
+    :derivedFromRegulation :CCPA ;
+    :requiresControl :DoNotSellMechanismControl .
+
+:ExampleMarketingProcessingActivityDPIA a :PrivacyImpactAssessment ;
+    rdfs:label "Example: DPIA for the Marketing Analytics Activity" ;
+    :assessesActivity :ExampleMarketingProcessingActivity ;
+    :evaluatesRequirement :CCPAOptOutComplianceRequirement .

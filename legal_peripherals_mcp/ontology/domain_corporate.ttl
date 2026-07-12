@@ -1,0 +1,120 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Corporate / entity-governance domain module — the corporate practice area
+# (board resolutions, written consents, closing checklists, M&A diligence
+# findings, material-contract schedules, and entity-compliance tracking).
+# Bonus module beyond the four core domains. Imports the shared upper ontology.
+# Formally types :Company
+# (subClassOf :Organization) — used but never declared across legal.ttl/
+# compliance_*.ttl until now. Reuses legal.ttl's :CorporateGovernanceDoc /
+# :governedByDoc / :governanceDocType for board resolutions and written consents,
+# and cross-links entity-compliance deadline tracking straight to
+# compliance_llc.ttl's :LLCAnnualReportRequirement — the same LLC formation/
+# governance capability this package's SOS + EIN tools already back. Key
+# concepts/document types/controls only, not exhaustive legal text.
+# CONCEPT:LP-OS.governance.legal-domain-corporate
+
+<http://knuckles.team/kg/legal-domain-corporate> a owl:Ontology ;
+    rdfs:label "Corporate / Entity Governance Domain Module" ;
+    rdfs:comment """Corporate governance and M&A-diligence concepts — board
+resolutions, written consents, diligence findings, material-contract schedules,
+closing checklists, and entity-compliance deadline tracking for the corporate
+practice area, cross-linked to the LLC compliance module.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:Company a owl:Class ;
+    rdfs:label "Company" ;
+    rdfs:comment "A business organization. Formally types legal.ttl's previously-undeclared :Company range/domain (:filedBy, :governedByDoc, :ownsIP, :hasBeneficiary)." ;
+    rdfs:subClassOf :Organization .
+
+:BoardResolution a owl:Class ;
+    rdfs:label "Board Resolution" ;
+    rdfs:comment "A board or committee resolution in house format. Specializes legal.ttl's :CorporateGovernanceDoc (governanceDocType 'board_resolution')." ;
+    rdfs:subClassOf :CorporateGovernanceDoc .
+
+:WrittenConsent a owl:Class ;
+    rdfs:label "Written Consent" ;
+    rdfs:comment "A unanimous written consent of the board or a committee, taken in lieu of a meeting." ;
+    rdfs:subClassOf :CorporateGovernanceDoc .
+
+:DiligenceFinding a owl:Class ;
+    rdfs:label "Diligence Finding" ;
+    rdfs:comment "An issue extracted from VDR documents during M&A diligence, categorized and rated against a materiality threshold. BFO:GenericallyDependentContinuant." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:MaterialContract a owl:Class ;
+    rdfs:label "Material Contract" ;
+    rdfs:comment "A Contract meeting the purchase agreement's Material Contract definition, scheduled on the disclosure schedule." ;
+    rdfs:subClassOf :Contract .
+
+:ClosingChecklistItem a owl:Class ;
+    rdfs:label "Closing Checklist Item" ;
+    rdfs:comment "A tracked item blocking (or clearing the path to) deal close, on the critical path or not." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:EntityComplianceDeadline a owl:Class ;
+    rdfs:label "Entity Compliance Deadline" ;
+    rdfs:comment "A tracked instance of a recurring entity-compliance ReportingRequirement (e.g. this specific LLC's next annual-report due date) for a specific Company." ;
+    rdfs:subClassOf bfo:0000031 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:subsidiaryOf a owl:ObjectProperty ;
+    rdfs:label "subsidiary of" ;
+    rdfs:domain :Company ;
+    rdfs:range :Company .
+
+:materialityThreshold a owl:DatatypeProperty ;
+    rdfs:domain :DiligenceFinding ;
+    rdfs:range xsd:string .
+
+:findingCategory a owl:DatatypeProperty ;
+    rdfs:comment "House diligence category (e.g. change_of_control, ip_assignment, litigation, key_contract)." ;
+    rdfs:domain :DiligenceFinding ;
+    rdfs:range xsd:string .
+
+:blocksClosing a owl:ObjectProperty ;
+    rdfs:label "blocks closing" ;
+    rdfs:domain :ClosingChecklistItem ;
+    rdfs:range :DiligenceFinding .
+
+:closingStatus a owl:DatatypeProperty ;
+    rdfs:comment "open, closed, or waived." ;
+    rdfs:domain :ClosingChecklistItem ;
+    rdfs:range xsd:string .
+
+:tracksRequirement a owl:ObjectProperty ;
+    rdfs:label "tracks requirement" ;
+    rdfs:comment "Links a Company-specific EntityComplianceDeadline to the general ReportingRequirement it instantiates (e.g. LLCAnnualReportRequirement)." ;
+    rdfs:domain :EntityComplianceDeadline ;
+    rdfs:range :ReportingRequirement .
+
+:deadlineFor a owl:ObjectProperty ;
+    rdfs:label "deadline for" ;
+    rdfs:domain :EntityComplianceDeadline ;
+    rdfs:range :Company .
+
+:nextDueDate a owl:DatatypeProperty ;
+    rdfs:domain :EntityComplianceDeadline ;
+    rdfs:range xsd:date .
+
+#################################################################
+# canonical / illustrative individuals — the LLC cross-link
+#################################################################
+
+:ExampleLLCAnnualReportDeadline a :EntityComplianceDeadline ;
+    rdfs:label "Example: LLC Annual Report Deadline" ;
+    rdfs:comment "Illustrative Company-specific instance of compliance_llc.ttl's LLCAnnualReportRequirement, the same reporting requirement this package's SOS/EIN entity-formation tools already back." ;
+    :tracksRequirement :LLCAnnualReportRequirement ;
+    :nextDueDate "2027-03-01"^^xsd:date .

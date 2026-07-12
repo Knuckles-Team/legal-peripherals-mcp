@@ -9,6 +9,7 @@
       "env": {
         "MCP_TOOL_MODE": "condensed",
         "BYPASS_IRS_FILING_HOURS": "False",
+        "COMPLIANCETOOL": "True",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
         "INGESTTOOL": "",

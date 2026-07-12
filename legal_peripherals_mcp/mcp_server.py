@@ -15,6 +15,7 @@ from starlette.responses import JSONResponse
 
 from legal_peripherals_mcp.api_client import Api
 from legal_peripherals_mcp.auth import get_client
+from legal_peripherals_mcp.mcp.mcp_compliance import handle_compliance_lookup
 from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
@@ -141,6 +142,37 @@ def register_ingest_tools(mcp: Any) -> None:
             ingest_filing_file, file_path, filing_type=filing_type, name=name
         )
         return {"file": file_path, "ingested": result}
+
+
+def register_compliance_tools(mcp: Any) -> None:
+    """Register the action-routed compliance-ontology lookup tool (tag: compliance)."""
+
+    @mcp.tool()
+    async def legal_compliance_lookup(
+        action: str,
+        regulation: str = "",
+        sector: str = "",
+        data_class: str = "",
+        data_classes: str = "",
+        ctx: Any = None,
+    ) -> dict:
+        """Query the bundled compliance + domain ontology suite (KG-native, no external API).
+
+        Actions: ``list_domains``, ``list_regulations`` (optional ``sector``/
+        ``data_class``), ``regulation_detail`` (needs ``regulation``), ``sector_lookup``
+        (needs ``sector``), ``dataclass_lookup`` (needs ``data_class``),
+        ``gate_requirements`` (needs comma-separated ``data_classes``, e.g. "PHI,PII")
+        — resolves the applicable Regulation(s) and required Control(s) the way a
+        ComplianceGate would for a governed entity carrying those data classifications.
+        """
+        return await handle_compliance_lookup(
+            action=action,
+            regulation=regulation,
+            sector=sector,
+            data_class=data_class,
+            data_classes=data_classes,
+            ctx=ctx,
+        )
 
 
 def get_mcp_instance() -> Any:

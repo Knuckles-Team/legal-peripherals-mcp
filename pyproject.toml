@@ -29,8 +29,15 @@ text = "MIT"
 [project.optional-dependencies]
 mcp = [ "agent-utilities[mcp]>=1.0.0", ]
 agent = [ "agent-utilities[agent,logfire]>=1.0.0", ]
-all = [ "agent-utilities[mcp,agent,logfire]>=1.0.0", ]
-test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", ]
+# Local rdflib-backed compliance-ontology lookup (legal_compliance_lookup tool /
+# compliance_kb.py). Kept out of core `dependencies` and out of the slim `mcp`
+# image per the fleet's owl-extra discipline (agent-utilities' dependency
+# discipline: rdflib/owlready2/pyshacl are a last-resort Python fallback, import-lazy, never
+# on the lean serving plane); the engine's native RDF/SPARQL surface is the
+# primary path. Without it the tool degrades honestly instead of crashing.
+ontology = [ "rdflib>=7.6.0", ]
+all = [ "agent-utilities[mcp,agent,logfire]>=1.0.0", "rdflib>=7.6.0", ]
+test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", "rdflib>=7.6.0", ]
 
 [project.scripts]
 legal-peripherals-mcp = "legal_peripherals_mcp.mcp_server:mcp_server"

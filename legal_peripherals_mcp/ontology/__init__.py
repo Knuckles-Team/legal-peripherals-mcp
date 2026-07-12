@@ -21,6 +21,23 @@ Modules carried:
   ``compliance_dodd_frank.ttl``, ``compliance_cfpb.ttl``, ``compliance_flsa.ttl``,
   ``compliance_taxation.ttl``, ``compliance_llc.ttl`` — one module per regulatory
   framework, each importing ``compliance.ttl``. See ``compliance.ttl``'s header
-  comment for the pattern to follow when adding more (GDPR, SOX, PCI-DSS,
-  FedRAMP/NIST, GLBA, ...).
+  comment for the pattern to follow when adding more (SOX, PCI-DSS, FedRAMP/NIST,
+  GLBA, ...).
+- ``domain_regulatory.ttl``, ``domain_employment.ttl``, ``domain_commercial.ttl``,
+  ``domain_privacy.ttl``, ``domain_corporate.ttl``, ``domain_litigation.ttl`` —
+  legal practice-area domain suite (CONCEPT:LP-OS.governance.legal-domain-suite):
+  one broader domain module per legal practice area, each importing
+  ``compliance.ttl`` + ``legal.ttl``. Unlike the single-Regulation
+  ``compliance_<framework>.ttl`` modules above, these carry a domain's *artifact*
+  and *process* vocabulary — regulatory-change/enforcement lifecycle, employment
+  contracts/investigations/leave, commercial contract types/renewals/escalation,
+  privacy DSARs/DPAs/PIAs (declaring GDPR + CCPA as :Regulation individuals),
+  corporate governance/diligence/entity-compliance, and litigation
+  matters/holds/claim charts — cross-linked into the existing compliance modules
+  (e.g. domain_employment.ttl's WorkerClassificationAssessment triggers
+  compliance_flsa.ttl's Obligations; domain_commercial.ttl's Contract resolves to
+  compliance_hipaa.ttl's BAA Attestation via DataClassification;
+  domain_corporate.ttl tracks compliance_llc.ttl's LLCAnnualReportRequirement).
+  Queryable through the ``legal_compliance_lookup`` MCP tool
+  (``legal_peripherals_mcp/compliance_kb.py``).
 """

@@ -324,7 +324,7 @@ def search_companies(
                 "q": entity_name.strip(),
                 "jurisdiction_code": jurisdiction,
                 "api_token": token,
-                "per_page": max(1, min(int(limit), 100)),
+                "per_page": str(max(1, min(int(limit), 100))),
             },
             timeout=_OC_TIMEOUT,
         )

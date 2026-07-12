@@ -1,0 +1,155 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Employment-law domain module — the employment practice area (worker
+# classification, wage/hour, hiring/termination review, handbook policy, the
+# internal-investigation lifecycle, leave tracking, and international expansion).
+# Imports the shared upper ontology; reuses (never redefines) legal.ttl's
+# :EmploymentLawMatter / :Employee(-range) / :involvesEmployee /
+# :governedByEmploymentStatute / :employmentLawType and the hub's :Policy /
+# :Person. Cross-links to :FLSA (compliance_flsa.ttl) so a worker-classification
+# outcome or a handbook policy resolves to the federal wage/hour obligations it
+# implements. Also formally types :Employee (subClassOf :Person) — referenced by
+# legal.ttl's :involvesEmployee but never declared as an owl:Class until now.
+# Key concepts/obligations/controls only, not exhaustive legal text.
+# CONCEPT:LP-OS.governance.legal-domain-employment
+
+<http://knuckles.team/kg/legal-domain-employment> a owl:Ontology ;
+    rdfs:label "Employment Law Domain Module" ;
+    rdfs:comment """Employment lifecycle concepts — worker classification, hiring/
+termination review, handbook policy, internal investigations, leave tracking, and
+international expansion for the employment practice area, cross-linked to the
+FLSA compliance module.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:Employee a owl:Class ;
+    rdfs:label "Employee" ;
+    rdfs:comment "A natural person in an employment relationship. Formally types legal.ttl's previously-undeclared :Employee range (:involvesEmployee)." ;
+    rdfs:subClassOf :Person .
+
+:EmploymentContract a owl:Class ;
+    rdfs:label "Employment Contract" ;
+    rdfs:comment "An offer letter, employment agreement, or restrictive-covenant agreement (non-compete/non-solicit/confidentiality) between an employer and a worker." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:RestrictiveCovenant a owl:Class ;
+    rdfs:label "Restrictive Covenant" ;
+    rdfs:comment "A non-compete, non-solicit, or confidentiality clause within an EmploymentContract, subject to jurisdiction-specific enforceability limits." ;
+    rdfs:subClassOf :ContractClause .
+
+:HandbookPolicy a owl:Class ;
+    rdfs:label "Employee Handbook Policy" ;
+    rdfs:comment "A house employment policy (leave, conduct, wage/hour, classification) published in the employee handbook, with per-state supplements where law differs. Doubles as the documented Control satisfying an employment Obligation." ;
+    rdfs:subClassOf :Policy,
+        :Control .
+
+:WorkerClassificationAssessment a owl:Class ;
+    rdfs:label "Worker Classification Assessment" ;
+    rdfs:comment "A determination of whether an engagement is employee, independent contractor, temp, or vendor, applying the jurisdiction's applicable test(s). BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:InternalInvestigation a owl:Class ;
+    rdfs:label "Internal Investigation" ;
+    rdfs:comment "A privileged internal investigation into a workplace complaint (discrimination, harassment, retaliation), from intake through the final memo. Specializes EmploymentLawMatter's process side. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:LeaveRequest a owl:Class ;
+    rdfs:label "Leave Request" ;
+    rdfs:comment "A tracked employee leave (FMLA, ADA accommodation, parental, medical, or state-specific) with a deadline-bearing decision clock. BFO:GenericallyDependentContinuant." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:InternationalExpansionProject a owl:Class ;
+    rdfs:label "International Expansion Project" ;
+    rdfs:comment "A cross-functional project standing up employment in a new country, framed as an EOR-vs-entity decision with tax/finance/HR triggers. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:employedBy a owl:ObjectProperty ;
+    rdfs:label "employed by" ;
+    rdfs:comment "Links an Employee to the employing Organization." ;
+    rdfs:domain :Employee ;
+    rdfs:range :Organization .
+
+:classificationOutcome a owl:DatatypeProperty ;
+    rdfs:label "classification outcome" ;
+    rdfs:comment "employee, independent_contractor, temp, or vendor." ;
+    rdfs:domain :WorkerClassificationAssessment ;
+    rdfs:range xsd:string .
+
+:classificationTriggersObligation a owl:ObjectProperty ;
+    rdfs:label "classification triggers obligation" ;
+    rdfs:comment "Links a WorkerClassificationAssessment to the compliance Obligation(s) its outcome triggers (e.g. an 'employee' outcome triggers FLSA minimum-wage/overtime obligations)." ;
+    rdfs:domain :WorkerClassificationAssessment ;
+    rdfs:range :Obligation .
+
+:documentedInPolicy a owl:ObjectProperty ;
+    rdfs:label "documented in policy" ;
+    rdfs:comment "Links a compliance Control to the HandbookPolicy that documents/implements it for employees." ;
+    rdfs:domain :Control ;
+    rdfs:range :HandbookPolicy .
+
+:investigates a owl:ObjectProperty ;
+    rdfs:label "investigates" ;
+    rdfs:comment "Links an InternalInvestigation to the EmploymentLawMatter it was opened for." ;
+    rdfs:domain :InternalInvestigation ;
+    rdfs:range :EmploymentLawMatter .
+
+:subjectOfInvestigation a owl:ObjectProperty ;
+    rdfs:label "subject of investigation" ;
+    rdfs:comment "Links an InternalInvestigation to the Employee(s) it concerns." ;
+    rdfs:domain :InternalInvestigation ;
+    rdfs:range :Employee .
+
+:leaveType a owl:DatatypeProperty ;
+    rdfs:comment "fmla, ada_accommodation, parental, medical, state_specific." ;
+    rdfs:domain :LeaveRequest ;
+    rdfs:range xsd:string .
+
+:leaveDecisionDeadline a owl:DatatypeProperty ;
+    rdfs:label "leave decision deadline" ;
+    rdfs:domain :LeaveRequest ;
+    rdfs:range xsd:date .
+
+:requestedBy a owl:ObjectProperty ;
+    rdfs:label "requested by" ;
+    rdfs:domain :LeaveRequest ;
+    rdfs:range :Employee .
+
+:expandsToJurisdiction a owl:ObjectProperty ;
+    rdfs:label "expands to jurisdiction" ;
+    rdfs:comment "Links an InternationalExpansionProject to the target Jurisdiction." ;
+    rdfs:domain :InternationalExpansionProject ;
+    rdfs:range :Jurisdiction .
+
+:expansionStructureType a owl:DatatypeProperty ;
+    rdfs:comment "employer_of_record or local_entity — the EOR-vs-entity framing decision." ;
+    rdfs:domain :InternationalExpansionProject ;
+    rdfs:range xsd:string .
+
+#################################################################
+# canonical / illustrative individuals — the FLSA cross-link
+#################################################################
+
+:TimekeepingHandbookPolicy a :HandbookPolicy ;
+    rdfs:label "Example: Timekeeping & Overtime Handbook Policy" ;
+    rdfs:comment "Illustrative HandbookPolicy documenting the FLSATimekeepingControl for employees." .
+
+:FLSATimekeepingControl :documentedInPolicy :TimekeepingHandbookPolicy .
+
+:MisclassifiedContractorAssessment a :WorkerClassificationAssessment ;
+    rdfs:label "Example: Contractor Reclassified as Employee" ;
+    rdfs:comment "Illustrative assessment: an 'employee' outcome triggers the FLSA minimum-wage and overtime obligations that did not apply as an independent contractor." ;
+    :classificationOutcome "employee" ;
+    :classificationTriggersObligation :FLSAMinimumWageObligation,
+        :FLSAOvertimeObligation .
