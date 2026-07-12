@@ -1,0 +1,97 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# BSA/AML (Bank Secrecy Act / Anti-Money Laundering) — finance compliance module, including
+# Suspicious Activity Report (SAR) and Currency Transaction Report (CTR) filing. Key
+# concepts/obligations/controls only, not exhaustive legal text.
+
+<http://knuckles.team/kg/legal-compliance-bsa-aml> a owl:Ontology ;
+    rdfs:label "BSA/AML Compliance Module" ;
+    rdfs:comment "Bank Secrecy Act / Anti-Money Laundering program obligations — KYC/CDD, an AML compliance program, and SAR/CTR filing." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:FinCEN a :RegulatoryAuthority ;
+    rdfs:label "Financial Crimes Enforcement Network" ;
+    rdfs:comment "Treasury bureau that administers the BSA and receives SAR/CTR filings." .
+
+:BSA_AML a :Regulation ;
+    rdfs:label "BSA/AML" ;
+    rdfs:comment "Bank Secrecy Act (31 U.S.C. 5311 et seq.) and its implementing Anti-Money Laundering regulations — KYC/customer due diligence, a written AML program, recordkeeping, and suspicious-activity/large-currency-transaction reporting." ;
+    :appliesToSector :FinanceSector ;
+    :appliesToDataClass :FinancialData ;
+    :enforcedBy :FinCEN ;
+    :imposesObligation :BSAKYCObligation,
+        :BSAAMLProgramObligation,
+        :BSARecordkeepingObligation ;
+    :hasReportingRequirement :BSASARFilingRequirement,
+        :BSACTRFilingRequirement .
+
+:BSAKYCObligation a :Obligation ;
+    rdfs:label "Know-Your-Customer / CDD Obligation" ;
+    rdfs:comment "Verify customer identity and beneficial ownership at account opening and maintain risk-based customer due diligence throughout the relationship." ;
+    :requiresControl :BSACustomerDueDiligenceControl,
+        :BSABeneficialOwnershipControl ;
+    :violation :BSAWillfulViolationPenalty .
+
+:BSAAMLProgramObligation a :Obligation ;
+    rdfs:label "AML Compliance Program Obligation" ;
+    rdfs:comment "Maintain a written AML program with a designated compliance officer, ongoing employee training, independent testing, and transaction monitoring." ;
+    :requiresControl :BSAAMLIndependentTestingControl,
+        :BSAAMLTrainingControl,
+        :BSATransactionMonitoringControl ;
+    :violation :BSAWillfulViolationPenalty .
+
+:BSARecordkeepingObligation a :Obligation ;
+    rdfs:label "BSA Recordkeeping Obligation" ;
+    rdfs:comment "Retain CDD records, SAR/CTR filings, and monetary-instrument records for at least five years." ;
+    :requiresControl :BSARecordkeepingControl .
+
+:BSACustomerDueDiligenceControl a :Control ;
+    rdfs:label "Customer Due Diligence Control" ;
+    rdfs:comment "Identity verification and risk-rating procedure applied at onboarding and on periodic refresh." .
+
+:BSABeneficialOwnershipControl a :Control ;
+    rdfs:label "Beneficial Ownership Control" ;
+    rdfs:comment "Collection and verification of beneficial-ownership information (25%+ owners, one control person) for legal-entity customers." .
+
+:BSAAMLIndependentTestingControl a :Control ;
+    rdfs:label "AML Independent Testing Control" ;
+    rdfs:comment "Periodic independent (internal audit or third-party) test of the AML program's design and operating effectiveness." .
+
+:BSAAMLTrainingControl a :Control ;
+    rdfs:label "AML Training Control" ;
+    rdfs:comment "Role-appropriate AML training delivered to relevant staff on a recurring cadence." .
+
+:BSATransactionMonitoringControl a :Control ;
+    rdfs:label "Transaction Monitoring Control" ;
+    rdfs:comment "Automated monitoring that flags transaction patterns indicative of money laundering or structuring for investigation." .
+
+:BSARecordkeepingControl a :Control ;
+    rdfs:label "BSA Recordkeeping Control" ;
+    rdfs:comment "Retention system for CDD, SAR, CTR, and monetary-instrument records meeting the five-year minimum." .
+
+:BSASARFilingRequirement a :ReportingRequirement ;
+    rdfs:label "Suspicious Activity Report (SAR) Filing" ;
+    rdfs:comment "File FinCEN Form 111 within 30 days of detecting a transaction (generally $5,000+) suspected of involving money laundering, fraud, or other illicit activity." ;
+    :triggeredByObligation :BSAAMLProgramObligation .
+
+:BSACTRFilingRequirement a :ReportingRequirement ;
+    rdfs:label "Currency Transaction Report (CTR) Filing" ;
+    rdfs:comment "File FinCEN Form 104 within 15 days for currency transactions exceeding $10,000 in a single business day." ;
+    :triggeredByObligation :BSAKYCObligation .
+
+:BSAWillfulViolationPenalty a :Penalty ;
+    rdfs:label "BSA Willful Violation Penalty" ;
+    rdfs:comment "Civil penalties up to the greater of the transaction amount or statutory cap per violation; willful violations may also carry criminal fines and imprisonment." .
+
+:BSASARComplianceRequirement a :ComplianceRequirement ;
+    rdfs:label "SAR Filing Timeliness Requirement" ;
+    rdfs:comment "Any system that surfaces suspicious-activity alerts must route them to a documented SAR filing decision within the 30-day regulatory clock." ;
+    :derivedFromRegulation :BSA_AML ;
+    :requiresControl :BSATransactionMonitoringControl .
+
+:BSAAMLIndependentTestingAssessment a :Assessment ;
+    rdfs:label "AML Independent Testing Assessment" ;
+    rdfs:comment "The periodic independent-test engagement (BSAAMLIndependentTestingControl in practice) that evaluates the SAR filing compliance requirement." ;
+    :evaluatesRequirement :BSASARComplianceRequirement .

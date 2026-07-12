@@ -6,6 +6,7 @@
 <!-- CONCEPT:LP-OS.governance.legal -->
 <!-- CONCEPT:LP-OS.governance.legal-2 -->
 <!-- CONCEPT:LP-OS.identity.legal -->
+<!-- CONCEPT:LP-OS.governance.compliance-ontology-suite -->
 
 This file acts as a machine-readable README for AI coding agents collaborating on this repository.
 
@@ -78,6 +79,7 @@ pytest -v
 | `CONCEPT:LP-OS.governance.legal` | Secretary of State Crawlers | Dynamic business entity lookup & verifications across 50 states |
 | `CONCEPT:LP-OS.governance.legal-2` | IRS EIN & Off-Hours Filing | SS-4 PDF drafting and scheduling compliance operations |
 | `CONCEPT:LP-OS.identity.legal` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
+| `CONCEPT:LP-OS.governance.compliance-ontology-suite` | Regulatory/Legal Compliance Ontology Suite | Shared compliance upper ontology plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC), federated into epistemic-graph and cross-linked to the shared infra/asset ontology by data classification |
 | `CONCEPT:AU-ECO.messaging.native-backend-abstraction` | Ecosystem Compliance | Multi-package integration compliance standard |
 
 ---

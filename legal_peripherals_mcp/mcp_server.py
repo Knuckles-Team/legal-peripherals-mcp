@@ -19,7 +19,7 @@ from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
 
-__version__ = "0.15.0"
+__version__ = "1.0.1"
 logger = get_logger(name="legal_peripherals_mcp")
 
 

@@ -1,0 +1,66 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# CFPB (Consumer Financial Protection Bureau) — consumer financial protection, created by
+# Title X of Dodd-Frank (see compliance_dodd_frank.ttl). Key concepts/obligations/controls
+# only.
+
+<http://knuckles.team/kg/legal-compliance-cfpb> a owl:Ontology ;
+    rdfs:label "CFPB Compliance Module" ;
+    rdfs:comment "CFPB consumer-financial-protection obligations — UDAAP prohibition, consumer-complaint handling, and lending-disclosure requirements." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:CFPB a :RegulatoryAuthority ;
+    rdfs:label "Consumer Financial Protection Bureau" ;
+    rdfs:comment "Independent federal agency, created by Dodd-Frank Title X, that writes and enforces consumer-financial-protection rules." .
+
+:CFPBConsumerProtection a :Regulation ;
+    rdfs:label "CFPB Consumer Financial Protection" ;
+    rdfs:comment "Consumer-financial-protection regulation enforced by the CFPB — prohibition of unfair, deceptive, or abusive acts or practices (UDAAP), consumer-complaint handling, and lending disclosures (e.g. Regulations E/Z)." ;
+    :appliesToSector :FinanceSector ;
+    :appliesToDataClass :FinancialData,
+        :PII ;
+    :enforcedBy :CFPB ;
+    :imposesObligation :CFPBUDAAPObligation,
+        :CFPBComplaintHandlingObligation,
+        :CFPBDisclosureObligation ;
+    :hasReportingRequirement :CFPBComplaintReportingRequirement .
+
+:CFPBUDAAPObligation a :Obligation ;
+    rdfs:label "UDAAP Prohibition Obligation" ;
+    rdfs:comment "Do not engage in unfair, deceptive, or abusive acts or practices in connection with a consumer financial product or service." ;
+    :requiresControl :CFPBUDAAPComplianceControl ;
+    :violation :CFPBCivilPenalty .
+
+:CFPBComplaintHandlingObligation a :Obligation ;
+    rdfs:label "Consumer Complaint Handling Obligation" ;
+    rdfs:comment "Receive, track, and timely respond to consumer complaints, including those routed through the CFPB complaint portal." ;
+    :requiresControl :CFPBComplaintHandlingControl .
+
+:CFPBDisclosureObligation a :Obligation ;
+    rdfs:label "Lending Disclosure Obligation" ;
+    rdfs:comment "Provide accurate, timely disclosures for consumer credit and deposit products (e.g. Truth in Lending / Regulation Z, Electronic Fund Transfer / Regulation E)." ;
+    :requiresControl :CFPBDisclosureControl ;
+    :violation :CFPBCivilPenalty .
+
+:CFPBUDAAPComplianceControl a :Control ;
+    rdfs:label "UDAAP Compliance Review Control" ;
+    rdfs:comment "Product/marketing review process screening for unfair, deceptive, or abusive terms or practices before launch." .
+
+:CFPBComplaintHandlingControl a :Control ;
+    rdfs:label "Complaint Handling Control" ;
+    rdfs:comment "Intake, escalation, and SLA-tracked resolution workflow for consumer complaints." .
+
+:CFPBDisclosureControl a :Control ;
+    rdfs:label "Lending Disclosure Control" ;
+    rdfs:comment "Templated, reviewed disclosure generation ensuring required Regulation E/Z content and timing." .
+
+:CFPBComplaintReportingRequirement a :ReportingRequirement ;
+    rdfs:label "CFPB Complaint Response Filing" ;
+    rdfs:comment "Timely response (typically within 15 days) to consumer complaints routed through the CFPB Consumer Complaint Database." ;
+    :triggeredByObligation :CFPBComplaintHandlingObligation .
+
+:CFPBCivilPenalty a :Penalty ;
+    rdfs:label "CFPB Civil Penalty" ;
+    rdfs:comment "Tiered civil penalties per violation (higher tiers for reckless or knowing violations), plus restitution and injunctive relief." .

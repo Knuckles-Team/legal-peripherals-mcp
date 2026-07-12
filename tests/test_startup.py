@@ -1,3 +1,5 @@
+import re
+
 import pytest
 
 
@@ -6,4 +8,6 @@ def test_startup():
     # Basic import test
     import legal_peripherals_mcp
 
-    assert legal_peripherals_mcp.__version__ == "0.15.0"
+    # Match a semver string rather than a hardcoded literal so this test doesn't drift
+    # out of sync with .bumpversion.cfg-driven releases.
+    assert re.fullmatch(r"\d+\.\d+\.\d+", legal_peripherals_mcp.__version__)

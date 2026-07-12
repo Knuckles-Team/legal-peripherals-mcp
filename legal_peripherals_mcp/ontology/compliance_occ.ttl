@@ -1,0 +1,61 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# OCC (Office of the Comptroller of the Currency) — prudential supervision of national banks
+# and federal savings associations. Key concepts/obligations/controls only.
+
+<http://knuckles.team/kg/legal-compliance-occ> a owl:Ontology ;
+    rdfs:label "OCC Compliance Module" ;
+    rdfs:comment "OCC prudential supervision — capital adequacy, safety-and-soundness examination, and BSA/AML program supervision for national banks and federal savings associations." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:OCC a :RegulatoryAuthority ;
+    rdfs:label "Office of the Comptroller of the Currency" ;
+    rdfs:comment "Treasury bureau that charters, regulates, and supervises national banks and federal savings associations." .
+
+:OCCBankSupervision a :Regulation ;
+    rdfs:label "OCC Bank Supervision" ;
+    rdfs:comment "12 CFR prudential supervision framework for national banks/federal savings associations — capital adequacy, safety and soundness, and examination authority, including supervision of each bank's BSA/AML program." ;
+    :appliesToSector :FinanceSector ;
+    :appliesToDataClass :FinancialData ;
+    :enforcedBy :OCC ;
+    :imposesObligation :OCCCapitalAdequacyObligation,
+        :OCCSafetyAndSoundnessObligation,
+        :OCCBSASupervisionObligation ;
+    :hasReportingRequirement :OCCCallReportRequirement .
+
+:OCCCapitalAdequacyObligation a :Obligation ;
+    rdfs:label "Capital Adequacy Obligation" ;
+    rdfs:comment "Maintain minimum regulatory capital ratios (common equity tier 1, tier 1, total capital, leverage) required by the OCC's capital rules." ;
+    :requiresControl :OCCCapitalAdequacyControl ;
+    :violation :OCCEnforcementActionPenalty .
+
+:OCCSafetyAndSoundnessObligation a :Obligation ;
+    rdfs:label "Safety and Soundness Obligation" ;
+    rdfs:comment "Operate under safe-and-sound banking practices (asset quality, management, earnings, liquidity, sensitivity to risk) subject to OCC examination." ;
+    :requiresControl :OCCExaminationReadinessControl ;
+    :violation :OCCEnforcementActionPenalty .
+
+:OCCBSASupervisionObligation a :Obligation ;
+    rdfs:label "OCC BSA/AML Supervision Obligation" ;
+    rdfs:comment "A national bank must maintain a BSA/AML program meeting the standards examined by the OCC (see the separate BSA_AML Regulation for the program's own KYC/SAR/CTR obligations)." ;
+    :requiresControl :OCCExaminationReadinessControl ;
+    :violation :OCCEnforcementActionPenalty .
+
+:OCCCapitalAdequacyControl a :Control ;
+    rdfs:label "Capital Adequacy Monitoring Control" ;
+    rdfs:comment "Recurring capital-ratio calculation and internal capital-adequacy-assessment process (ICAAP-style)." .
+
+:OCCExaminationReadinessControl a :Control ;
+    rdfs:label "Examination Readiness Control" ;
+    rdfs:comment "Documentation, governance, and issue-tracking (matters requiring attention) maintained in a state ready for an OCC examination." .
+
+:OCCCallReportRequirement a :ReportingRequirement ;
+    rdfs:label "Call Report Filing" ;
+    rdfs:comment "Quarterly Consolidated Reports of Condition and Income (Call Report) filed with the FFIEC/OCC." ;
+    :triggeredByObligation :OCCSafetyAndSoundnessObligation .
+
+:OCCEnforcementActionPenalty a :Penalty ;
+    rdfs:label "OCC Enforcement Action" ;
+    rdfs:comment "Formal enforcement remedies — cease-and-desist order, civil money penalty, or removal/prohibition order — for unsafe/unsound practices or violations of law." .

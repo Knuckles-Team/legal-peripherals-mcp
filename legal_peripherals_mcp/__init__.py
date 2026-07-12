@@ -1,2 +1,2 @@
-__version__ = "0.15.0"
+__version__ = "1.0.1"
 _MCP_AVAILABLE = True

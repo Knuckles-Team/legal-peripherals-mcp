@@ -1,0 +1,75 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Federal Taxation — filing, withholding/deposit, and recordkeeping obligations under the
+# Internal Revenue Code. Key concepts/obligations/controls only. Cross-references this
+# package's existing :EINApplication (legal.ttl) — an EIN is a prerequisite for most
+# business tax filings — and compliance_llc.ttl for entity-level tax elections.
+
+<http://knuckles.team/kg/legal-compliance-taxation> a owl:Ontology ;
+    rdfs:label "Taxation Compliance Module" ;
+    rdfs:comment "Federal (IRC-based) tax filing, withholding/deposit, and recordkeeping obligations for individuals and business entities." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:IRS a :RegulatoryAuthority ;
+    rdfs:label "Internal Revenue Service" ;
+    rdfs:comment "Treasury bureau that administers and enforces the Internal Revenue Code, and issues the EIN a business entity files under." .
+
+:FederalTaxation a :Regulation ;
+    rdfs:label "Federal Taxation" ;
+    rdfs:comment "Internal Revenue Code obligations — income tax return filing, payroll tax withholding/deposit, and supporting recordkeeping — applicable to individuals and business entities across every sector." ;
+    :appliesToSector :PrivateSector,
+        :FinanceSector,
+        :GovernmentSector ;
+    :appliesToDataClass :FinancialData,
+        :PII ;
+    :enforcedBy :IRS ;
+    :imposesObligation :TaxFilingObligation,
+        :TaxWithholdingObligation,
+        :TaxRecordkeepingObligation ;
+    :hasReportingRequirement :FederalIncomeTaxReturnRequirement,
+        :PayrollTaxDepositRequirement .
+
+:TaxFilingObligation a :Obligation ;
+    rdfs:label "Tax Return Filing Obligation" ;
+    rdfs:comment "File an accurate income tax return (individual or business, per entity type/election) by the applicable statutory or extended deadline. A business entity generally files under the EIN obtained via an :EINApplication." ;
+    :requiresControl :TaxFilingControl ;
+    :violation :TaxPenalty .
+
+:TaxWithholdingObligation a :Obligation ;
+    rdfs:label "Payroll Tax Withholding Obligation" ;
+    rdfs:comment "Withhold federal income, Social Security, and Medicare tax from employee wages and deposit the employer's matching share on the required schedule." ;
+    :requiresControl :TaxWithholdingControl ;
+    :violation :TaxPenalty .
+
+:TaxRecordkeepingObligation a :Obligation ;
+    rdfs:label "Tax Recordkeeping Obligation" ;
+    rdfs:comment "Retain books, records, and supporting documentation for the statutory period (generally at least 3 years, 6+ for substantial underreporting)." ;
+    :requiresControl :TaxRecordkeepingControl .
+
+:TaxFilingControl a :Control ;
+    rdfs:label "Tax Filing Control" ;
+    rdfs:comment "Review-and-sign-off process ensuring the correct return type, schedules, and deadline are met for the entity's tax classification." .
+
+:TaxWithholdingControl a :Control ;
+    rdfs:label "Payroll Tax Withholding Control" ;
+    rdfs:comment "Payroll-system control computing and depositing withheld taxes on the IRS-required deposit schedule." .
+
+:TaxRecordkeepingControl a :Control ;
+    rdfs:label "Tax Recordkeeping Control" ;
+    rdfs:comment "Document-retention system meeting the IRC's minimum retention periods for returns and supporting records." .
+
+:FederalIncomeTaxReturnRequirement a :ReportingRequirement ;
+    rdfs:label "Federal Income Tax Return Filing" ;
+    rdfs:comment "Annual filing (Form 1040/1120/1120-S/1065 depending on entity type/election) by the statutory or extended due date." ;
+    :triggeredByObligation :TaxFilingObligation .
+
+:PayrollTaxDepositRequirement a :ReportingRequirement ;
+    rdfs:label "Payroll Tax Deposit and Return Filing" ;
+    rdfs:comment "Quarterly Form 941 (and annual Form 940 FUTA) filing plus timely deposit of withheld/matched payroll taxes." ;
+    :triggeredByObligation :TaxWithholdingObligation .
+
+:TaxPenalty a :Penalty ;
+    rdfs:label "Tax Penalty" ;
+    rdfs:comment "Failure-to-file and failure-to-pay penalties plus statutory interest (IRC 6651); accuracy-related and fraud penalties may also apply." .
