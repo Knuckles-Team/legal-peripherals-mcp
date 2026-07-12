@@ -702,6 +702,21 @@
 <td>Statutes &amp; Charter Templates</td>
 <td>LLC/corporate filing guidelines and dynamic template lookups</td>
 </tr>
+<tr>
+<td><code>CONCEPT:LP-OS.governance.compliance-ontology-suite</code></td>
+<td>Regulatory/Legal Compliance Ontology Suite</td>
+<td>Shared compliance upper ontology (Regulation/Obligation/Control/ComplianceRequirement/Penalty/Sector/ReportingRequirement/ComplianceGate/Assessment/Attestation/RegulatoryAuthority) plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC formation/governance), federated into epistemic-graph via the ontology provider and cross-linked to the shared infra/asset ontology by data classification</td>
+</tr>
+<tr>
+<td><code>CONCEPT:LP-OS.governance.legal-domain-suite</code></td>
+<td>Legal Practice-Area Domain Ontology Suite</td>
+<td><code>domain_regulatory.ttl</code> / <code>domain_employment.ttl</code> / <code>domain_commercial.ttl</code> / <code>domain_privacy.ttl</code> / <code>domain_corporate.ttl</code> / <code>domain_litigation.ttl</code> — one broader artifact/process module per legal practice area, each importing compliance.ttl + legal.ttl and cross-linked into existing FLSA/HIPAA/LLC individuals rather than floating disconnected; declares GDPR + CCPA as new :Regulation individuals</td>
+</tr>
+<tr>
+<td><code>CONCEPT:LP-OS.governance.legal-compliance-kb</code></td>
+<td>Compliance Ontology Lookup Tool</td>
+<td><code>legal_compliance_lookup</code> action-routed MCP tool (<code>compliance_kb.py</code> + <code>mcp/mcp_compliance.py</code>) answering structured queries against the bundled ontology suite — no external API, no fabrication, honest degrade without <code>rdflib</code> (<code>[ontology]</code> extra)</td>
+</tr>
 </tbody>
 </table>
 
