@@ -23,7 +23,7 @@
       {
         "criterion": "externalized_prompts",
         "points": 0,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp",
         "reasoning": "No prompts/ directory found. Prompts may be hardcoded in source."
       },
       {
@@ -41,25 +41,25 @@
       {
         "criterion": "agents_md",
         "points": 10,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/AGENTS.md (2395 bytes)",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/AGENTS.md (2395 bytes)",
         "reasoning": "AGENTS.md exists with comprehensive content"
       },
       {
         "criterion": "pre_commit_hooks",
         "points": 10,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.pre-commit-config.yaml",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/.pre-commit-config.yaml",
         "reasoning": "Pre-commit configuration found for automated code quality checks"
       },
       {
         "criterion": "gitignore",
         "points": 10,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.gitignore",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/.gitignore",
         "reasoning": ".gitignore exists to prevent committing build artifacts and secrets"
       },
       {
         "criterion": "env_template",
         "points": 10,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.env.example",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/.env.example",
         "reasoning": "Environment template exists for onboarding and secret management"
       },
       {
@@ -88,7 +88,7 @@
       {
         "criterion": "dependency_freshness",
         "points": 100,
-        "evidence": "source=/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/pyproject.toml total=6 major=0 minor=0 patch=0 not_installed=0",
+        "evidence": "source=${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/pyproject.toml total=6 major=0 minor=0 patch=0 not_installed=0",
         "reasoning": "Audited 6 deps (6 installed, 0 constraint-only). 0 major, 0 minor, 0 patch updates."
       }
     ],
@@ -186,7 +186,7 @@
         "length": 61,
         "complexity": 14,
         "nesting_depth": 0,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
       },
       {
         "name": "run_enhancer",
@@ -194,7 +194,7 @@
         "length": 108,
         "complexity": 12,
         "nesting_depth": 3,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
       },
       {
         "name": "handle_sos_lookup",
@@ -202,7 +202,7 @@
         "length": 74,
         "complexity": 12,
         "nesting_depth": 5,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
       },
       {
         "name": "test_handle_statute_rules_delaware_corporation",
@@ -210,7 +210,7 @@
         "length": 16,
         "complexity": 7,
         "nesting_depth": 0,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py"
       },
       {
         "name": "handle_ein_draft",
@@ -218,7 +218,7 @@
         "length": 57,
         "complexity": 6,
         "nesting_depth": 1,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
       }
     ],
     "top_long": [
@@ -228,7 +228,7 @@
         "length": 108,
         "complexity": 12,
         "nesting_depth": 3,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py"
       },
       {
         "name": "get_mcp_instance",
@@ -236,7 +236,7 @@
         "length": 80,
         "complexity": 5,
         "nesting_depth": 1,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py"
       },
       {
         "name": "handle_sos_lookup",
@@ -244,7 +244,7 @@
         "length": 74,
         "complexity": 12,
         "nesting_depth": 5,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py"
       },
       {
         "name": "test_mcp_tools_routing",
@@ -252,7 +252,7 @@
         "length": 61,
         "complexity": 14,
         "nesting_depth": 0,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py"
       },
       {
         "name": "handle_ein_draft",
@@ -260,7 +260,7 @@
         "length": 57,
         "complexity": 6,
         "nesting_depth": 1,
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py"
       }
     ],
     "structural_issues": [],
@@ -319,7 +319,7 @@
     "tests": [
       {
         "name": "test_init_dynamics",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_init_dynamics.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_init_dynamics.py",
         "line": 5,
         "length": 4,
         "intent": "unit",
@@ -331,7 +331,7 @@
       },
       {
         "name": "test_handle_statute_rules_delaware_corporation",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
         "line": 8,
         "length": 16,
         "intent": "unit",
@@ -344,7 +344,7 @@
       },
       {
         "name": "test_handle_statute_rules_texas_llc",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
         "line": 28,
         "length": 12,
         "intent": "unit",
@@ -357,7 +357,7 @@
       },
       {
         "name": "test_handle_statute_rules_fallback",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_statute.py",
         "line": 44,
         "length": 12,
         "intent": "unit",
@@ -370,7 +370,7 @@
       },
       {
         "name": "test_concept_parity",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_concept_parity.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_concept_parity.py",
         "line": 5,
         "length": 3,
         "intent": "unit",
@@ -382,7 +382,7 @@
       },
       {
         "name": "test_startup",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_startup.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_startup.py",
         "line": 5,
         "length": 5,
         "intent": "unit",
@@ -394,7 +394,7 @@
       },
       {
         "name": "test_handle_sos_lookup_texas",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
         "line": 8,
         "length": 9,
         "intent": "unit",
@@ -407,7 +407,7 @@
       },
       {
         "name": "test_handle_sos_lookup_delaware",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
         "line": 21,
         "length": 9,
         "intent": "unit",
@@ -420,7 +420,7 @@
       },
       {
         "name": "test_handle_sos_lookup_wyoming",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
         "line": 34,
         "length": 9,
         "intent": "unit",
@@ -433,7 +433,7 @@
       },
       {
         "name": "test_handle_sos_lookup_nevada",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
         "line": 47,
         "length": 8,
         "intent": "unit",
@@ -446,7 +446,7 @@
       },
       {
         "name": "test_handle_sos_lookup_fallback",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_sos.py",
         "line": 59,
         "length": 10,
         "intent": "unit",
@@ -459,7 +459,7 @@
       },
       {
         "name": "test_is_irs_active",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
         "line": 10,
         "length": 15,
         "intent": "unit",
@@ -471,7 +471,7 @@
       },
       {
         "name": "test_get_next_filing_time",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
         "line": 28,
         "length": 10,
         "intent": "unit",
@@ -483,7 +483,7 @@
       },
       {
         "name": "test_handle_ein_draft_active_hours",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
         "line": 42,
         "length": 23,
         "intent": "unit",
@@ -496,7 +496,7 @@
       },
       {
         "name": "test_handle_ein_draft_off_hours",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
         "line": 69,
         "length": 19,
         "intent": "unit",
@@ -509,7 +509,7 @@
       },
       {
         "name": "test_handle_ein_draft_bypass_override",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_ein.py",
         "line": 92,
         "length": 17,
         "intent": "unit",
@@ -522,7 +522,7 @@
       },
       {
         "name": "test_api_client_basic_mock",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
         "line": 7,
         "length": 4,
         "intent": "unit",
@@ -534,7 +534,7 @@
       },
       {
         "name": "test_api_client_endpoints",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
         "line": 14,
         "length": 7,
         "intent": "unit",
@@ -546,7 +546,7 @@
       },
       {
         "name": "test_api_client_full_endpoints",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_api_client.py",
         "line": 24,
         "length": 18,
         "intent": "unit",
@@ -558,7 +558,7 @@
       },
       {
         "name": "test_mcp_server_registration",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
         "line": 7,
         "length": 8,
         "intent": "unit",
@@ -570,7 +570,7 @@
       },
       {
         "name": "test_mcp_tools_routing",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/test_mcp_server.py",
         "line": 19,
         "length": 61,
         "intent": "unit",
@@ -917,73 +917,73 @@
     "functions_missing_docstrings": [
       {
         "function": "run_enhancer",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/run_enhancer.py",
         "line": 13,
         "length": 108
       },
       {
         "function": "get_mcp_instance",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
         "line": 22,
         "length": 80
       },
       {
         "function": "draft_ein_form",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
         "line": 49,
         "length": 31
       },
       {
         "function": "lookup_statute_rules",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp_server.py",
         "line": 83,
         "length": 15
       },
       {
         "function": "request",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/api_client.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/api_client.py",
         "line": 15,
         "length": 17
       },
       {
         "function": "get_client",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/auth.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/auth.py",
         "line": 10,
         "length": 15
       },
       {
         "function": "handle_statute_rules",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_statute.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_statute.py",
         "line": 34,
         "length": 45
       },
       {
         "function": "is_irs_active",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
         "line": 10,
         "length": 16
       },
       {
         "function": "get_next_filing_time",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
         "line": 28,
         "length": 13
       },
       {
         "function": "handle_ein_draft",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_ein.py",
         "line": 43,
         "length": 57
       },
       {
         "function": "handle_sos_lookup",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/legal_peripherals_mcp/mcp/mcp_sos.py",
         "line": 7,
         "length": 74
       },
       {
         "function": "mock_ctx",
-        "file": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/tests/conftest.py",
+        "file": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/tests/conftest.py",
         "line": 5,
         "length": 12
       }
@@ -1157,7 +1157,7 @@
       {
         "criterion": "bumpversion_exists",
         "points": 20,
-        "evidence": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/.bumpversion.cfg",
+        "evidence": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/.bumpversion.cfg",
         "reasoning": ".bumpversion.cfg found"
       },
       {
