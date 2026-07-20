@@ -158,13 +158,11 @@ async def handle_statute_rules(
             state, entity_type, topic
         )
     except StatuteLookupError as exc:
-        logger.warning("Statute validation failed: %s", exc)
-        return f"Error: {exc}"
+        logger.warning("Operation failed: error_type=%s", type(exc).__name__)
+        return "Error: invalid statute lookup parameters"
 
     if ctx:
-        await ctx.info(
-            f"Querying statutes for state={state_upper}, entity_type={type_norm}, topic={topic_norm}"
-        )
+        await ctx.info("Querying configured statute sources")
 
     try:
         return await asyncio.wait_for(
@@ -172,13 +170,11 @@ async def handle_statute_rules(
             timeout=STATUTE_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
-        msg = f"Statute lookup timed out after {STATUTE_TIMEOUT_SECONDS}s for state={state_upper}."
-        logger.error(msg)
-        return f"Error: {msg}"
+        logger.error("Statute lookup timed out")
+        return "Error: statute lookup timed out"
     except Exception as exc:
-        msg = f"Statute lookup failed for state={state_upper}: {exc}"
-        logger.exception(msg)
-        return f"Error: {msg}"
+        logger.error("Statute lookup failed: error_type=%s", type(exc).__name__)
+        return "Error: statute lookup failed"
 
 
 async def _do_statute_lookup(state_upper: str, type_norm: str, topic_norm: str) -> str:

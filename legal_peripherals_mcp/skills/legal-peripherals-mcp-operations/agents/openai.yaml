@@ -1,0 +1,4 @@
+interface:
+  display_name: "Legal Peripherals MCP Operations"
+  short_description: "Help with Legal Peripherals MCP Operations tasks"
+  default_prompt: "Use $legal-peripherals-mcp-operations to complete a governed provider workflow."

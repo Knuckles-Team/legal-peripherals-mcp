@@ -1,0 +1,60 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# FLSA (Fair Labor Standards Act) — labor: minimum wage, overtime, and recordkeeping. Key
+# concepts/obligations/controls only. See legal.ttl's :EmploymentLawMatter /
+# :governedByEmploymentStatute for the case/matter side of employment-law handling.
+
+<http://knuckles.team/kg/legal-compliance-flsa> a owl:Ontology ;
+    rdfs:label "FLSA Compliance Module" ;
+    rdfs:comment "Fair Labor Standards Act — minimum wage, overtime, and payroll-recordkeeping obligations for covered employers." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:DOLWHD a :RegulatoryAuthority ;
+    rdfs:label "DOL Wage and Hour Division" ;
+    rdfs:comment "Department of Labor division that administers and enforces the FLSA." .
+
+:FLSA a :Regulation ;
+    rdfs:label "FLSA" ;
+    rdfs:comment "Fair Labor Standards Act (29 U.S.C. 201 et seq.) — federal minimum wage, overtime pay for non-exempt employees, and payroll recordkeeping." ;
+    :appliesToSector :PrivateSector,
+        :GovernmentSector ;
+    :appliesToDataClass :PII ;
+    :enforcedBy :DOLWHD ;
+    :imposesObligation :FLSAMinimumWageObligation,
+        :FLSAOvertimeObligation,
+        :FLSARecordkeepingObligation .
+
+:FLSAMinimumWageObligation a :Obligation ;
+    rdfs:label "Minimum Wage Obligation" ;
+    rdfs:comment "Pay covered non-exempt employees no less than the federal minimum wage for all hours worked." ;
+    :requiresControl :FLSAPayrollComplianceControl ;
+    :violation :FLSABackWagesPenalty .
+
+:FLSAOvertimeObligation a :Obligation ;
+    rdfs:label "Overtime Obligation" ;
+    rdfs:comment "Pay covered non-exempt employees at least 1.5x their regular rate for hours worked beyond 40 in a workweek." ;
+    :requiresControl :FLSATimekeepingControl ;
+    :violation :FLSABackWagesPenalty .
+
+:FLSARecordkeepingObligation a :Obligation ;
+    rdfs:label "FLSA Recordkeeping Obligation" ;
+    rdfs:comment "Maintain accurate records of hours worked, wages paid, and exemption classification for each employee." ;
+    :requiresControl :FLSARecordkeepingControl .
+
+:FLSAPayrollComplianceControl a :Control ;
+    rdfs:label "Payroll Compliance Control" ;
+    rdfs:comment "Payroll-system validation that no covered employee is paid below the applicable minimum wage." .
+
+:FLSATimekeepingControl a :Control ;
+    rdfs:label "Timekeeping Control" ;
+    rdfs:comment "Accurate time-tracking and exempt/non-exempt classification review feeding overtime calculation." .
+
+:FLSARecordkeepingControl a :Control ;
+    rdfs:label "FLSA Recordkeeping Control" ;
+    rdfs:comment "Retention of hours/wage/classification records for the statutory minimum period (generally 3 years for payroll, 2 years for time cards)." .
+
+:FLSABackWagesPenalty a :Penalty ;
+    rdfs:label "FLSA Back Wages / Liquidated Damages" ;
+    rdfs:comment "Back-wage liability plus an equal amount in liquidated damages, civil money penalties for repeated/willful violations, and possible criminal penalties for willful violations." .

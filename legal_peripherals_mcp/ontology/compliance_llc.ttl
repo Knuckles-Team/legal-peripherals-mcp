@@ -1,0 +1,67 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# LLC (Limited Liability Company) formation and governance — state-level compliance module.
+# Reuses this package's existing legal.ttl classes rather than redefining them:
+# :LLCFormationFiling (subClassOf :RegulatoryFiling), :BusinessEntity, :CorporateGovernanceDoc,
+# :Jurisdiction. Backs the package's existing Secretary-of-State / EIN capability
+# (legal_peripherals_mcp/mcp/mcp_sos.py, mcp_ein.py).
+
+<http://knuckles.team/kg/legal-compliance-llc> a owl:Ontology ;
+    rdfs:label "LLC Formation & Governance Compliance Module" ;
+    rdfs:comment "State-level LLC formation, registered-agent, annual-report, and operating-agreement obligations." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:SecretaryOfState a :RegulatoryAuthority ;
+    rdfs:label "Secretary of State" ;
+    rdfs:comment "The state-level office (varies by :Jurisdiction) that receives LLC formation filings, registered-agent designations, and annual reports." .
+
+:LLCFormationGovernance a :Regulation ;
+    rdfs:label "LLC Formation & Governance" ;
+    rdfs:comment "State LLC statutes (e.g. each state's LLC Act) governing formation, registered-agent maintenance, annual/biennial reporting, and internal governance documentation." ;
+    :appliesToSector :PrivateSector ;
+    :appliesToDataClass :PII ;
+    :enforcedBy :SecretaryOfState ;
+    :imposesObligation :LLCFormationObligation,
+        :LLCAnnualReportObligation,
+        :LLCOperatingAgreementObligation ;
+    :hasReportingRequirement :LLCAnnualReportRequirement .
+
+:LLCFormationObligation a :Obligation ;
+    rdfs:label "LLC Formation Filing Obligation" ;
+    rdfs:comment "File Articles/Certificate of Organization with the state Secretary of State and designate a registered agent before conducting business. Concretely realized as an :LLCFormationFiling (see legal.ttl)." ;
+    :requiresControl :LLCRegisteredAgentControl ;
+    :violation :LLCAdministrativeDissolutionPenalty .
+
+:LLCAnnualReportObligation a :Obligation ;
+    rdfs:label "LLC Annual/Biennial Report Obligation" ;
+    rdfs:comment "File the state's periodic (annual or biennial, by jurisdiction) report and pay any franchise/registration fee to remain in good standing." ;
+    :requiresControl :LLCAnnualReportFilingControl ;
+    :violation :LLCAdministrativeDissolutionPenalty .
+
+:LLCOperatingAgreementObligation a :Obligation ;
+    rdfs:label "Operating Agreement Maintenance Obligation" ;
+    rdfs:comment "Adopt and maintain an operating agreement documenting member rights, management structure, and profit/loss allocation. Concretely realized as a :CorporateGovernanceDoc (see legal.ttl)." ;
+    :requiresControl :LLCOperatingAgreementControl .
+
+:LLCRegisteredAgentControl a :Control ;
+    rdfs:label "Registered Agent Control" ;
+    rdfs:comment "Continuous maintenance of a registered agent with a valid in-state address for service of process." .
+
+:LLCAnnualReportFilingControl a :Control ;
+    rdfs:label "Annual Report Filing Control" ;
+    rdfs:comment "Tracked filing calendar ensuring the state's periodic report and fee are submitted before the jurisdiction's deadline." .
+
+:LLCOperatingAgreementControl a :Control ;
+    rdfs:label "Operating Agreement Control" ;
+    rdfs:comment "Document-management control keeping the operating agreement current with membership/ownership changes." .
+
+:LLCAnnualReportRequirement a :ReportingRequirement ;
+    rdfs:label "LLC Annual/Biennial Report Filing" ;
+    rdfs:comment "The state's periodic report filing (cadence and fee vary by :Jurisdiction) required to maintain good standing." ;
+    :triggeredByObligation :LLCAnnualReportObligation .
+
+:LLCAdministrativeDissolutionPenalty a :Penalty ;
+    rdfs:label "Administrative Dissolution / Loss of Good Standing" ;
+    rdfs:comment "Failure to maintain a registered agent or file the periodic report can result in loss of good standing and, if uncured, administrative dissolution by the state." .

@@ -1,0 +1,20 @@
+schema_version: '1'
+connector: legal-peripherals-mcp
+ontology_source: legal
+sync:
+- preset: legal-sos-entities
+  server: legal-peripherals-mcp
+  tool: legal_ingest_sos_entities
+  action: list
+  records_path: entities
+  id_field: id
+  title_field: name
+  text_field: registered_address
+  updated_field: incorporation_date
+  doc_type: business_entity
+  tool_schema_sha256: 55bccda5f05345d5cc0b80634b492547dc1e29ce7950b5557943283c55261f6b
+governance:
+  default_acl: quarantine
+  identity: opaque-reference
+  tenant: required-at-materialization
+  provenance: required-at-materialization

@@ -7,6 +7,9 @@ mappings. CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 
 from __future__ import annotations
 
+import pytest
+from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
+
 from legal_peripherals_mcp.kg_ingest import (
     ingest_documents,
     ingest_ein_application,
@@ -20,6 +23,7 @@ from legal_peripherals_mcp.kg_ingest import (
 class _FakeTxn:
     def __init__(self):
         self.nodes = {}
+        self.edges = []
         self.committed = False
 
     def begin(self, graph=None):
@@ -29,33 +33,28 @@ class _FakeTxn:
     def add_node(self, txn, node_id, props):
         self.nodes[node_id] = props
 
+    def add_edge(self, txn, src, dst, props):
+        self.edges.append((src, dst, props))
+
     def commit(self, txn):
         self.committed = True
         return True
 
 
-class _FakeEdges:
-    def __init__(self):
-        self.edges = []
-
-    def add(self, src, dst, props):
-        self.edges.append((src, dst, props))
-
 
 class _FakeClient:
     def __init__(self):
         self.txn = _FakeTxn()
-        self.edges = _FakeEdges()
 
 
 def test_ingest_entities_writes_nodes_and_edges_with_provenance():
     c = _FakeClient()
     res = ingest_entities(
         [
-            {"id": "a", "type": "BusinessEntity", "name": "Acme"},
-            {"id": "b", "type": "Jurisdiction"},
+            {"id": "a", "node_type": "BusinessEntity", "name": "Acme"},
+            {"id": "b", "node_type": "Jurisdiction"},
         ],
-        [{"source": "a", "target": "b", "type": "incorporatedIn"}],
+        [{"source": "a", "target": "b", "relationship": "incorporatedIn"}],
         client=c,
         graph="__commons__",
     )
@@ -64,12 +63,12 @@ def test_ingest_entities_writes_nodes_and_edges_with_provenance():
     assert set(c.txn.nodes) == {"a", "b"}
     assert c.txn.nodes["a"]["source"] == "legal-peripherals-mcp"
     assert c.txn.nodes["a"]["domain"] == "legal"
-    assert c.edges.edges == [("a", "b", {"type": "incorporatedIn"})]
+    assert c.txn.edges == [("a", "b", {"relationship": "incorporatedIn"})]
 
 
-def test_ingest_entities_empty_is_noop():
-    assert ingest_entities([], client=_FakeClient()) is None
-
+def test_ingest_empty_is_rejected():
+    with pytest.raises(NativeIngestError, match="at least one entity"):
+        ingest_entities([], client=_FakeClient())
 
 def test_ingest_sos_entities_maps_business_entity_and_jurisdiction():
     c = _FakeClient()
@@ -91,19 +90,19 @@ def test_ingest_sos_entities_maps_business_entity_and_jurisdiction():
     )
     assert res == {"nodes": 2, "edges": 1}
     ent = c.txn.nodes["legal:businessentity:us_de_1234567"]
-    assert ent["type"] == "BusinessEntity"
+    assert ent["node_type"] == "BusinessEntity"
     assert ent["name"] == "Acme Holdings LLC"
     assert ent["companyNumber"] == "1234567"
     assert ent["registryStatus"] == "Active"
     assert ent["incorporationDate"] == "2020-01-15"
     assert ent["externalToolId"] == "us_de_1234567"
     jur = c.txn.nodes["legal:jurisdiction:us_de"]
-    assert jur["type"] == "Jurisdiction"
-    assert c.edges.edges == [
+    assert jur["node_type"] == "Jurisdiction"
+    assert c.txn.edges == [
         (
             "legal:businessentity:us_de_1234567",
             "legal:jurisdiction:us_de",
-            {"type": "incorporatedIn"},
+            {"relationship": "incorporatedIn"},
         )
     ]
 
@@ -121,24 +120,25 @@ def test_ingest_ein_application_maps_filing_and_entity():
     )
     assert res == {"nodes": 2, "edges": 1}
     app = c.txn.nodes["legal:einapplication:acme-holdings-llc"]
-    assert app["type"] == "EINApplication"
+    assert app["node_type"] == "EINApplication"
     assert app["filingType"] == "ss4_ein"
     assert app["filingAgency"] == "IRS"
     assert app["filingStatus"] == "queued"
     assert app["text"] == "=== SS-4 ..."
     ent = c.txn.nodes["legal:businessentity:acme-holdings-llc"]
-    assert ent["type"] == "BusinessEntity"
-    assert c.edges.edges == [
+    assert ent["node_type"] == "BusinessEntity"
+    assert c.txn.edges == [
         (
             "legal:einapplication:acme-holdings-llc",
             "legal:businessentity:acme-holdings-llc",
-            {"type": "appliesForEntity"},
+            {"relationship": "appliesForEntity"},
         )
     ]
 
 
-def test_ingest_ein_application_blank_name_is_noop():
-    assert ingest_ein_application("   ", client=_FakeClient()) is None
+def test_ingest_ein_application_blank_name_is_rejected():
+    with pytest.raises(NativeIngestError, match="at least one entity"):
+        ingest_ein_application("   ", client=_FakeClient())
 
 
 def test_ingest_documents_and_filing_document():
@@ -150,7 +150,7 @@ def test_ingest_documents_and_filing_document():
     )
     assert res == {"nodes": 1, "edges": 0}
     node = c.txn.nodes["legal:document:d1"]
-    assert node["type"] == "Document"
+    assert node["node_type"] == "Document"
     assert node["text"] == "hello"
     assert "created_at" in node
 
@@ -167,8 +167,9 @@ def test_ingest_documents_and_filing_document():
     assert c2.txn.nodes["legal:document:de-llc-voting"]["title"] == "DE LLC voting"
 
 
-def test_ingest_filing_document_empty_text_is_noop():
-    assert ingest_filing_document("id", "   ", client=_FakeClient()) is None
+def test_ingest_filing_document_empty_text_is_rejected():
+    with pytest.raises(NativeIngestError, match="at least one document"):
+        ingest_filing_document("id", "   ", client=_FakeClient())
 
 
 def test_search_companies_no_token_returns_empty(monkeypatch):

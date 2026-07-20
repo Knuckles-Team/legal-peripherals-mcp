@@ -1,0 +1,129 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Regulatory-affairs domain module — the regulatory-change practice area
+# (regulatory feeds, NPRM comment periods, policy diffs/redrafts, gap tracking,
+# and enforcement monitoring).
+# Covers what compliance.ttl's per-Regulation modules don't: the regulatory-CHANGE
+# lifecycle itself — tracking new/amended rules, NPRM comment periods, enforcement
+# actions, agency guidance, and gap remediation — rather than a single framework's
+# obligations. Imports the shared upper ontology; reuses (never redefines)
+# :Regulation / :RegulatoryAuthority / :ComplianceRequirement / :ComplianceGate /
+# :Assessment / :Obligation and legal.ttl's :RegulatoryFiling / :FederalStatute /
+# :StateStatute / :Jurisdiction. Key concepts/obligations/controls only, not
+# exhaustive legal text. CONCEPT:LP-OS.governance.legal-domain-regulatory
+
+<http://knuckles.team/kg/legal-domain-regulatory> a owl:Ontology ;
+    rdfs:label "Regulatory Affairs Domain Module" ;
+    rdfs:comment """Regulatory-change lifecycle: proposed/final rules, NPRM comment
+periods, agency guidance, enforcement actions, and compliance-gap remediation
+for the regulatory-change practice area.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:RegulatoryChangeNotice a owl:Class ;
+    rdfs:label "Regulatory Change Notice" ;
+    rdfs:comment "A proposed or final rule change published by a RegulatoryAuthority (e.g. a Federal Register NPRM/final rule, an agency bulletin). BFO:GenericallyDependentContinuant." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:RegulatoryComment a owl:Class ;
+    rdfs:label "Regulatory Comment" ;
+    rdfs:comment "A comment submitted (or drafted for submission) during a RegulatoryChangeNotice's public comment period. BFO:GDC." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:AgencyGuidance a owl:Class ;
+    rdfs:label "Agency Guidance" ;
+    rdfs:comment "Non-binding interpretive guidance, bulletin, or FAQ issued by a RegulatoryAuthority clarifying how it will apply a Regulation." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:EnforcementAction a owl:Class ;
+    rdfs:label "Enforcement Action" ;
+    rdfs:comment "An investigation, consent order, or civil/administrative action a RegulatoryAuthority brings against an Organization for an alleged Obligation violation. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:ComplianceGapRemediation a owl:Class ;
+    rdfs:label "Compliance Gap Remediation" ;
+    rdfs:comment "A tracked remediation plan closing a gap identified between current policy/practice and a ComplianceRequirement (e.g. by a policy redraft). BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:amendsRegulation a owl:ObjectProperty ;
+    rdfs:label "amends regulation" ;
+    rdfs:comment "Links a RegulatoryChangeNotice to the Regulation it proposes to amend or finalize." ;
+    rdfs:domain :RegulatoryChangeNotice ;
+    rdfs:range :Regulation .
+
+:issuedByAuthority a owl:ObjectProperty ;
+    rdfs:label "issued by authority" ;
+    rdfs:comment "Links a RegulatoryChangeNotice, AgencyGuidance, or EnforcementAction to the issuing/enforcing RegulatoryAuthority." ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :RegulatoryChangeNotice :AgencyGuidance :EnforcementAction ) ] ;
+    rdfs:range :RegulatoryAuthority .
+
+:respondsToNotice a owl:ObjectProperty ;
+    rdfs:label "responds to notice" ;
+    rdfs:comment "Links a RegulatoryComment to the RegulatoryChangeNotice (NPRM) it was submitted against." ;
+    rdfs:domain :RegulatoryComment ;
+    rdfs:range :RegulatoryChangeNotice .
+
+:commentDeadline a owl:DatatypeProperty ;
+    rdfs:label "comment deadline" ;
+    rdfs:comment "The date a RegulatoryChangeNotice's public comment window closes." ;
+    rdfs:domain :RegulatoryChangeNotice ;
+    rdfs:range xsd:date .
+
+:enforcementTargets a owl:ObjectProperty ;
+    rdfs:label "enforcement targets" ;
+    rdfs:comment "Links an EnforcementAction to the Organization it was brought against." ;
+    rdfs:domain :EnforcementAction ;
+    rdfs:range :Organization .
+
+:arisesFromObligation a owl:ObjectProperty ;
+    rdfs:label "arises from obligation" ;
+    rdfs:comment "Links an EnforcementAction to the Obligation whose alleged breach triggered it." ;
+    rdfs:domain :EnforcementAction ;
+    rdfs:range :Obligation .
+
+:remediatesGap a owl:ObjectProperty ;
+    rdfs:label "remediates gap" ;
+    rdfs:comment "Links a ComplianceGapRemediation to the ComplianceRequirement it closes the gap against." ;
+    rdfs:domain :ComplianceGapRemediation ;
+    rdfs:range :ComplianceRequirement .
+
+:trackedByAssessment a owl:ObjectProperty ;
+    rdfs:label "tracked by assessment" ;
+    rdfs:comment "Links a ComplianceGapRemediation to the Assessment that originally surfaced the gap." ;
+    rdfs:domain :ComplianceGapRemediation ;
+    rdfs:range :Assessment .
+
+#################################################################
+# canonical / illustrative individuals — cross-linked into the existing
+# per-framework modules so a live regulatory-change feed resolves straight to
+# the obligations it affects.
+#################################################################
+
+:HIPAAOmnibusRuleNotice a :RegulatoryChangeNotice ;
+    rdfs:label "Example: HIPAA Security Rule NPRM" ;
+    rdfs:comment "Illustrative RegulatoryChangeNotice showing how a proposed rule links back to a tracked Regulation for materiality scoring." ;
+    :amendsRegulation :HIPAA ;
+    :issuedByAuthority :HHSOCR ;
+    :commentDeadline "2026-09-01"^^xsd:date .
+
+:FLSAOvertimeRuleGuidance a :AgencyGuidance ;
+    rdfs:label "Example: DOL WHD Overtime Rule Guidance" ;
+    rdfs:comment "Illustrative AgencyGuidance clarifying FLSA overtime-exemption thresholds." ;
+    :issuedByAuthority :DOLWHD .
+
+:PHIEncryptionGapRemediation a :ComplianceGapRemediation ;
+    rdfs:label "Example: PHI Encryption Gap Remediation" ;
+    rdfs:comment "Illustrative remediation plan closing a gap against the HIPAAPHIEncryptionRequirement." ;
+    :remediatesGap :HIPAAPHIEncryptionRequirement .

@@ -7,13 +7,13 @@
         "legal_peripherals_mcp.mcp_server"
       ],
       "env": {
-        "MCP_TOOL_MODE": "condensed",
+        "MCP_TOOL_MODE": "intent",
         "BYPASS_IRS_FILING_HOURS": "False",
+        "COMPLIANCETOOL": "True",
         "EINTOOL": "True",
         "EIN_TIMEOUT_SECONDS": "30",
         "LEGAL_PERIPHERALS_BASE_URL": "http://localhost:8000",
-        "LEGAL_PERIPHERALS_TOKEN": "",
-        "OPENCORPORATES_API_TOKEN": "",
+        "OPENCORPORATES_BASE_URL": "https://api.opencorporates.com/v0.4",
         "SOSTOOL": "True",
         "SOS_TIMEOUT_SECONDS": "30",
         "STATUTETOOL": "True",

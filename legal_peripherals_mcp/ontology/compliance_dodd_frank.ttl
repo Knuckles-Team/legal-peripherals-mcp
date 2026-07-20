@@ -1,0 +1,70 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Dodd-Frank Wall Street Reform and Consumer Protection Act — systemic-risk oversight, the
+# Volcker Rule, and (via Title X) the creation of the CFPB (see compliance_cfpb.ttl). Key
+# concepts/obligations/controls only.
+
+<http://knuckles.team/kg/legal-compliance-dodd-frank> a owl:Ontology ;
+    rdfs:label "Dodd-Frank Compliance Module" ;
+    rdfs:comment "Dodd-Frank systemic-risk oversight (enhanced prudential standards, stress testing), the Volcker Rule, and the Title X consumer-protection mandate realized by the CFPB." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:FSOC a :RegulatoryAuthority ;
+    rdfs:label "Financial Stability Oversight Council" ;
+    rdfs:comment "The council Dodd-Frank created to identify and respond to systemic risk and designate systemically important financial institutions (SIFIs)." .
+
+:DoddFrank a :Regulation ;
+    rdfs:label "Dodd-Frank Act" ;
+    rdfs:comment "Dodd-Frank Wall Street Reform and Consumer Protection Act (2010) — systemic-risk oversight and enhanced prudential standards for large banking organizations, the Volcker Rule proprietary-trading restrictions, and (Title X) the consumer-protection mandate realized by the CFPB." ;
+    :appliesToSector :FinanceSector ;
+    :appliesToDataClass :FinancialData ;
+    :enforcedBy :FSOC ;
+    :imposesObligation :DoddFrankSystemicRiskObligation,
+        :DoddFrankVolckerRuleObligation,
+        :DoddFrankConsumerProtectionObligation ;
+    :hasReportingRequirement :DoddFrankStressTestReportingRequirement .
+
+:DoddFrankSystemicRiskObligation a :Obligation ;
+    rdfs:label "Systemic Risk / Enhanced Prudential Standards Obligation" ;
+    rdfs:comment "SIFI-designated institutions must meet enhanced prudential standards, including annual stress testing and resolution ('living will') planning." ;
+    :requiresControl :DoddFrankStressTestingControl,
+        :DoddFrankLivingWillControl ;
+    :violation :DoddFrankCivilPenalty .
+
+:DoddFrankVolckerRuleObligation a :Obligation ;
+    rdfs:label "Volcker Rule Obligation" ;
+    rdfs:comment "Banking entities may not engage in short-term proprietary trading and face limits on ownership of/relationships with covered funds, subject to a compliance-program requirement." ;
+    :requiresControl :DoddFrankVolckerComplianceProgramControl ;
+    :violation :DoddFrankCivilPenalty .
+
+:DoddFrankConsumerProtectionObligation a :Obligation ;
+    rdfs:label "Consumer Protection Mandate Obligation" ;
+    rdfs:comment "Title X established the Consumer Financial Protection Bureau (see the CFPBConsumerProtection Regulation) with authority to write and enforce consumer-financial-protection rules; a covered institution must maintain oversight alignment with CFPB rulemaking." ;
+    :requiresControl :DoddFrankConsumerProtectionOversightControl .
+
+:DoddFrankStressTestingControl a :Control ;
+    rdfs:label "Stress Testing Control" ;
+    rdfs:comment "Annual company-run and supervisory stress tests (DFAST) modeling capital adequacy under severely adverse scenarios." .
+
+:DoddFrankLivingWillControl a :Control ;
+    rdfs:label "Resolution Plan Control" ;
+    rdfs:comment "A maintained 'living will' resolution plan describing an orderly wind-down under bankruptcy without systemic disruption." .
+
+:DoddFrankVolckerComplianceProgramControl a :Control ;
+    rdfs:label "Volcker Compliance Program Control" ;
+    rdfs:comment "Documented policies, internal controls, independent testing, and reporting/recordkeeping for trading-desk Volcker-Rule compliance." .
+
+:DoddFrankConsumerProtectionOversightControl a :Control ;
+    rdfs:label "Consumer Protection Oversight Control" ;
+    rdfs:comment "Ongoing tracking of, and alignment with, CFPB rulemaking and guidance (see compliance_cfpb.ttl for the concrete consumer-protection obligations/controls)." .
+
+:DoddFrankStressTestReportingRequirement a :ReportingRequirement ;
+    rdfs:label "Dodd-Frank Act Stress Test (DFAST) Reporting" ;
+    rdfs:comment "Annual submission of company-run stress-test results and capital-plan disclosures to the primary federal regulator." ;
+    :triggeredByObligation :DoddFrankSystemicRiskObligation .
+
+:DoddFrankCivilPenalty a :Penalty ;
+    rdfs:label "Dodd-Frank Civil Penalty" ;
+    rdfs:comment "Civil money penalties and, for repeated or uncorrected violations, enhanced prudential/enforcement remedies up to and including SIFI-specific restrictions." .

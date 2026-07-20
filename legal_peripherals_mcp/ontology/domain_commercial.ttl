@@ -1,0 +1,138 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Commercial-contracts domain module — the commercial-contracts practice area
+# (NDA / vendor / SaaS-MSA review, amendment history, renewal tracking, review
+# findings, and escalation routing). Imports the shared upper ontology.
+# Formally types :Contract (subClassOf bfo:0000031) — legal.ttl's :hasClause
+# already used :Contract as a domain but never declared it as an owl:Class until
+# now. Reuses legal.ttl's :ContractClause / :hasClause, and cross-links a
+# data-classified Contract straight to the compliance Regulation + Attestation it
+# triggers (e.g. a vendor agreement touching PHI resolves to HIPAA's signed-BAA
+# Attestation) via the hub's :classifiedAs / :governedBy. Key concepts/document
+# types/controls only, not exhaustive legal text.
+# CONCEPT:LP-OS.governance.legal-domain-commercial
+
+<http://knuckles.team/kg/legal-domain-commercial> a owl:Ontology ;
+    rdfs:label "Commercial Contracts Domain Module" ;
+    rdfs:comment """Commercial-contract lifecycle concepts — NDAs, MSAs, vendor
+agreements, amendments, renewal deadlines, playbook review findings, and
+escalation routing for the commercial-contracts practice area, cross-linked to
+the compliance suite via data classification.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:Contract a owl:Class ;
+    rdfs:label "Contract" ;
+    rdfs:comment "A legally binding commercial agreement. Formally types legal.ttl's previously-undeclared :Contract domain (:hasClause)." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:NDAAgreement a owl:Class ;
+    rdfs:label "NDA Agreement" ;
+    rdfs:comment "A non-disclosure / confidentiality agreement, inbound or mutual." ;
+    rdfs:subClassOf :Contract .
+
+:MSAAgreement a owl:Class ;
+    rdfs:label "SaaS / Master Service Agreement" ;
+    rdfs:comment "A SaaS subscription or master service agreement — auto-renewal, price escalation, SLA, and data-processing terms are the typical review focus." ;
+    rdfs:subClassOf :Contract .
+
+:VendorAgreement a owl:Class ;
+    rdfs:label "Vendor Agreement" ;
+    rdfs:comment "An inbound vendor/supplier agreement reviewed against the team playbook." ;
+    rdfs:subClassOf :Contract .
+
+:ContractAmendment a owl:Class ;
+    rdfs:label "Contract Amendment" ;
+    rdfs:comment "A dated change to a base Contract, tracked so the full amendment history and provision-level trace are reconstructable." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:RenewalDeadline a owl:Class ;
+    rdfs:label "Renewal Deadline" ;
+    rdfs:comment "A tracked cancel-by / auto-renewal notice-window deadline for a Contract." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:ContractReviewFinding a owl:Class ;
+    rdfs:label "Contract Review Finding" ;
+    rdfs:comment "A flagged deviation from the team playbook found during Contract review, rated GREEN/YELLOW/RED for triage." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:EscalationRoute a owl:Class ;
+    rdfs:label "Escalation Route" ;
+    rdfs:comment "The routing of a ContractReviewFinding to the correct approver per the escalation matrix. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:amendsContract a owl:ObjectProperty ;
+    rdfs:label "amends contract" ;
+    rdfs:domain :ContractAmendment ;
+    rdfs:range :Contract .
+
+:hasRenewalDeadline a owl:ObjectProperty ;
+    rdfs:label "has renewal deadline" ;
+    rdfs:domain :Contract ;
+    rdfs:range :RenewalDeadline .
+
+:cancelByDate a owl:DatatypeProperty ;
+    rdfs:label "cancel-by date" ;
+    rdfs:domain :RenewalDeadline ;
+    rdfs:range xsd:date .
+
+:noticeWindowDays a owl:DatatypeProperty ;
+    rdfs:label "notice window days" ;
+    rdfs:comment "Days of advance notice required before the cancel-by date to avoid auto-renewal." ;
+    rdfs:domain :RenewalDeadline ;
+    rdfs:range xsd:integer .
+
+:flaggedIn a owl:ObjectProperty ;
+    rdfs:label "flagged in" ;
+    rdfs:domain :ContractReviewFinding ;
+    rdfs:range :Contract .
+
+:deviatesFromClause a owl:ObjectProperty ;
+    rdfs:label "deviates from clause" ;
+    rdfs:comment "Links a ContractReviewFinding to the playbook ContractClause it deviates from." ;
+    rdfs:domain :ContractReviewFinding ;
+    rdfs:range :ContractClause .
+
+:findingSeverity a owl:DatatypeProperty ;
+    rdfs:comment "green, yellow, or red — triage rating from the fast-triage playbook." ;
+    rdfs:domain :ContractReviewFinding ;
+    rdfs:range xsd:string .
+
+:escalatesFinding a owl:ObjectProperty ;
+    rdfs:label "escalates finding" ;
+    rdfs:domain :EscalationRoute ;
+    rdfs:range :ContractReviewFinding .
+
+:routesToApprover a owl:ObjectProperty ;
+    rdfs:label "routes to approver" ;
+    rdfs:domain :EscalationRoute ;
+    rdfs:range :Person .
+
+:requiresAttestation a owl:ObjectProperty ;
+    rdfs:label "requires attestation" ;
+    rdfs:comment "Links a data-classified Contract to the compliance Attestation (e.g. a signed BAA) required before it may proceed." ;
+    rdfs:domain :Contract ;
+    rdfs:range :Attestation .
+
+#################################################################
+# canonical / illustrative individuals — the data-classification cross-link
+#################################################################
+
+:ExamplePHIVendorAgreement a :VendorAgreement ;
+    rdfs:label "Example: Vendor Agreement Handling PHI" ;
+    rdfs:comment "Illustrative VendorAgreement classified as handling PHI, resolving to HIPAA and its signed-BAA Attestation before it may proceed." ;
+    :classifiedAs :PHI ;
+    :governedBy :HIPAA ;
+    :requiresAttestation :HIPAABusinessAssociateAgreement .

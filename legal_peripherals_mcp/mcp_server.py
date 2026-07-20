@@ -4,22 +4,21 @@ import asyncio
 import sys
 from typing import Any
 
-from agent_utilities.mcp_utilities import (
-    create_mcp_server,
-    load_config,
-    register_tool_surface,
-)
+from agent_utilities.core.config import load_config
+from agent_utilities.mcp.server_factory import create_mcp_server
+from agent_utilities.mcp.verbose_tools import register_tool_surface
 from fastmcp.utilities.logging import get_logger
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from legal_peripherals_mcp.api_client import Api
 from legal_peripherals_mcp.auth import get_client
+from legal_peripherals_mcp.mcp.mcp_compliance import handle_compliance_lookup
 from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
 
-__version__ = "0.15.0"
+__version__ = "1.2.0"
 logger = get_logger(name="legal_peripherals_mcp")
 
 
@@ -143,6 +142,37 @@ def register_ingest_tools(mcp: Any) -> None:
         return {"file": file_path, "ingested": result}
 
 
+def register_compliance_tools(mcp: Any) -> None:
+    """Register the action-routed compliance-ontology lookup tool (tag: compliance)."""
+
+    @mcp.tool()
+    async def legal_compliance_lookup(
+        action: str,
+        regulation: str = "",
+        sector: str = "",
+        data_class: str = "",
+        data_classes: str = "",
+        ctx: Any = None,
+    ) -> dict:
+        """Query the bundled compliance + domain ontology suite (KG-native, no external API).
+
+        Actions: ``list_domains``, ``list_regulations`` (optional ``sector``/
+        ``data_class``), ``regulation_detail`` (needs ``regulation``), ``sector_lookup``
+        (needs ``sector``), ``dataclass_lookup`` (needs ``data_class``),
+        ``gate_requirements`` (needs comma-separated ``data_classes``, e.g. "PHI,PII")
+        — resolves the applicable Regulation(s) and required Control(s) the way a
+        ComplianceGate would for a governed entity carrying those data classifications.
+        """
+        return await handle_compliance_lookup(
+            action=action,
+            regulation=regulation,
+            sector=sector,
+            data_class=data_class,
+            data_classes=data_classes,
+            ctx=ctx,
+        )
+
+
 def get_mcp_instance() -> Any:
     load_config()
     args, mcp, middlewares = create_mcp_server(
@@ -162,7 +192,7 @@ def get_mcp_instance() -> Any:
         service="legal-peripherals-mcp",
         tools_module=sys.modules[__name__],
     )
-    logger.info(f"Registered condensed tool surfaces: {registered_tags}")
+    logger.info("Registered condensed tool surfaces: count=%d", len(registered_tags))
 
     for mw in middlewares:
         mcp.add_middleware(mw)

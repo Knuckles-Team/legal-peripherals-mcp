@@ -1,0 +1,219 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Regulatory/legal compliance upper ontology — the reusable backbone every per-regulation
+# module in this directory (compliance_hipaa.ttl, compliance_bsa_aml.ttl, compliance_occ.ttl,
+# compliance_dodd_frank.ttl, compliance_cfpb.ttl, compliance_flsa.ttl, compliance_taxation.ttl,
+# compliance_llc.ttl, …) imports via owl:imports. All classes/properties live in the shared
+# `:` (kg#) namespace per the fleet federation convention; only the owl:Ontology node below
+# gets this module's own IRI.
+#
+# Deliberately REUSES rather than redefines what already exists:
+#   - hub (agent_utilities ontology.ttl): :Regulation, :DataClassification, :governedBy,
+#     :classifiedAs, :Organization, :System, :Server, :GovernedEntity, :Policy.
+#   - this package (legal.ttl): :Jurisdiction, :Statute, :FederalStatute, :StateStatute,
+#     :RegulatoryFiling, :BusinessEntity, :LLCFormationFiling, :CorporateGovernanceDoc,
+#     :EmploymentLawMatter.
+# Only the classes/properties those do NOT already cover are declared here.
+#
+# The join to the shared infra/asset ontology: any governed entity (a :System, :Server,
+# :Organization, or other bfo:0000001 continuant) that is :classifiedAs one of the
+# :DataClassification individuals below (:PHI, :PII, :PCI, :FinancialData, :CUI) resolves to
+# the applicable :Regulation via that Regulation's :appliesToDataClass edge — and/or may be
+# :governedBy the Regulation directly. A :ComplianceRequirement derived from that Regulation
+# (:derivedFromRegulation) is what a :ComplianceGate — wired into the incident, SDLC, and
+# comparative-intelligence loops — or a periodic :Assessment evaluates (:evaluatesRequirement);
+# an :Attestation (:attestsTo) is the durable evidence that an :Obligation or :Control was met.
+#
+# Extending the suite (GDPR, SOX, PCI-DSS, FedRAMP/NIST, GLBA, …): drop a new
+# compliance_<name>.ttl into this directory — the agent_utilities.ontology_providers hub
+# loader globs every *.ttl here automatically, no code changes required. Each new module
+# should: (1) declare its own owl:Ontology IRI under http://knuckles.team/kg/legal-compliance-
+# <name> that owl:imports <http://knuckles.team/kg/legal-compliance>; (2) declare one
+# :Regulation individual tagged :appliesToSector / :appliesToDataClass / :enforcedBy /
+# :imposesObligation / (optionally) :hasReportingRequirement; (3) declare its
+# :RegulatoryAuthority individual(s); (4) declare 2-4 :Obligation individuals, each
+# :requiresControl one or more :Control individuals and optionally :violation a :Penalty;
+# (5) optionally declare :ReportingRequirement / :ComplianceRequirement / :Assessment /
+# :Attestation / :ComplianceGate individuals where the framework genuinely has one. Keep it
+# structured and useful — key concepts/obligations/controls, not exhaustive legal text.
+#
+# CONCEPT:LP-OS.governance.compliance-ontology-suite
+
+<http://knuckles.team/kg/legal-compliance> a owl:Ontology ;
+    rdfs:label "Regulatory Compliance Upper Ontology" ;
+    rdfs:comment """Reusable backbone for regulatory/legal compliance frameworks —
+regulations, authorities, obligations, controls, reporting requirements, gates,
+assessments, attestations — cross-linked to the shared infra/asset ontology via
+:governedBy / :classifiedAs / :appliesToDataClass so a service or asset's data
+classification resolves the regulation(s) that govern it.""" ;
+    owl:imports <http://knuckles.team/kg>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes (owl:Class) — new; NOT already defined in the hub or legal.ttl
+#################################################################
+
+:RegulatoryAuthority a owl:Class ;
+    rdfs:label "Regulatory Authority" ;
+    rdfs:comment "A government body or agency that issues and enforces a Regulation (e.g. HHS/OCR, FinCEN, OCC, CFPB, DOL, IRS, a state Secretary of State)." ;
+    rdfs:subClassOf :Organization .
+
+:Obligation a owl:Class ;
+    rdfs:label "Obligation" ;
+    rdfs:comment "A specific duty a Regulation imposes on a governed entity (asset, service, or organization). BFO:GenericallyDependentContinuant." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:Control a owl:Class ;
+    rdfs:label "Control" ;
+    rdfs:comment "A documented safeguard or control measure that satisfies one or more Obligations or ComplianceRequirements (e.g. encryption-at-rest, dual-approval, access logging)." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:ComplianceRequirement a owl:Class ;
+    rdfs:label "Compliance Requirement" ;
+    rdfs:comment "A concrete, checkable requirement derived from a Regulation's Obligation(s) — the unit a ComplianceGate or Assessment evaluates." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:Penalty a owl:Class ;
+    rdfs:label "Penalty" ;
+    rdfs:comment "A sanction or consequence (civil fine, criminal liability, license revocation, consent order) risked for violating an Obligation." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:Sector a owl:Class ;
+    rdfs:label "Sector" ;
+    rdfs:comment "An economic/operational sector a Regulation applies to (finance, medical, government, private). Canonical individuals declared below." ;
+    rdfs:subClassOf skos:Concept .
+
+:ReportingRequirement a owl:Class ;
+    rdfs:label "Reporting Requirement" ;
+    rdfs:comment "A recurring or triggered regulatory filing/notification obligation (e.g. a SAR, a CTR, a tax return, a breach notification). Specializes RegulatoryFiling with a compliance trigger and a target RegulatoryAuthority." ;
+    rdfs:subClassOf :RegulatoryFiling .
+
+:ComplianceGate a owl:Class ;
+    rdfs:label "Compliance Gate" ;
+    rdfs:comment "An automated or manual checkpoint — wired into the incident, SDLC, or comparative-intelligence loops — that evaluates whether a governed entity satisfies its ComplianceRequirement(s) before it may proceed (deploy, onboard, process data). BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:Assessment a owl:Class ;
+    rdfs:label "Assessment" ;
+    rdfs:comment "A point-in-time evaluation of compliance posture against one or more ComplianceRequirement(s)/Control(s) (e.g. a HIPAA risk assessment, an AML independent test, a SOC 2 audit). BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:Attestation a owl:Class ;
+    rdfs:label "Attestation" ;
+    rdfs:comment "A signed statement or document evidencing that an Obligation or Control has been satisfied (e.g. a signed BAA, an officer certification, an audit letter). BFO:GenericallyDependentContinuant." ;
+    rdfs:subClassOf bfo:0000031 .
+
+#################################################################
+# object properties (owl:ObjectProperty) — new
+#################################################################
+
+:appliesToSector a owl:ObjectProperty ;
+    rdfs:label "applies to sector" ;
+    rdfs:comment "Links a Regulation to the Sector(s) it applies to." ;
+    rdfs:domain :Regulation ;
+    rdfs:range :Sector .
+
+:appliesToDataClass a owl:ObjectProperty ;
+    rdfs:label "applies to data class" ;
+    rdfs:comment "Links a Regulation to the DataClassification(s) that trigger it (e.g. :PHI -> :HIPAA). This is the join used to resolve a governed entity's applicable Regulation(s) from its :classifiedAs edge." ;
+    rdfs:domain :Regulation ;
+    rdfs:range :DataClassification .
+
+:imposesObligation a owl:ObjectProperty ;
+    rdfs:label "imposes obligation" ;
+    rdfs:comment "Links a Regulation to the Obligation(s) it imposes." ;
+    rdfs:domain :Regulation ;
+    rdfs:range :Obligation .
+
+:requiresControl a owl:ObjectProperty ;
+    rdfs:label "requires control" ;
+    rdfs:comment "Links an Obligation or ComplianceRequirement to the Control(s) that satisfy it." ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Obligation :ComplianceRequirement ) ] ;
+    rdfs:range :Control .
+
+:hasReportingRequirement a owl:ObjectProperty ;
+    rdfs:label "has reporting requirement" ;
+    rdfs:comment "Links a Regulation to its ReportingRequirement(s), e.g. BSA -> SAR filing." ;
+    rdfs:domain :Regulation ;
+    rdfs:range :ReportingRequirement .
+
+:triggeredByObligation a owl:ObjectProperty ;
+    rdfs:label "triggered by obligation" ;
+    rdfs:comment "Links a ReportingRequirement to the Obligation whose breach or detection triggers it (e.g. a SAR filing triggered by an AML suspicious-activity-monitoring Obligation)." ;
+    rdfs:domain :ReportingRequirement ;
+    rdfs:range :Obligation .
+
+:enforcedBy a owl:ObjectProperty ;
+    rdfs:label "enforced by" ;
+    rdfs:comment "Links a Regulation to the RegulatoryAuthority that enforces it." ;
+    rdfs:domain :Regulation ;
+    rdfs:range :RegulatoryAuthority .
+
+:violation a owl:ObjectProperty ;
+    rdfs:label "violation" ;
+    rdfs:comment "Links an Obligation to the Penalty risked for non-compliance." ;
+    rdfs:domain :Obligation ;
+    rdfs:range :Penalty .
+
+:derivedFromRegulation a owl:ObjectProperty ;
+    rdfs:label "derived from regulation" ;
+    rdfs:comment "Links a ComplianceRequirement back to the Regulation its Obligation(s) were derived from." ;
+    rdfs:domain :ComplianceRequirement ;
+    rdfs:range :Regulation .
+
+:evaluatesRequirement a owl:ObjectProperty ;
+    rdfs:label "evaluates requirement" ;
+    rdfs:comment "Links an Assessment or ComplianceGate to the ComplianceRequirement(s) it evaluates." ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :Assessment :ComplianceGate ) ] ;
+    rdfs:range :ComplianceRequirement .
+
+:attestsTo a owl:ObjectProperty ;
+    rdfs:label "attests to" ;
+    rdfs:comment "Links an Attestation to the Obligation or Control it evidences satisfaction of." ;
+    rdfs:domain :Attestation ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( :Obligation :Control ) ] .
+
+#################################################################
+# canonical Sector individuals
+#################################################################
+
+:FinanceSector a :Sector ;
+    rdfs:label "Finance Sector" .
+
+:MedicalSector a :Sector ;
+    rdfs:label "Medical Sector" .
+
+:GovernmentSector a :Sector ;
+    rdfs:label "Government Sector" .
+
+:PrivateSector a :Sector ;
+    rdfs:label "Private Sector" .
+
+#################################################################
+# canonical DataClassification individuals (reuses the hub's :DataClassification class)
+#################################################################
+
+:PHI a :DataClassification ;
+    rdfs:label "Protected Health Information" ;
+    rdfs:comment "PHI as defined by HIPAA — individually identifiable health information." .
+
+:PII a :DataClassification ;
+    rdfs:label "Personally Identifiable Information" ;
+    rdfs:comment "Data that can identify a specific individual (name + SSN, DOB, address, …)." .
+
+:PCI a :DataClassification ;
+    rdfs:label "Payment Card Data" ;
+    rdfs:comment "Cardholder data in scope for PCI-DSS." .
+
+:FinancialData a :DataClassification ;
+    rdfs:label "Financial Data" ;
+    rdfs:comment "Customer account/transaction data in scope for GLBA, BSA/AML, Dodd-Frank, and CFPB." .
+
+:CUI a :DataClassification ;
+    rdfs:label "Controlled Unclassified Information" ;
+    rdfs:comment "CUI as defined by 32 CFR Part 2002 — in scope for FedRAMP/NIST 800-171 government contracting." .

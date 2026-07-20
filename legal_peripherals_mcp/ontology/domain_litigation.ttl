@@ -1,0 +1,129 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Litigation domain module — the litigation practice area (matter lifecycle,
+# demand letters, legal holds, depositions, privilege logs, subpoenas, claim
+# charts, and chronologies). Bonus module beyond the four core domains.
+# Imports the shared upper ontology.
+# Reuses legal.ttl's :LegalMatter / :EmploymentLawMatter / :governedByStatute /
+# :governedByEmploymentStatute rather than redefining a matter class — every class
+# here is a litigation ARTIFACT attached to an existing LegalMatter. Key
+# concepts/document types/controls only, not exhaustive legal text.
+# CONCEPT:LP-OS.governance.legal-domain-litigation
+
+<http://knuckles.team/kg/legal-domain-litigation> a owl:Ontology ;
+    rdfs:label "Litigation Domain Module" ;
+    rdfs:comment """Litigation-lifecycle artifacts — demand letters, legal holds,
+depositions, privilege log entries, subpoenas, claim charts, and chronology
+events for the litigation practice area, all attached to legal.ttl's existing
+:LegalMatter.""" ;
+    owl:imports <http://knuckles.team/kg/legal-compliance>,
+        <http://knuckles.team/kg/legal> .
+
+#################################################################
+# classes — new
+#################################################################
+
+:DemandLetter a owl:Class ;
+    rdfs:label "Demand Letter" ;
+    rdfs:comment "An outbound or inbound demand letter, gated on a privilege / FRE 408 / waiver / admission checklist before send." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:LegalHold a owl:Class ;
+    rdfs:label "Legal Hold" ;
+    rdfs:comment "A litigation/preservation hold notice, tracked through issue, refresh, and release. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:Deposition a owl:Class ;
+    rdfs:label "Deposition" ;
+    rdfs:comment "A witness deposition, prepared around the case theory and organized by topic. BFO:Process." ;
+    rdfs:subClassOf bfo:0000015 .
+
+:PrivilegeLogEntry a owl:Class ;
+    rdfs:label "Privilege Log Entry" ;
+    rdfs:comment "A first-pass or attorney-reviewed privilege call for a withheld document." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:Subpoena a owl:Class ;
+    rdfs:label "Subpoena" ;
+    rdfs:comment "A subpoena served on or by the company, triaged for scope, burden, and privilege." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:ClaimChart a owl:Class ;
+    rdfs:label "Claim Chart" ;
+    rdfs:comment "An element chart mapping a cause of action's (or a patent claim's) elements to supporting/rebutting evidence." ;
+    rdfs:subClassOf bfo:0000031 .
+
+:ChronologyEvent a owl:Class ;
+    rdfs:label "Chronology Event" ;
+    rdfs:comment "A dated, de-duplicated event in a matter's chronology, tagged by significance to the case theory." ;
+    rdfs:subClassOf bfo:0000031 .
+
+#################################################################
+# object / datatype properties — new
+#################################################################
+
+:issuedForMatter a owl:ObjectProperty ;
+    rdfs:label "issued for matter" ;
+    rdfs:comment "Links a DemandLetter, LegalHold, Deposition, or Subpoena to the LegalMatter it belongs to." ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( :DemandLetter :LegalHold :Deposition :Subpoena ) ] ;
+    rdfs:range :LegalMatter .
+
+:holdStatus a owl:DatatypeProperty ;
+    rdfs:comment "issued, refreshed, or released." ;
+    rdfs:domain :LegalHold ;
+    rdfs:range xsd:string .
+
+:nextRefreshDate a owl:DatatypeProperty ;
+    rdfs:domain :LegalHold ;
+    rdfs:range xsd:date .
+
+:depositionWitness a owl:ObjectProperty ;
+    rdfs:domain :Deposition ;
+    rdfs:range :Person .
+
+:privilegeStatus a owl:DatatypeProperty ;
+    rdfs:comment "privileged, not_privileged, or needs_review." ;
+    rdfs:domain :PrivilegeLogEntry ;
+    rdfs:range xsd:string .
+
+:subpoenaScope a owl:DatatypeProperty ;
+    rdfs:comment "documents, testimony, or both." ;
+    rdfs:domain :Subpoena ;
+    rdfs:range xsd:string .
+
+:chartsCauseOfAction a owl:ObjectProperty ;
+    rdfs:label "charts cause of action" ;
+    rdfs:domain :ClaimChart ;
+    rdfs:range :LegalMatter .
+
+:partOfMatter a owl:ObjectProperty ;
+    rdfs:label "part of matter" ;
+    rdfs:domain :ChronologyEvent ;
+    rdfs:range :LegalMatter .
+
+:eventSignificance a owl:DatatypeProperty ;
+    rdfs:comment "low, medium, or high — significance to the matter's case theory." ;
+    rdfs:domain :ChronologyEvent ;
+    rdfs:range xsd:string .
+
+#################################################################
+# canonical / illustrative individuals — the EmploymentLawMatter cross-link
+#################################################################
+
+:ExampleWageHourMatter a :EmploymentLawMatter ;
+    rdfs:label "Example: Wage & Hour Litigation Matter" ;
+    rdfs:comment "Illustrative EmploymentLawMatter (legal.ttl) governed by the FLSA, with a litigation ClaimChart and ChronologyEvent attached — proving the litigation and employment domain modules compose on the same matter." ;
+    :governedByEmploymentStatute :FLSA .
+
+:ExampleWageHourClaimChart a :ClaimChart ;
+    rdfs:label "Example: FLSA Overtime Claim Chart" ;
+    :chartsCauseOfAction :ExampleWageHourMatter .
+
+:ExampleWageHourChronologyEvent a :ChronologyEvent ;
+    rdfs:label "Example: Missed Overtime Payment Event" ;
+    :partOfMatter :ExampleWageHourMatter ;
+    :eventSignificance "high" .

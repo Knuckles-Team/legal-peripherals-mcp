@@ -1,0 +1,102 @@
+@prefix : <http://knuckles.team/kg#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# HIPAA (Health Insurance Portability and Accountability Act) — medical/PHI compliance
+# module. Key concepts/obligations/controls only, not exhaustive legal text.
+
+<http://knuckles.team/kg/legal-compliance-hipaa> a owl:Ontology ;
+    rdfs:label "HIPAA Compliance Module" ;
+    rdfs:comment "HIPAA Privacy Rule, Security Rule, Breach Notification Rule, and Business Associate Agreement obligations for entities handling Protected Health Information." ;
+    owl:imports <http://knuckles.team/kg/legal-compliance> .
+
+:HHSOCR a :RegulatoryAuthority ;
+    rdfs:label "HHS Office for Civil Rights" ;
+    rdfs:comment "The HHS component that administers and enforces HIPAA." .
+
+:HIPAA a :Regulation ;
+    rdfs:label "HIPAA" ;
+    rdfs:comment "Health Insurance Portability and Accountability Act of 1996, as amended by HITECH — privacy, security, and breach-notification requirements for Protected Health Information (PHI)." ;
+    :appliesToSector :MedicalSector ;
+    :appliesToDataClass :PHI ;
+    :enforcedBy :HHSOCR ;
+    :imposesObligation :HIPAAPrivacyRuleObligation,
+        :HIPAASecurityRuleObligation,
+        :HIPAABreachNotificationObligation,
+        :HIPAABAAObligation ;
+    :hasReportingRequirement :HIPAABreachNotificationRequirement .
+
+:HIPAAPrivacyRuleObligation a :Obligation ;
+    rdfs:label "HIPAA Privacy Rule Obligation" ;
+    rdfs:comment "Use and disclose PHI only as permitted, applying the minimum-necessary standard, and honor patient rights of access/amendment." ;
+    :requiresControl :HIPAAMinimumNecessaryControl,
+        :HIPAAAccessControl ;
+    :violation :HIPAACivilMonetaryPenalty .
+
+:HIPAASecurityRuleObligation a :Obligation ;
+    rdfs:label "HIPAA Security Rule Obligation" ;
+    rdfs:comment "Implement administrative, physical, and technical safeguards to protect the confidentiality, integrity, and availability of electronic PHI (ePHI)." ;
+    :requiresControl :HIPAAEncryptionControl,
+        :HIPAAAuditLogControl ;
+    :violation :HIPAACivilMonetaryPenalty .
+
+:HIPAABreachNotificationObligation a :Obligation ;
+    rdfs:label "HIPAA Breach Notification Obligation" ;
+    rdfs:comment "Notify affected individuals, HHS, and (for breaches over 500 records) the media following discovery of a breach of unsecured PHI." ;
+    :requiresControl :HIPAAIncidentResponseControl ;
+    :violation :HIPAACivilMonetaryPenalty .
+
+:HIPAABAAObligation a :Obligation ;
+    rdfs:label "HIPAA Business Associate Agreement Obligation" ;
+    rdfs:comment "Execute a Business Associate Agreement (BAA) with any vendor/subcontractor that creates, receives, maintains, or transmits PHI on the covered entity's behalf." ;
+    :requiresControl :HIPAABAAControl ;
+    :violation :HIPAACivilMonetaryPenalty .
+
+:HIPAAMinimumNecessaryControl a :Control ;
+    rdfs:label "Minimum Necessary Access Control" ;
+    rdfs:comment "Role-based access restricting PHI exposure to the minimum necessary for the task." .
+
+:HIPAAAccessControl a :Control ;
+    rdfs:label "PHI Access Control" ;
+    rdfs:comment "Unique user identification, emergency access procedure, automatic logoff for systems holding ePHI." .
+
+:HIPAAEncryptionControl a :Control ;
+    rdfs:label "ePHI Encryption Control" ;
+    rdfs:comment "Encryption of ePHI at rest and in transit (addressable Security Rule specification)." .
+
+:HIPAAAuditLogControl a :Control ;
+    rdfs:label "ePHI Audit Log Control" ;
+    rdfs:comment "Audit controls that record and examine activity in systems containing ePHI." .
+
+:HIPAAIncidentResponseControl a :Control ;
+    rdfs:label "PHI Incident Response Control" ;
+    rdfs:comment "Documented breach-detection, risk-assessment, and notification-timeline procedure (60-day clock from discovery)." .
+
+:HIPAABAAControl a :Control ;
+    rdfs:label "Business Associate Agreement Control" ;
+    rdfs:comment "Contract-management control ensuring a signed BAA exists before any PHI is shared with a business associate." .
+
+:HIPAABreachNotificationRequirement a :ReportingRequirement ;
+    rdfs:label "HIPAA Breach Notification Filing" ;
+    rdfs:comment "Notify affected individuals within 60 days of discovery; notify HHS OCR (immediately if 500+ records, else annually); notify media if 500+ records in a state/jurisdiction." ;
+    :triggeredByObligation :HIPAABreachNotificationObligation .
+
+:HIPAACivilMonetaryPenalty a :Penalty ;
+    rdfs:label "HIPAA Civil Monetary Penalty" ;
+    rdfs:comment "Tiered civil penalties (per violation, capped annually per identical-provision category) based on culpability, up to willful-neglect-uncorrected; criminal penalties may also apply for knowing violations." .
+
+:HIPAAPHIEncryptionRequirement a :ComplianceRequirement ;
+    rdfs:label "PHI-at-Rest Encryption Requirement" ;
+    rdfs:comment "Any asset/service classified as handling PHI must satisfy the HIPAAEncryptionControl before it may process production PHI." ;
+    :derivedFromRegulation :HIPAA ;
+    :requiresControl :HIPAAEncryptionControl .
+
+:HIPAABusinessAssociateAgreement a :Attestation ;
+    rdfs:label "Signed Business Associate Agreement" ;
+    rdfs:comment "The signed BAA document evidencing that a vendor accepted its HIPAA Business Associate obligations." ;
+    :attestsTo :HIPAABAAObligation .
+
+:PHIOnboardingComplianceGate a :ComplianceGate ;
+    rdfs:label "PHI Onboarding Compliance Gate" ;
+    rdfs:comment "The checkpoint (SDLC/incident-loop) that blocks an asset from going live against production PHI until its HIPAAPHIEncryptionRequirement is satisfied." ;
+    :evaluatesRequirement :HIPAAPHIEncryptionRequirement .
