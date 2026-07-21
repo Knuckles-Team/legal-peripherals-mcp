@@ -121,7 +121,11 @@ async def test_sos_lookup_http_error_is_truthful(monkeypatch):
         res = await handle_sos_lookup("NV", "Acme LLC", ctx=None)
 
     assert res.startswith("Error:")
-    assert "NV" in res
+    # Security hardening: the returned error is generic (no internal exception
+    # detail leaked) — but it is still a truthful failure, never a fabricated record.
+    assert "entity lookup failed" in res
+    assert "Good Standing" not in res
+    assert "Active" not in res
 
 
 @pytest.mark.concept("LEGAL-001")
@@ -130,4 +134,6 @@ async def test_sos_lookup_invalid_state():
     """Validation still rejects bad state codes."""
     res = await handle_sos_lookup("ZZ", "Acme LLC")
     assert res.startswith("Error:")
-    assert "Invalid state" in res
+    # Bad input is still rejected; the message is generic (security hardening does
+    # not echo which specific field failed validation).
+    assert "invalid entity lookup parameters" in res

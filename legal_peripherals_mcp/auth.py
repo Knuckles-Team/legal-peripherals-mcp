@@ -12,8 +12,6 @@ def get_client() -> Api:
     """Get authenticated client for legal_peripherals_mcp."""
     base_url = setting("LEGAL_PERIPHERALS_BASE_URL", "")
     token = setting("LEGAL_PERIPHERALS_TOKEN", "")
-    verify = setting("LEGAL_PERIPHERALS_SSL_VERIFY", True)
-
     if not base_url:
         # Default fallback for testing
         base_url = "http://localhost:8000"
@@ -21,5 +19,4 @@ def get_client() -> Api:
     return Api(
         base_url=base_url,
         token=token,
-        verify=verify,
     )

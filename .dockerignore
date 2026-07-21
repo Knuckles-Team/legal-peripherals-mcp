@@ -1,4 +1,14 @@
 .git
+# Security boundary: never send VCS metadata or local credentials to the build daemon.
+.env
+.env.*
+.venv
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
 .pytest_cache
 .ruff_cache
 __pycache__

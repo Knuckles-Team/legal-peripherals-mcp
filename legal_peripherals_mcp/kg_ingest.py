@@ -7,14 +7,10 @@ applications (``:EINApplication``) — plus the text of drafted filings / statut
 summaries as ``:Document`` nodes for semantic search. Raw filing files (drafts) go in
 as blobs via :mod:`legal_peripherals_mcp.kg_media`.
 
-Everything rides the **lightweight engine client** (``GraphComputeEngine()._client`` +
-``txn``) through the shared ``agent_utilities...native_ingest`` primitive. The primitive
-import is GUARDED: when the shared helper is not present in the installed agent_utilities,
-this module falls back to a self-contained txn writer with the identical contract. Either
-way the whole seam is dependency-/engine-guarded — with no KG stack or no reachable engine
-every entry point **no-ops** (returns ``None``), so the connector runs with zero KG
-infrastructure. Node ids follow ``legal:<class>:<externalId>`` and every ``type`` matches a
-class the package's ``ontology`` federates.
+Everything rides the required
+``agent_utilities.knowledge_graph.memory.native_ingest`` authority. Node ids follow
+``legal:<class>:<externalId>`` and every ``node_type`` matches a class the package's
+``ontology`` federates.
 """
 
 from __future__ import annotations
@@ -22,14 +18,19 @@ from __future__ import annotations
 import logging
 import os
 import re
-import time
 from typing import Any
+
+from agent_utilities.knowledge_graph.memory.native_ingest import (
+    ingest_documents as _native_ingest_documents,
+)
+from agent_utilities.knowledge_graph.memory.native_ingest import (
+    ingest_entities as _native_ingest_entities,
+)
 
 logger = logging.getLogger("legal_peripherals_mcp.kg")
 
 _SOURCE = "legal-peripherals-mcp"
 _DOMAIN = "legal"
-_DEFAULT_GRAPH = "__commons__"
 
 # OpenCorporates config mirrors legal_peripherals_mcp.mcp.mcp_sos so the wire-first
 # ingest tool queries the exact same real registry aggregator.
@@ -39,84 +40,6 @@ _OC_BASE_URL = os.getenv(
 _OC_TIMEOUT = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
 
 
-# --------------------------------------------------------------------------- #
-# Write path: shared primitive with a self-contained fallback.
-# --------------------------------------------------------------------------- #
-try:  # Preferred: the fleet's one push-into-the-KG path.
-    from agent_utilities.knowledge_graph.memory.native_ingest import (
-        ingest_documents as _shared_ingest_documents,
-    )
-    from agent_utilities.knowledge_graph.memory.native_ingest import (
-        ingest_entities as _shared_ingest_entities,
-    )
-
-    _HAVE_SHARED = True
-except Exception as e:  # noqa: BLE001 — primitive not yet in installed agent_utilities
-    logger.debug("native_ingest primitive unavailable, using fallback: %s", e)
-    _HAVE_SHARED = False
-
-
-def _fallback_client() -> tuple[Any | None, str]:
-    """Resolve ``(engine_client, graph)`` via the lightweight engine, or ``(None, "")``."""
-    try:
-        from agent_utilities.knowledge_graph.core.graph_compute import (
-            GraphComputeEngine,
-        )
-    except Exception as e:  # noqa: BLE001 — KG stack absent
-        logger.debug("KG ingest unavailable (import): %s", e)
-        return None, ""
-    try:
-        engine = GraphComputeEngine()
-        client = getattr(engine, "_client", None)
-        if client is None:
-            return None, ""
-        return client, (getattr(engine, "graph_name", None) or _DEFAULT_GRAPH)
-    except Exception as e:  # noqa: BLE001 — engine unreachable
-        logger.debug("KG ingest: engine unreachable: %s", e)
-        return None, ""
-
-
-def _fallback_write_nodes(
-    nodes: list[dict[str, Any]],
-    relationships: list[dict[str, Any]] | None,
-    *,
-    client: Any | None,
-    graph: str | None,
-) -> dict[str, int] | None:
-    """Self-contained txn writer, contract-identical to the shared primitive."""
-    nodes = [n for n in (nodes or []) if n.get("id")]
-    if not nodes:
-        return None
-    if client is None:
-        client, graph = _fallback_client()
-    if client is None:
-        return None
-    graph = graph or _DEFAULT_GRAPH
-    try:
-        txn = client.txn.begin(graph=graph)
-        for node in nodes:
-            props = {k: v for k, v in node.items() if k != "id" and v is not None}
-            props.setdefault("source", _SOURCE)
-            props.setdefault("domain", _DOMAIN)
-            client.txn.add_node(txn, node["id"], props)
-        committed = client.txn.commit(txn)
-    except Exception as e:  # noqa: BLE001 — engine/txn failure is non-fatal
-        logger.warning("KG ingest: txn failed: %s", e)
-        return None
-    if not committed:
-        logger.warning("KG ingest: txn not committed (conflict)")
-        return None
-    edges = 0
-    for rel in relationships or []:
-        try:
-            client.edges.add(
-                rel["source"], rel["target"], {"type": rel.get("type", "RELATED")}
-            )
-            edges += 1
-        except Exception as e:  # noqa: BLE001 — pure edge link, best-effort
-            logger.debug("KG ingest: edge skipped: %s", e)
-    logger.info("KG ingest: wrote %d nodes, %d edges", len(nodes), edges)
-    return {"nodes": len(nodes), "edges": edges}
 
 
 def ingest_entities(
@@ -127,16 +50,16 @@ def ingest_entities(
     domain: str = _DOMAIN,
     client: Any | None = None,
     graph: str | None = None,
-) -> dict[str, int] | None:
+) -> dict[str, int]:
     """Write typed OWL nodes (+ edges) into epistemic-graph. See module docstring."""
-    entities = [e for e in (entities or []) if e.get("id")]
-    if not entities:
-        return None
-    if _HAVE_SHARED and client is None:
-        return _shared_ingest_entities(
-            entities, relationships, source=source, domain=domain
-        )
-    return _fallback_write_nodes(entities, relationships, client=client, graph=graph)
+    return _native_ingest_entities(
+        entities,
+        relationships,
+        source=source,
+        domain=domain,
+        client=client,
+        graph=graph,
+    )
 
 
 def ingest_documents(
@@ -146,27 +69,11 @@ def ingest_documents(
     domain: str = _DOMAIN,
     client: Any | None = None,
     graph: str | None = None,
-) -> dict[str, int] | None:
+) -> dict[str, int]:
     """Write text records as ``:Document`` nodes (semantic-search fodder)."""
-    docs = [
-        d
-        for d in (documents or [])
-        if d.get("id") and (d.get("text") or d.get("content"))
-    ]
-    if not docs:
-        return None
-    if _HAVE_SHARED and client is None:
-        return _shared_ingest_documents(docs, source=source, domain=domain)
-    now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    nodes: list[dict[str, Any]] = []
-    for doc in docs:
-        node = {k: v for k, v in doc.items() if k != "content" and v is not None}
-        node["id"] = doc["id"]
-        node["type"] = "Document"
-        node["text"] = doc.get("text") or doc.get("content")
-        node.setdefault("created_at", now)
-        nodes.append(node)
-    return _fallback_write_nodes(nodes, None, client=client, graph=graph)
+    return _native_ingest_documents(
+        documents, source=source, domain=domain, client=client, graph=graph
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -185,7 +92,7 @@ def ingest_sos_entities(
     *,
     client: Any | None = None,
     graph: str | None = None,
-) -> dict[str, int] | None:
+) -> dict[str, int]:
     """Map OpenCorporates company records → ``:BusinessEntity`` (+ ``:Jurisdiction``) nodes.
 
     ``companies``: OpenCorporates ``company`` dicts (``name``, ``jurisdiction_code``,
@@ -201,7 +108,7 @@ def ingest_sos_entities(
         entities.append(
             {
                 "id": eid,
-                "type": "BusinessEntity",
+                "node_type": "BusinessEntity",
                 "name": company.get("name"),
                 "jurisdiction_code": company.get("jurisdiction_code"),
                 "companyNumber": number or None,
@@ -219,12 +126,12 @@ def ingest_sos_entities(
             entities.append(
                 {
                     "id": jid,
-                    "type": "Jurisdiction",
+                    "node_type": "Jurisdiction",
                     "name": company.get("jurisdiction_code"),
                 }
             )
             relationships.append(
-                {"source": eid, "target": jid, "type": "incorporatedIn"}
+                {"source": eid, "target": jid, "relationship": "incorporatedIn"}
             )
     return ingest_entities(entities, relationships, client=client, graph=graph)
 
@@ -241,17 +148,17 @@ def ingest_ein_application(
     draft_text: str = "",
     client: Any | None = None,
     graph: str | None = None,
-) -> dict[str, int] | None:
+) -> dict[str, int]:
     """Map a drafted IRS SS-4 → ``:EINApplication`` (+ ``:BusinessEntity``) nodes."""
     if not (legal_name or "").strip():
-        return None
+        return ingest_entities([], client=client, graph=graph)
     slug = _slug(legal_name)
     aid = f"legal:einapplication:{slug}"
     bid = f"legal:businessentity:{slug}"
     entities = [
         {
             "id": aid,
-            "type": "EINApplication",
+            "node_type": "EINApplication",
             "name": f"SS-4: {legal_name}",
             "legal_name": legal_name,
             "trade_name": trade_name or None,
@@ -267,12 +174,14 @@ def ingest_ein_application(
         },
         {
             "id": bid,
-            "type": "BusinessEntity",
+            "node_type": "BusinessEntity",
             "name": legal_name,
             "company_type": business_type or None,
         },
     ]
-    relationships = [{"source": aid, "target": bid, "type": "appliesForEntity"}]
+    relationships = [
+        {"source": aid, "target": bid, "relationship": "appliesForEntity"}
+    ]
     return ingest_entities(entities, relationships, client=client, graph=graph)
 
 
@@ -285,10 +194,10 @@ def ingest_filing_document(
     source_uri: str = "",
     client: Any | None = None,
     graph: str | None = None,
-) -> dict[str, int] | None:
+) -> dict[str, int]:
     """Store a rendered filing / statute summary as a searchable ``:Document`` node."""
     if not doc_id or not (text or "").strip():
-        return None
+        return ingest_documents([], client=client, graph=graph)
     doc: dict[str, Any] = {"id": doc_id, "text": text, "doc_type": doc_type}
     if title:
         doc["title"] = title
@@ -309,7 +218,8 @@ def search_companies(
     """List real OpenCorporates company records for a state + name (best-effort).
 
     Returns ``[]`` when no ``OPENCORPORATES_API_TOKEN`` is set or the request fails,
-    so the wire-first ingest tool degrades to a no-op rather than fabricating data.
+    so the source query returns no records rather than fabricating data. Native
+    ingestion remains authoritative whenever records are available.
     """
     token = os.getenv("OPENCORPORATES_API_TOKEN", "").strip()
     if not token or not (state or "").strip() or not (entity_name or "").strip():
@@ -331,7 +241,7 @@ def search_companies(
         resp.raise_for_status()
         payload = resp.json()
     except Exception as e:  # noqa: BLE001 — live fetch is best-effort
-        logger.warning("SOS company search failed: %s", e)
+        logger.warning("Operation failed: error_type=%s", type(e).__name__)
         return []
     results = (payload.get("results") or {}).get("companies") or []
     return [c.get("company", c) for c in results if c]

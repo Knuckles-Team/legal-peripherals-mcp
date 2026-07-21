@@ -47,5 +47,5 @@ async def handle_compliance_lookup(
         )
         return {"action": action, "result": result}
     except ComplianceLookupError as exc:
-        logger.warning("Compliance lookup failed: %s", exc)
-        return {"action": action, "error": str(exc)}
+        logger.warning("Operation failed: error_type=%s", type(exc).__name__)
+        return {"action": action, "error": "Operation failed"}

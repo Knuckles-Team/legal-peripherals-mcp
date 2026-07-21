@@ -125,8 +125,8 @@ async def handle_ein_draft(
             legal_name, business_type, responsible_party_ssn, max_employees
         )
     except EINDraftError as exc:
-        logger.warning("EIN draft validation failed: %s", exc)
-        return f"Error: {exc}"
+        logger.warning("Operation failed: error_type=%s", type(exc).__name__)
+        return "Error: invalid EIN draft parameters"
 
     try:
         return await asyncio.wait_for(
@@ -147,13 +147,11 @@ async def handle_ein_draft(
             timeout=EIN_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
-        msg = f"EIN draft timed out after {EIN_TIMEOUT_SECONDS}s for '{legal_name}'."
-        logger.error(msg)
-        return f"Error: {msg}"
+        logger.error("EIN draft timed out")
+        return "Error: EIN draft timed out"
     except Exception as exc:
-        msg = f"EIN draft failed for '{legal_name}': {exc}"
-        logger.exception(msg)
-        return f"Error: {msg}"
+        logger.error("EIN draft failed: error_type=%s", type(exc).__name__)
+        return "Error: EIN draft failed"
 
 
 async def _do_ein_draft(
@@ -237,17 +235,14 @@ async def _do_ein_draft(
 
 
 def _maybe_ingest_ein(**kwargs) -> None:
-    """Default-on native ingestion of the drafted SS-4 (best-effort, no-op safe).
+    """Default-on authoritative native ingestion of the drafted SS-4.
 
     Pushes the draft into the epistemic-graph as an ``:EINApplication`` node linked to
-    its ``:BusinessEntity``. Disable with ``LEGAL_KG_INGEST=false``. Any failure is
-    swallowed so drafting is never impacted.
+    its ``:BusinessEntity``. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
+    native ingestion failures propagate.
     """
     if not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
         return
-    try:
-        from legal_peripherals_mcp.kg_ingest import ingest_ein_application
+    from legal_peripherals_mcp.kg_ingest import ingest_ein_application
 
-        ingest_ein_application(kwargs.pop("legal_name"), **kwargs)
-    except Exception as exc:  # noqa: BLE001 — ingestion is best-effort
-        logger.debug("KG ingest of EIN application skipped: %s", exc)
+    ingest_ein_application(kwargs.pop("legal_name"), **kwargs)

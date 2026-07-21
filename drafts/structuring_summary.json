@@ -9,13 +9,13 @@
   "business_purpose": "Sovereign asset protection, physical gold/silver pooling and community dividends",
   "files_generated": {
     "trust_agreement": null,
-    "sovereign_trust_indenture": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/drafts/sovereign_trust_indenture.txt",
-    "commodity_asset_pool_registry": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/drafts/commodity_asset_pool_registry.txt",
-    "managing_directors_dividend_resolution": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/drafts/managing_directors_dividend_resolution.txt",
+    "sovereign_trust_indenture": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/drafts/sovereign_trust_indenture.txt",
+    "commodity_asset_pool_registry": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/drafts/commodity_asset_pool_registry.txt",
+    "managing_directors_dividend_resolution": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/drafts/managing_directors_dividend_resolution.txt",
     "llc_operating_agreement": null,
-    "ein_ss4_draft": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/drafts/ein_ss4_draft.txt",
+    "ein_ss4_draft": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/drafts/ein_ss4_draft.txt",
     "assignment_of_membership_interest": null,
     "amended_operating_agreement": null,
-    "structure_diagram": "/home/apps/workspace/agent-packages/agents/legal-peripherals-mcp/drafts/structure_diagram.txt"
+    "structure_diagram": "${WORKSPACE_ROOT}/agent-packages/agents/legal-peripherals-mcp/drafts/structure_diagram.txt"
   }
 }

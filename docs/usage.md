@@ -33,7 +33,6 @@ from legal_peripherals_mcp.api_client import Api
 api = Api(
     base_url="http://localhost:8000",
     token="<your-token>",
-    verify=True,
 )
 
 # Read calls against the backing platform
@@ -41,8 +40,9 @@ entities = api.request("GET", "/sos/entities", params={"state": "DE"})
 statutes = api.request("GET", "/statutes/TX/LLC")
 ```
 
-Build a client straight from the environment (reads `LEGAL_PERIPHERALS_BASE_URL`,
-`LEGAL_PERIPHERALS_TOKEN`, `LEGAL_PERIPHERALS_SSL_VERIFY`):
+Build a client from the configured endpoint and credential references. Custom
+trust, private CA, and mTLS policy come from `TLS_PROFILE` or `TLS_PROFILE_REF`
+in AgentConfig; certificate verification is mandatory:
 
 ```python
 from legal_peripherals_mcp.auth import get_client

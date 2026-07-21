@@ -84,8 +84,7 @@ Rendered filing **files** (the `drafts/*.txt` artifacts) are stored as content-a
 - The SSN is always masked (`***-**-1234`) in the rendered draft — never echo a full SSN.
 - Filing status depends on the wall clock in `America/New_York`; use `BYPASS_IRS_FILING_HOURS=true`
   only for tests.
-- Ingestion is best-effort and engine-guarded: no reachable engine ⇒ silent no-op; the draft
-  is unaffected.
+- When ingestion is enabled, engine, validation, and transaction failures propagate.
 - `business_type` must be one of the accepted SS-4 values or the tool returns a validation error.
 
 ## Related

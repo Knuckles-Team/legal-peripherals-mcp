@@ -1,0 +1,8 @@
+{
+  "algorithm": "agent-utilities:mcp-tool-schema-compat:v1",
+  "connector": "legal-peripherals-mcp",
+  "schema_version": "1",
+  "tools": {
+    "legal_ingest_sos_entities": "55bccda5f05345d5cc0b80634b492547dc1e29ce7950b5557943283c55261f6b"
+  }
+}

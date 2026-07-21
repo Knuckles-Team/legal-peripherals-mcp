@@ -50,17 +50,17 @@ uv run legal-peripherals-mcp
 
 ## Prebuilt Docker image
 
-A multi-stage, slim image is published on every release (entrypoint
+A multi-stage runtime image is published on every release (entrypoint
 `legal-peripherals-mcp`):
 
 ```bash
-docker pull knucklessg1/legal-peripherals-mcp:latest
+docker pull example/legal-peripherals-mcp@sha256:<digest>
 
 docker run --rm -i \
   -e SOSTOOL=True \
   -e EINTOOL=True \
   -e STATUTETOOL=True \
-  knucklessg1/legal-peripherals-mcp:latest        # stdio transport (default)
+  example/legal-peripherals-mcp@sha256:<digest>        # stdio transport (default)
 ```
 
 For an HTTP server with a published port, see [Deployment](deployment.md).

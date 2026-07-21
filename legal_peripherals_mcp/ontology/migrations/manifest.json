@@ -1,0 +1,6 @@
+{
+  "connector": "legal-peripherals-mcp",
+  "current_ontology_source": "legal",
+  "migrations": [],
+  "schema_version": "1"
+}

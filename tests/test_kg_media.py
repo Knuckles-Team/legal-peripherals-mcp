@@ -1,11 +1,14 @@
 """Native blob ingestion for drafted filings — coverage with a fake MediaStore.
 
 Exercises ``kg_media.ingest_filing_file`` without a live engine: a fake store captures
-the bytes + metadata, and the no-engine / missing-file paths no-op.
+the bytes + metadata, invalid paths return no result, and native failures propagate.
 CONCEPT:AU-KG.ingest.list-durable-media.
 """
 
 from __future__ import annotations
+
+import pytest
+from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
 
 from legal_peripherals_mcp.kg_media import ingest_filing_file
 
@@ -64,11 +67,14 @@ def test_ingest_none_path_is_noop():
     assert ingest_filing_file(None, media_store=_FakeStore()) is None
 
 
-def test_ingest_no_store_is_noop(tmp_path, monkeypatch):
+def test_ingest_native_store_failure_propagates(tmp_path, monkeypatch):
     p = tmp_path / "doc.txt"
     p.write_text("hi")
-    # No injected store and no engine reachable → resolver yields None → no-op.
     import legal_peripherals_mcp.kg_media as kg_media
 
-    monkeypatch.setattr(kg_media, "_media_store", lambda: None)
-    assert ingest_filing_file(str(p), media_store=None) is None
+    def fail():
+        raise NativeIngestError("native media store is unavailable")
+
+    monkeypatch.setattr(kg_media, "_native_media_store", fail)
+    with pytest.raises(NativeIngestError, match="unavailable"):
+        ingest_filing_file(str(p), media_store=None)

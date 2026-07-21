@@ -91,20 +91,17 @@ class SOSLookupError(Exception):
 
 
 def _maybe_ingest_entities(companies: list[dict]) -> None:
-    """Default-on native ingestion of SOS company records (best-effort, no-op safe).
+    """Default-on authoritative native ingestion of SOS company records.
 
     Pushes each looked-up business entity into the epistemic-graph as a
-    ``:BusinessEntity`` node. Disable with ``LEGAL_KG_INGEST=false``. Any failure
-    (no engine, no KG stack) is swallowed so the lookup itself is never impacted.
+    ``:BusinessEntity`` node. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
+    native ingestion failures propagate.
     """
     if not companies or not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
         return
-    try:
-        from legal_peripherals_mcp.kg_ingest import ingest_sos_entities
+    from legal_peripherals_mcp.kg_ingest import ingest_sos_entities
 
-        ingest_sos_entities(companies)
-    except Exception as exc:  # noqa: BLE001 — ingestion is best-effort
-        logger.debug("KG ingest of SOS entities skipped: %s", exc)
+    ingest_sos_entities(companies)
 
 
 def _validate_inputs(state: str, entity_name: str) -> tuple[str, str]:
@@ -141,13 +138,11 @@ async def handle_sos_lookup(
     try:
         state_upper, entity_name_clean = _validate_inputs(state, entity_name)
     except SOSLookupError as exc:
-        logger.warning("SOS validation failed: %s", exc)
-        return f"Error: {exc}"
+        logger.warning("Operation failed: error_type=%s", type(exc).__name__)
+        return "Error: invalid entity lookup parameters"
 
     if ctx:
-        await ctx.info(
-            f"Initiating SOS lookup for state={state_upper}, entity={entity_name_clean}, id={entity_id}"
-        )
+        await ctx.info("Initiating configured entity lookup")
 
     try:
         return await asyncio.wait_for(
@@ -155,13 +150,11 @@ async def handle_sos_lookup(
             timeout=SOS_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
-        msg = f"SOS lookup timed out after {SOS_TIMEOUT_SECONDS}s for state={state_upper}, entity={entity_name_clean}."
-        logger.error(msg)
-        return f"Error: {msg}"
+        logger.error("Entity lookup timed out")
+        return "Error: entity lookup timed out"
     except Exception as exc:
-        msg = f"SOS lookup failed for state={state_upper}: {exc}"
-        logger.exception(msg)
-        return f"Error: {msg}"
+        logger.error("Entity lookup failed: error_type=%s", type(exc).__name__)
+        return "Error: entity lookup failed"
 
 
 def _jurisdiction_code(state_upper: str) -> str:
@@ -254,7 +247,7 @@ async def _do_lookup(
         )
     except requests.RequestException as exc:
         raise SOSLookupError(
-            f"OpenCorporates request failed for {state_upper}: {exc}"
+            f"OpenCorporates request failed for {state_upper}: {type(exc).__name__}"
         ) from exc
 
     companies = (data.get("results") or {}).get("companies") or []

@@ -80,13 +80,12 @@ Every successful lookup auto-ingests its company records (unless `LEGAL_KG_INGES
 - its jurisdiction → a `:Jurisdiction` node with an `:incorporatedIn` link.
 
 `legal_ingest_sos_entities` is the explicit Wire-First entry point and also returns the
-raw `entities` list plus `{"ingested": {...}|None}`.
+raw `entities` list plus `{"ingested": {...}}`.
 
 ## Gotchas
 - No `OPENCORPORATES_API_TOKEN` ⇒ the tool truthfully reports "not configured" and returns
-  no record; ingestion no-ops.
-- Ingestion is best-effort and engine-guarded: with no reachable epistemic-graph engine it
-  silently no-ops; the lookup result is never affected.
+  no record, so there is nothing to ingest.
+- When ingestion is enabled, engine, validation, and transaction failures propagate.
 - Company number formats are jurisdiction-specific; prefer a name search first, then a
   direct fetch with the returned `Company Number`.
 

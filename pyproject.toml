@@ -16,19 +16,19 @@ classifiers = [
 ]
 requires-python = ">=3.11, <3.15"
 dependencies = [
-    "agent-utilities>=1.0.0",
+    "agent-utilities>=1.27.1,<2.0.0",
     "playwright>=1.40.0",
 ]
 [[project.authors]]
-name = "Audel Rouhi"
-email = "knucklessg1@gmail.com"
+name = "Project Maintainers"
+email = "maintainers@users.noreply.github.com"
 
 [project.license]
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=1.0.0", ]
-agent = [ "agent-utilities[agent,logfire]>=1.0.0", ]
+mcp = [ "agent-utilities[mcp]>=1.27.1,<2.0.0", ]
+agent = [ "agent-utilities[agent-runtime,logfire]>=1.27.1,<2.0.0", ]
 # Local rdflib-backed compliance-ontology lookup (legal_compliance_lookup tool /
 # compliance_kb.py). Kept out of core `dependencies` and out of the slim `mcp`
 # image per the fleet's owl-extra discipline (agent-utilities' dependency
@@ -36,7 +36,7 @@ agent = [ "agent-utilities[agent,logfire]>=1.0.0", ]
 # on the lean serving plane); the engine's native RDF/SPARQL surface is the
 # primary path. Without it the tool degrades honestly instead of crashing.
 ontology = [ "rdflib>=7.6.0", ]
-all = [ "agent-utilities[mcp,agent,logfire]>=1.0.0", "rdflib>=7.6.0", ]
+all = [ "agent-utilities[mcp,agent-runtime,logfire]>=1.27.1,<2.0.0", "rdflib>=7.6.0", ]
 test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", "rdflib>=7.6.0", ]
 
 [project.scripts]

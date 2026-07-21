@@ -514,7 +514,7 @@ Dated: {datetime.now().strftime("%Y-%m-%d")}
         trust_file = os.path.join(drafts_dir, "trust_agreement.txt")
         with open(trust_file, "w") as f:
             f.write(trust_agreement)
-        print(f"{GREEN}Drafted Trust Agreement saved to: {trust_file}{RESET}")
+        print(f"{GREEN}Drafted Trust Agreement saved successfully.{RESET}")
     else:
         print_section("PHASE 3: Trust Agreement (Skipped)")
         print(
@@ -560,7 +560,7 @@ Dated: {datetime.now().strftime("%Y-%m-%d")}
         ein_file = os.path.join(drafts_dir, "ein_ss4_draft.txt")
         with open(ein_file, "w") as f:
             f.write(ein_result)
-        print(f"{GREEN}Drafted IRS EIN SS-4 saved to: {ein_file}{RESET}")
+        print(f"{GREEN}Drafted IRS EIN SS-4 saved successfully.{RESET}")
     else:
         print_section("PHASE 4: IRS Form SS-4 EIN (Skipped)")
         print(
@@ -691,7 +691,7 @@ Step 4: Notify the IRS (Form 8822-B)
         transition_file = os.path.join(drafts_dir, "transition_guide.txt")
         with open(transition_file, "w") as f:
             f.write(transition_guide)
-        print(f"{GREEN}Transition Guide saved to: {transition_file}{RESET}")
+        print(f"{GREEN}Transition Guide saved successfully.{RESET}")
 
     else:
         # Path 1 Operating Agreement
@@ -832,7 +832,7 @@ Path type: {diagram_type}
     diagram_file = os.path.join(drafts_dir, "structure_diagram.txt")
     with open(diagram_file, "w") as f:
         f.write(diagram)
-    print(f"{GREEN}Structure Diagram saved to: {diagram_file}{RESET}")
+    print(f"{GREEN}Structure Diagram saved successfully.{RESET}")
 
     # Save summary metadata
     summary_data = {
@@ -860,7 +860,7 @@ Path type: {diagram_type}
     summary_file = os.path.join(drafts_dir, "structuring_summary.json")
     with open(summary_file, "w") as f:
         json.dump(summary_data, f, indent=2)
-    print(f"{GREEN}Summary metadata saved to: {summary_file}{RESET}")
+    print(f"{GREEN}Summary metadata saved successfully.{RESET}")
 
     print(
         f"\n{BOLD}{GREEN}🎉 SUCCESS! Generalized holding company structuring flow completed successfully!{RESET}\n"
