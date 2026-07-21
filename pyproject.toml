@@ -17,7 +17,7 @@ classifiers = [
 requires-python = ">=3.11, <3.15"
 dependencies = [
     "agent-utilities>=1.27.1,<2.0.0",
-    "playwright>=1.40.0",
+    "playwright>=1.61.0",
 ]
 [[project.authors]]
 name = "Project Maintainers"
@@ -37,7 +37,7 @@ agent = [ "agent-utilities[agent-runtime,logfire]>=1.27.1,<2.0.0", ]
 # primary path. Without it the tool degrades honestly instead of crashing.
 ontology = [ "rdflib>=7.6.0", ]
 all = [ "agent-utilities[mcp,agent-runtime,logfire]>=1.27.1,<2.0.0", "rdflib>=7.6.0", ]
-test = [ "pytest-xdist>=3.6.0", "pytest", "pytest-asyncio", "pytest-cov", "rdflib>=7.6.0", ]
+test = [ "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-cov>=7.1.0", "rdflib>=7.6.0", ]
 
 [project.scripts]
 legal-peripherals-mcp = "legal_peripherals_mcp.mcp_server:mcp_server"
