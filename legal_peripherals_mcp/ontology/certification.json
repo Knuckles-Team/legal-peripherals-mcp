@@ -1,7 +1,8 @@
 {
   "api_version": "graphos.io/v1",
   "artifacts": {
-    "connector_manifest.yml": "2f745919fcac1b49001ee698beff81e107ae754c60bdab98d6f5764af8717617",
+    "a2a.json": "33c9912ba5a3eefe140af2300c81881a464bcc1d46caba9a6e0d984f2f81a301",
+    "connector_manifest.yml": "08f0cf821bb3b532b0bbaa9fbc74642aba66653095534a95f64aef70b1f6c714",
     "legal_peripherals_mcp/connectors/mcp_source_presets.json": "79b8a2e2397b85dd3a1210e6c389a2b9b4489e46346529aa7f1b1136d2edc821",
     "legal_peripherals_mcp/connectors/tool_schema_fingerprints.json": "5b3530ecf8af26864fa84a0707ae9815b2cd76e77bec6a16cba22a83d5b45ae5",
     "legal_peripherals_mcp/ontology/compliance.ttl": "d9eaae06064301d3f9497ee23f267e47d3473c3aaf6ea006480aefd3a4997c41",
@@ -33,19 +34,19 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=1.27.1,<2",
+    "agent_utilities": ">=2.1.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.23.1,<3"
+    "epistemic_graph": ">=2.23.0,<3"
   },
   "connector": "legal-peripherals-mcp",
   "kind": "ConnectorSourceAttestation",
   "live_certified": false,
   "mode": "offline-source",
   "schema_version": "2",
-  "signature": "a9QcDH2d2dS0NPmnT1RNB8HbGdf33Zbq-2cRagrN1-ZQWsAJIVTJJJ51szQCfQBMqslSzCbt-b1zEaTMFcbqAA",
+  "signature": "AaGRQ3BxrlYtt6uPpy2pIBaiWB2xwSoU5CARWiuqJRi2kI72hSXDTaZ5w9tivyAMRICkdLILCMs66mQYeHTmDA",
   "signature_algorithm": "ed25519",
   "signer": "ontology-manifest-generator",
-  "signing_public_key": "q0Cp7bmQMqJhbofGKKw8xXC6KbFzukBDDke0UYVi8y4",
+  "signing_public_key": "QkigdPNpcUU7x7NcSkwCsUXIQpaFncMQbYSoiSgI2SY",
   "status": "source-validated",
-  "validated_at": "2026-07-18T00:00:00Z"
+  "validated_at": "2026-07-31T04:00:00Z"
 }
