@@ -72,12 +72,14 @@ def test_all_expected_skills_present_on_disk():
 def test_every_skill_has_well_formed_frontmatter():
     for skill_dir in _skill_dirs():
         fm = _frontmatter(skill_dir / "SKILL.md")
-        assert fm.get("name") == skill_dir.name, (
-            f"{skill_dir}: frontmatter name '{fm.get('name')}' != dir name"
-        )
-        assert fm.get("skill_type") in {"skill", "workflow", "graph"}, (
-            f"{skill_dir}: missing/invalid skill_type"
-        )
+        assert (
+            fm.get("name") == skill_dir.name
+        ), f"{skill_dir}: frontmatter name '{fm.get('name')}' != dir name"
+        assert fm.get("skill_type") in {
+            "skill",
+            "workflow",
+            "graph",
+        }, f"{skill_dir}: missing/invalid skill_type"
         assert fm.get("description"), f"{skill_dir}: missing description"
         assert fm.get("license"), f"{skill_dir}: missing license"
 
@@ -89,9 +91,9 @@ def test_new_skills_cross_reference_at_least_one_sibling():
     for name in NEW_DOMAIN_SKILLS:
         body = (SKILLS_DIR / name / "SKILL.md").read_text(encoding="utf-8")
         assert "## Related" in body, f"{name}: missing Related section"
-        assert "legal-peripherals-" in body.split("## Related", 1)[1], (
-            f"{name}: Related section doesn't cross-reference a sibling skill"
-        )
+        assert (
+            "legal-peripherals-" in body.split("## Related", 1)[1]
+        ), f"{name}: Related section doesn't cross-reference a sibling skill"
 
 
 def test_new_skills_declare_when_not_to_use():

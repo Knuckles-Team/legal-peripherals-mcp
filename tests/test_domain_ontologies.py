@@ -141,9 +141,9 @@ def test_init_docstring_documents_domain_modules():
 
     doc = provider.__doc__ or ""
     for module_name in DOMAIN_MODULES:
-        assert module_name in doc, (
-            f"{module_name} not documented in ontology/__init__.py"
-        )
+        assert (
+            module_name in doc
+        ), f"{module_name} not documented in ontology/__init__.py"
 
 
 # --------------------------------------------------------------------------- #
@@ -167,9 +167,9 @@ def test_module_declares_ontology_iri_and_imports(module_name: str, spec: dict):
     onto_iri = rdflib.URIRef(spec["iri"])
     assert (onto_iri, RDF.type, OWL.Ontology) in g
     imports = set(g.objects(onto_iri, OWL.imports))
-    assert UPPER_IRI in imports, (
-        f"{module_name} does not import the compliance upper ontology"
-    )
+    assert (
+        UPPER_IRI in imports
+    ), f"{module_name} does not import the compliance upper ontology"
     assert LEGAL_IRI in imports, f"{module_name} does not import legal.ttl"
 
 
@@ -181,9 +181,11 @@ def test_module_declares_ontology_iri_and_imports(module_name: str, spec: dict):
 def test_module_defines_expected_classes(module_name: str, spec: dict):
     g = _graph(ONTOLOGY_DIR / module_name)
     for cls in spec["classes"]:
-        assert (KG[cls], RDF.type, OWL.Class) in g, (
-            f"{module_name}: missing class :{cls}"
-        )
+        assert (
+            KG[cls],
+            RDF.type,
+            OWL.Class,
+        ) in g, f"{module_name}: missing class :{cls}"
 
 
 # --------------------------------------------------------------------------- #
@@ -286,9 +288,9 @@ def test_domain_modules_declare_no_duplicate_class_across_each_other():
     collisions = {
         s: owners for s, owners in typed_subject_owners.items() if len(owners) > 1
     }
-    assert not collisions, (
-        f"duplicate type declarations across domain modules: {collisions}"
-    )
+    assert (
+        not collisions
+    ), f"duplicate type declarations across domain modules: {collisions}"
 
 
 def test_new_classes_do_not_redefine_existing_upper_or_legal_or_compliance_classes():

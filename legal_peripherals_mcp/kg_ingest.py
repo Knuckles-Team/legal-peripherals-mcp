@@ -40,8 +40,6 @@ _OC_BASE_URL = os.getenv(
 _OC_TIMEOUT = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
 
 
-
-
 def ingest_entities(
     entities: list[dict[str, Any]],
     relationships: list[dict[str, Any]] | None = None,
@@ -179,9 +177,7 @@ def ingest_ein_application(
             "company_type": business_type or None,
         },
     ]
-    relationships = [
-        {"source": aid, "target": bid, "relationship": "appliesForEntity"}
-    ]
+    relationships = [{"source": aid, "target": bid, "relationship": "appliesForEntity"}]
     return ingest_entities(entities, relationships, client=client, graph=graph)
 
 
