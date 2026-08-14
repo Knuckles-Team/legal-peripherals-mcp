@@ -61,6 +61,9 @@ legal-peripherals-mcp = "legal_peripherals_mcp.ontology"
 [project.entry-points."agent_utilities.source_connector_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.connectors"
 
+[tool.uv.workspace]
+members = ["."]
+
 [tool.setuptools]
 include-package-data = true
 
