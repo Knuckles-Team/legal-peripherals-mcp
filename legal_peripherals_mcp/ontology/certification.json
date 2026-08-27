@@ -1,7 +1,7 @@
 {
   "api_version": "graphos.io/v1",
   "artifacts": {
-    "connector_manifest.yml": "90e002ebf0f88760bb7f9502c1a3a97f403b8233bf799380f8e78e3e796ce732",
+    "connector_manifest.yml": "8826f88fb77d3fdf685220e30f6ae4b53545d76349c692c30cbc7eb6cbbe2c3b",
     "legal_peripherals_mcp/connectors/mcp_source_presets.json": "79b8a2e2397b85dd3a1210e6c389a2b9b4489e46346529aa7f1b1136d2edc821",
     "legal_peripherals_mcp/connectors/tool_schema_fingerprints.json": "5b3530ecf8af26864fa84a0707ae9815b2cd76e77bec6a16cba22a83d5b45ae5",
     "legal_peripherals_mcp/ontology/compliance.ttl": "d9eaae06064301d3f9497ee23f267e47d3473c3aaf6ea006480aefd3a4997c41",
@@ -33,9 +33,9 @@
     "synthetic_fixture_contract": "passed"
   },
   "compatibility": {
-    "agent_utilities": ">=2.4.0,<3",
+    "agent_utilities": ">=2.5.0,<3",
     "bundle_schema": "2",
-    "epistemic_graph": ">=2.26.0,<3"
+    "epistemic_graph": ">=2.27.0,<3"
   },
   "connector": "legal-peripherals-mcp",
   "kind": "ConnectorSourceAttestation",
@@ -47,5 +47,5 @@
   "signer": "UNSIGNED-PREVIEW",
   "signing_public_key": "",
   "status": "source-validated",
-  "validated_at": "2026-08-21T04:30:39Z"
+  "validated_at": "2026-08-26T13:42:55Z"
 }
