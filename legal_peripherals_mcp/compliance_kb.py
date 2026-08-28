@@ -247,30 +247,53 @@ def gate_requirements(data_classes: list[str]) -> dict[str, Any]:
     }
 
 
+def _parse_data_classes(raw: Any) -> list[str]:
+    """Accept either a list of data-classification names or a comma-separated string."""
+    if isinstance(raw, list):
+        return raw
+    return [d.strip() for d in str(raw).split(",") if d.strip()]
+
+
+def _run_list_domains(kwargs: dict[str, Any]) -> Any:
+    return list_domains()
+
+
+def _run_list_regulations(kwargs: dict[str, Any]) -> Any:
+    return list_regulations(
+        sector=kwargs.get("sector", ""), data_class=kwargs.get("data_class", "")
+    )
+
+
+def _run_regulation_detail(kwargs: dict[str, Any]) -> Any:
+    return regulation_detail(kwargs.get("regulation", ""))
+
+
+def _run_sector_lookup(kwargs: dict[str, Any]) -> Any:
+    return sector_lookup(kwargs.get("sector", ""))
+
+
+def _run_dataclass_lookup(kwargs: dict[str, Any]) -> Any:
+    return dataclass_lookup(kwargs.get("data_class", ""))
+
+
+def _run_gate_requirements(kwargs: dict[str, Any]) -> Any:
+    return gate_requirements(_parse_data_classes(kwargs.get("data_classes") or ""))
+
+
+_ACTION_HANDLERS: dict[str, Any] = {
+    "list_domains": _run_list_domains,
+    "list_regulations": _run_list_regulations,
+    "regulation_detail": _run_regulation_detail,
+    "sector_lookup": _run_sector_lookup,
+    "dataclass_lookup": _run_dataclass_lookup,
+    "gate_requirements": _run_gate_requirements,
+}
+
+
 def run_action(action: str, **kwargs: Any) -> Any:
     """Dispatch a ``legal_compliance_lookup`` MCP action to its handler."""
     if action not in VALID_ACTIONS:
         raise ComplianceLookupError(
             f"Unknown action '{action}'. Valid actions: {sorted(VALID_ACTIONS)}"
         )
-    if action == "list_domains":
-        return list_domains()
-    if action == "list_regulations":
-        return list_regulations(
-            sector=kwargs.get("sector", ""), data_class=kwargs.get("data_class", "")
-        )
-    if action == "regulation_detail":
-        return regulation_detail(kwargs.get("regulation", ""))
-    if action == "sector_lookup":
-        return sector_lookup(kwargs.get("sector", ""))
-    if action == "dataclass_lookup":
-        return dataclass_lookup(kwargs.get("data_class", ""))
-    if action == "gate_requirements":
-        raw = kwargs.get("data_classes") or ""
-        data_classes = (
-            raw
-            if isinstance(raw, list)
-            else [d.strip() for d in raw.split(",") if d.strip()]
-        )
-        return gate_requirements(data_classes)
-    raise ComplianceLookupError(f"Unhandled action '{action}'.")  # pragma: no cover
+    return _ACTION_HANDLERS[action](kwargs)
