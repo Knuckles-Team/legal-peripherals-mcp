@@ -255,6 +255,26 @@ def test_search_companies_no_token_returns_empty(monkeypatch):
     assert search_companies("DE", "Acme") == []
 
 
+def test_search_companies_missing_state_or_name_returns_empty(monkeypatch):
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok")
+    assert search_companies("", "Acme") == []
+    assert search_companies("DE", "") == []
+
+
+def test_search_companies_request_failure_returns_empty(monkeypatch):
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok")
+
+    import legal_peripherals_mcp.kg_ingest as kg
+
+    class _FailingRequests:
+        @staticmethod
+        def get(url, params=None, timeout=None):
+            raise ConnectionError("boom")
+
+    monkeypatch.setitem(__import__("sys").modules, "requests", _FailingRequests)
+    assert kg.search_companies("DE", "Acme") == []
+
+
 def test_search_companies_parses_records(monkeypatch):
     monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok")
 
