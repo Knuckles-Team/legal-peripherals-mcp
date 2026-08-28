@@ -67,6 +67,25 @@ def test_ingest_none_path_is_noop():
     assert ingest_filing_file(None, media_store=_FakeStore()) is None
 
 
+def test_ingest_filing_file_read_failure_returns_none(tmp_path):
+    # A directory passed as file_path exists (passes the os.path.exists guard)
+    # but open(..., "rb") raises IsADirectoryError, a subclass of OSError.
+    d = tmp_path / "not_a_file"
+    d.mkdir()
+    assert ingest_filing_file(str(d), media_store=_FakeStore()) is None
+
+
+def test_ingest_filing_file_store_returns_none_is_noop(tmp_path):
+    p = tmp_path / "doc.txt"
+    p.write_text("hi")
+
+    class _NoneStore:
+        def store_media(self, *args, **kwargs):
+            return None
+
+    assert ingest_filing_file(str(p), media_store=_NoneStore()) is None
+
+
 def test_ingest_native_store_failure_propagates(tmp_path, monkeypatch):
     p = tmp_path / "doc.txt"
     p.write_text("hi")
