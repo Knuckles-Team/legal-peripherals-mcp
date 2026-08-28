@@ -16,80 +16,90 @@ PROJECT_DIR = Path(__file__).parent.resolve()
 SPECIFY_DIR = PROJECT_DIR / ".specify"
 
 
-def run_enhancer():
-    print("🚀 Starting Code Enhancer on project:", PROJECT_DIR.name)
+_ANALYZERS = [
+    ("analyze_project", "analyze_project"),
+    ("audit_dependencies", "audit_dependencies"),
+    ("analyze_codebase", "analyze_codebase"),
+    ("analyze_security", "analyze_security"),
+    ("analyze_tests", "analyze_tests"),
+    ("audit_documentation", "audit_documentation"),
+    ("analyze_architecture", "analyze_architecture"),
+    ("trace_concepts", "trace_concepts"),
+    ("run_linters", "run_linters"),
+    ("run_precommit", "run_precommit"),
+    ("run_tests", "run_tests"),
+    ("analyze_directory_density", "analyze_directory_density"),
+    ("analyze_ui", "analyze_ui"),
+    ("analyze_version_sync", "analyze_version_sync"),
+    ("audit_changelog", "audit_changelog"),
+    ("grade_pytest", "grade_pytest"),
+    ("scan_env_vars", "scan_env_vars"),
+]
 
-    analyzers = [
-        ("analyze_project", "analyze_project"),
-        ("audit_dependencies", "audit_dependencies"),
-        ("analyze_codebase", "analyze_codebase"),
-        ("analyze_security", "analyze_security"),
-        ("analyze_tests", "analyze_tests"),
-        ("audit_documentation", "audit_documentation"),
-        ("analyze_architecture", "analyze_architecture"),
-        ("trace_concepts", "trace_concepts"),
-        ("run_linters", "run_linters"),
-        ("run_precommit", "run_precommit"),
-        ("run_tests", "run_tests"),
-        ("analyze_directory_density", "analyze_directory_density"),
-        ("analyze_ui", "analyze_ui"),
-        ("analyze_version_sync", "analyze_version_sync"),
-        ("audit_changelog", "audit_changelog"),
-        ("grade_pytest", "grade_pytest"),
-        ("scan_env_vars", "scan_env_vars"),
-    ]
 
+def _load_analyzer_function(module_name: str, func_name: str):
+    """Dynamically load one analyzer script's entry-point function.
+
+    Returns ``None`` (and prints a notice) when the script's import spec can't
+    be built at all -- a state distinct from the script existing but failing.
+    """
+    script_path = SCRIPTS_DIR / f"{module_name}.py"
+    spec = importlib.util.spec_from_file_location(module_name, str(script_path))
+    if spec is None or spec.loader is None:
+        print(f"❌ Could not load spec for {module_name}")
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return getattr(module, func_name)
+
+
+def _run_one_analyzer(module_name: str, func_name: str) -> dict | None:
+    """Run one analyzer script against ``PROJECT_DIR``.
+
+    Returns the analyzer's result dict, ``None`` if its spec couldn't be
+    built, or a synthesized F-grade fallback dict if it raised.
+    """
+    print(f"\n🔍 Running analyzer: {module_name}...")
+    start_time = time.monotonic()
+    try:
+        func = _load_analyzer_function(module_name, func_name)
+        if func is None:
+            return None
+        result = func(str(PROJECT_DIR))
+        elapsed = time.monotonic() - start_time
+        print(
+            f"✅ Finished {module_name} in {elapsed:.2f}s (Score: {result.get('score', 'N/A')}, Grade: {result.get('grade', 'N/A')})"
+        )
+        return result
+    except Exception as e:
+        print(f"Operation failed: {type(e).__name__}")
+        return {
+            "domain": module_name.replace("_", " ").title(),
+            "score": 0,
+            "grade": "F",
+            "findings": [f"Analysis error: {type(e).__name__[:200]}"],
+            "justifications": [],
+        }
+
+
+def _run_all_analyzers(analyzers: list[tuple[str, str]]) -> list[dict]:
+    """Run every analyzer, keeping results with a real score (excludes -1/N-A)."""
     results = []
-
     for module_name, func_name in analyzers:
-        print(f"\n🔍 Running analyzer: {module_name}...")
-        start_time = time.monotonic()
-        try:
-            # Dynamically load the analyzer script
-            script_path = SCRIPTS_DIR / f"{module_name}.py"
-            spec = importlib.util.spec_from_file_location(module_name, str(script_path))
-            if spec is None or spec.loader is None:
-                print(f"❌ Could not load spec for {module_name}")
-                continue
+        result = _run_one_analyzer(module_name, func_name)
+        if result is not None and result.get("score", 0) != -1:
+            results.append(result)
+    return results
 
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            func = getattr(module, func_name)
 
-            # Execute with project dir
-            result = func(str(PROJECT_DIR))
-            elapsed = time.monotonic() - start_time
-            print(
-                f"✅ Finished {module_name} in {elapsed:.2f}s (Score: {result.get('score', 'N/A')}, Grade: {result.get('grade', 'N/A')})"
-            )
-
-            if result.get("score", 0) != -1:
-                results.append(result)
-        except Exception as e:
-            elapsed = time.monotonic() - start_time
-            print(f"Operation failed: {type(e).__name__}")
-            results.append(
-                {
-                    "domain": module_name.replace("_", " ").title(),
-                    "score": 0,
-                    "grade": "F",
-                    "findings": [f"Analysis error: {type(e).__name__[:200]}"],
-                    "justifications": [],
-                }
-            )
-
-    print("\n📝 Compiling final results...")
-    safe_results, _privacy_report = sanitize_for_persistence(results)
-
-    # Ensure specify dir exists
+def _write_results_json(safe_results: list[dict]) -> None:
     SPECIFY_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Save raw json results
     results_json_path = SPECIFY_DIR / "results.json"
     results_json_path.write_text(json.dumps(safe_results, indent=2), encoding="utf-8")
     print("💾 Sanitized results saved successfully")
 
-    # Load and run generate_report
+
+def _generate_markdown_report(safe_results: list[dict]) -> None:
     try:
         report_spec = importlib.util.spec_from_file_location(
             "generate_report", str(SCRIPTS_DIR / "generate_report.py")
@@ -111,7 +121,8 @@ def run_enhancer():
     except Exception as e:
         print(f"Operation failed: {type(e).__name__}")
 
-    # Load and run generate_sdd_handoff
+
+def _generate_sdd_handoff_artifact(results: list[dict]) -> None:
     try:
         sdd_spec = importlib.util.spec_from_file_location(
             "generate_sdd_handoff", str(SCRIPTS_DIR / "generate_sdd_handoff.py")
@@ -127,6 +138,19 @@ def run_enhancer():
         print("🎯 SDD handoff successfully written to: .specify/specs/")
     except Exception as e:
         print(f"Operation failed: {type(e).__name__}")
+
+
+def run_enhancer():
+    print("🚀 Starting Code Enhancer on project:", PROJECT_DIR.name)
+
+    results = _run_all_analyzers(_ANALYZERS)
+
+    print("\n📝 Compiling final results...")
+    safe_results, _privacy_report = sanitize_for_persistence(results)
+
+    _write_results_json(safe_results)
+    _generate_markdown_report(safe_results)
+    _generate_sdd_handoff_artifact(results)
 
 
 if __name__ == "__main__":
