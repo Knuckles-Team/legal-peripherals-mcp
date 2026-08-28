@@ -134,6 +134,41 @@ def ingest_sos_entities(
     return ingest_entities(entities, relationships, client=client, graph=graph)
 
 
+def _optional(value: str) -> str | None:
+    """Normalize an empty/absent string field to ``None`` for graph ingestion."""
+    return value or None
+
+
+def _ein_application_entities(
+    legal_name: str, aid: str, bid: str, slug: str, fields: dict[str, str]
+) -> list[dict[str, Any]]:
+    """Build the ``:EINApplication`` + ``:BusinessEntity`` node dicts for one filing."""
+    return [
+        {
+            "id": aid,
+            "node_type": "EINApplication",
+            "name": f"SS-4: {legal_name}",
+            "legal_name": legal_name,
+            "trade_name": _optional(fields["trade_name"]),
+            "business_type": _optional(fields["business_type"]),
+            "filingType": "ss4_ein",
+            "filingAgency": "IRS",
+            "filingStatus": _optional(fields["filing_status"]),
+            "county_state": _optional(fields["county_state"]),
+            "reason_for_applying": _optional(fields["reason_for_applying"]),
+            "closing_month_tax_year": _optional(fields["closing_month_tax_year"]),
+            "text": _optional(fields["draft_text"]),
+            "externalToolId": slug,
+        },
+        {
+            "id": bid,
+            "node_type": "BusinessEntity",
+            "name": legal_name,
+            "company_type": _optional(fields["business_type"]),
+        },
+    ]
+
+
 def ingest_ein_application(
     legal_name: str,
     *,
@@ -153,30 +188,16 @@ def ingest_ein_application(
     slug = _slug(legal_name)
     aid = f"legal:einapplication:{slug}"
     bid = f"legal:businessentity:{slug}"
-    entities = [
-        {
-            "id": aid,
-            "node_type": "EINApplication",
-            "name": f"SS-4: {legal_name}",
-            "legal_name": legal_name,
-            "trade_name": trade_name or None,
-            "business_type": business_type or None,
-            "filingType": "ss4_ein",
-            "filingAgency": "IRS",
-            "filingStatus": filing_status or None,
-            "county_state": county_state or None,
-            "reason_for_applying": reason_for_applying or None,
-            "closing_month_tax_year": closing_month_tax_year or None,
-            "text": draft_text or None,
-            "externalToolId": slug,
-        },
-        {
-            "id": bid,
-            "node_type": "BusinessEntity",
-            "name": legal_name,
-            "company_type": business_type or None,
-        },
-    ]
+    fields = {
+        "trade_name": trade_name,
+        "business_type": business_type,
+        "county_state": county_state,
+        "reason_for_applying": reason_for_applying,
+        "closing_month_tax_year": closing_month_tax_year,
+        "filing_status": filing_status,
+        "draft_text": draft_text,
+    }
+    entities = _ein_application_entities(legal_name, aid, bid, slug, fields)
     relationships = [{"source": aid, "target": bid, "relationship": "appliesForEntity"}]
     return ingest_entities(entities, relationships, client=client, graph=graph)
 
@@ -205,22 +226,14 @@ def ingest_filing_document(
 # --------------------------------------------------------------------------- #
 # Wire-first fetch: live OpenCorporates search for the ingest MCP tool.
 # --------------------------------------------------------------------------- #
-def search_companies(
-    state: str,
-    entity_name: str,
-    *,
-    limit: int = 10,
-) -> list[dict[str, Any]]:
-    """List real OpenCorporates company records for a state + name (best-effort).
+def _missing_search_inputs(token: str, state: str, entity_name: str) -> bool:
+    return not token or not (state or "").strip() or not (entity_name or "").strip()
 
-    Returns ``[]`` when no ``OPENCORPORATES_API_TOKEN`` is set or the request fails,
-    so the source query returns no records rather than fabricating data. Native
-    ingestion remains authoritative whenever records are available.
-    """
-    token = os.getenv("OPENCORPORATES_API_TOKEN", "").strip()
-    if not token or not (state or "").strip() or not (entity_name or "").strip():
-        return []
-    jurisdiction = f"us_{state.strip().lower()}"
+
+def _fetch_opencorporates_companies(
+    jurisdiction: str, entity_name: str, token: str, limit: int
+) -> list[dict[str, Any]]:
+    """Best-effort live OpenCorporates company search; ``[]`` on any failure."""
     try:
         import requests
 
@@ -241,3 +254,22 @@ def search_companies(
         return []
     results = (payload.get("results") or {}).get("companies") or []
     return [c.get("company", c) for c in results if c]
+
+
+def search_companies(
+    state: str,
+    entity_name: str,
+    *,
+    limit: int = 10,
+) -> list[dict[str, Any]]:
+    """List real OpenCorporates company records for a state + name (best-effort).
+
+    Returns ``[]`` when no ``OPENCORPORATES_API_TOKEN`` is set or the request fails,
+    so the source query returns no records rather than fabricating data. Native
+    ingestion remains authoritative whenever records are available.
+    """
+    token = os.getenv("OPENCORPORATES_API_TOKEN", "").strip()
+    if _missing_search_inputs(token, state, entity_name):
+        return []
+    jurisdiction = f"us_{state.strip().lower()}"
+    return _fetch_opencorporates_companies(jurisdiction, entity_name, token, limit)
