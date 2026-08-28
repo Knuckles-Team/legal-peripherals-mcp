@@ -64,6 +64,20 @@ def test_sector_lookup_requires_sector():
 
 
 @pytest.mark.concept("LEGAL-002")
+def test_sector_lookup_action_returns_regulations_for_sector():
+    regs = compliance_kb.run_action("sector_lookup", sector="Medical")
+    ids = {r["id"] for r in regs}
+    assert "HIPAA" in ids
+
+
+@pytest.mark.concept("LEGAL-002")
+def test_dataclass_lookup_action_returns_regulations_for_dataclass():
+    regs = compliance_kb.run_action("dataclass_lookup", data_class="PHI")
+    ids = {r["id"] for r in regs}
+    assert "HIPAA" in ids
+
+
+@pytest.mark.concept("LEGAL-002")
 def test_gate_requirements_resolves_multiple_regulations_and_controls():
     result = compliance_kb.run_action("gate_requirements", data_classes="PHI,PII")
     assert "HIPAA" in result["applicable_regulations"]
