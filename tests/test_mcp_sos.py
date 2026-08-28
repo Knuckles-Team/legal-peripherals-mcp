@@ -100,6 +100,19 @@ async def test_sos_lookup_direct_by_company_number(monkeypatch):
 
 @pytest.mark.concept("LEGAL-001")
 @pytest.mark.asyncio
+async def test_sos_lookup_direct_by_company_number_not_found(monkeypatch):
+    """An entity_id direct fetch with no matching company is an honest not-found."""
+    monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
+    with patch("legal_peripherals_mcp.mcp.mcp_sos.requests.get") as mget:
+        mget.return_value = _mock_response({"results": {"company": None}})
+        res = await handle_sos_lookup("WY", "Nonexistent Co", "WY-000")
+
+    assert "No Secretary-of-State record found" in res
+    assert "WY-000" in res
+
+
+@pytest.mark.concept("LEGAL-001")
+@pytest.mark.asyncio
 async def test_sos_lookup_no_results(monkeypatch):
     """An empty result set yields an honest 'no record found' — not a fabrication."""
     monkeypatch.setenv("OPENCORPORATES_API_TOKEN", "tok_test")
