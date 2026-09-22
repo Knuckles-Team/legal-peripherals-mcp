@@ -3,12 +3,12 @@
   "legal-sos-entities": {
     "server": "legal-peripherals-mcp",
     "tool": "legal_ingest_sos_entities",
-    "action": "list",
     "records_path": "entities",
     "id_field": "id",
     "title_field": "name",
     "text_field": "registered_address",
     "updated_field": "incorporation_date",
-    "doc_type": "business_entity"
+    "doc_type": "business_entity",
+    "params_style": "args"
   }
 }
