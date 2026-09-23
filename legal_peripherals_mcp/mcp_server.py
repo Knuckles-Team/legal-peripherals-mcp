@@ -94,7 +94,17 @@ def register_statute_tools(mcp: Any) -> None:
 def register_ingest_tools(mcp: Any) -> None:
     """Register Wire-First native KG ingestion tools (tag: ingest)."""
 
-    @mcp.tool()
+    @mcp.tool(
+        annotations={
+            "readOnlyHint": False,
+            "destructiveHint": False,
+            "idempotentHint": False,
+            "openWorldHint": True,
+        },
+        meta={
+            "eg.annotations": {"modalities_in": ["text"], "modalities_out": ["text"]}
+        },
+    )
     async def legal_ingest_sos_entities(
         state: str,
         entity_name: str,
