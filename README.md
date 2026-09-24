@@ -98,8 +98,6 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 
 > **Install the connector-focused `[mcp]` extra.** Examples use `legal-peripherals-mcp[mcp]` to add
 > FastMCP / FastAPI through `agent-utilities[mcp]`; the required Agent Utilities core
-> still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
-> enables model orchestration.
 
 #### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)
 
@@ -232,7 +230,6 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
-
 <!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->
 
 ## Deploy with `agent-utilities-deployment`
@@ -246,7 +243,7 @@ to **"deploy `legal-peripherals-mcp` with agent-utilities-deployment"**.
 | Install mode | Command |
 |------|---------|
 | Installed package | `uv tool install "legal-peripherals-mcp[mcp]"`, then run `legal-peripherals-mcp` |
-| Editable source | `uv pip install -e ".[agent]"`, then run `legal-peripherals-mcp` |
+| Editable source | `uv pip install -e ".[mcp]"`, then run `legal-peripherals-mcp` |
 | Immutable container | deploy `registry.example.invalid/legal-peripherals-mcp@sha256:<digest>` through the operator-selected orchestrator |
 
 The repository embeds no deployment profile, credential value, certificate path, or
