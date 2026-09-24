@@ -6,7 +6,7 @@ import re
 import zoneinfo
 from datetime import datetime, timedelta
 
-from agent_utilities.base_utilities import get_logger, to_boolean
+from agent_connector_sdk.utilities import get_logger, to_boolean
 
 logger = get_logger(__name__)
 

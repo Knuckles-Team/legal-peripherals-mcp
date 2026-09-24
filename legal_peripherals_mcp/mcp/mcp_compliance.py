@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from agent_utilities.base_utilities import get_logger
+from agent_connector_sdk.utilities import get_logger
 
 from legal_peripherals_mcp.compliance_kb import ComplianceLookupError, run_action
 

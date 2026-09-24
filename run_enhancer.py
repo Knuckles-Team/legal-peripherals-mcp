@@ -5,7 +5,7 @@ import os
 import time
 from pathlib import Path
 
-from agent_utilities.security.persistence_privacy import sanitize_for_persistence
+from legal_peripherals_mcp._persistence_privacy_compat import sanitize_for_persistence
 
 # Paths
 SCRIPTS_DIR_VALUE = os.getenv("CODE_ENHANCER_SCRIPTS_DIR")

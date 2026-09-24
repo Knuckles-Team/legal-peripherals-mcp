@@ -1,11 +1,9 @@
 """CONCEPT:LP-OS.governance.legal Dynamic client facade orchestration and resource mappings."""
 
 import requests
-from agent_utilities.base_utilities import get_logger
-from agent_utilities.core.transport_security import (
-    ResolvedTLSProfile,
-    resolve_configured_tls_profile,
-)
+from agent_connector_sdk.utilities import get_logger
+from agent_connector_sdk.tls.profile import ResolvedTLSProfile
+from agent_connector_sdk.tls.resolve import resolve_tls_profile
 
 logger = get_logger(__name__)
 
@@ -19,9 +17,7 @@ class Api:
     ):
         self.base_url = base_url.rstrip("/")
         self.token = token
-        self.tls_profile = tls_profile or resolve_configured_tls_profile(
-            "legal_peripherals"
-        )
+        self.tls_profile = tls_profile or resolve_tls_profile("legal_peripherals")
         self._session = self.tls_profile.configure_requests_session(requests.Session())
 
     def close(self) -> None:
