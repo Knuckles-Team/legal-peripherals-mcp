@@ -16,7 +16,7 @@ classifiers = [
 ]
 requires-python = ">=3.12, <3.15"
 dependencies = [
-    "agent-connector-sdk>=0.1.0,<1.0.0", "playwright>=1.61.0",
+    "agent-connector-sdk>=0.1.0,<1.0.0", "agent-utilities>=2.0.0,<3.0.0", "playwright>=1.61.0",
 ]
 [[project.authors]]
 name = "Project Maintainers"
@@ -62,6 +62,9 @@ members = ["."]
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.uv.sources]
+agent-utilities = { path = ".uv-workspace-siblings/agent-utilities", editable = true }
 
 [tool.ruff]
 line-length = 88

@@ -17,18 +17,18 @@ import mimetypes
 import os
 from typing import Any
 
+from agent_utilities.knowledge_graph.memory.native_ingest import (
+    media_store as _native_media_store,
+)
 
 logger = logging.getLogger("legal_peripherals_mcp.kg_media")
 
 _SOURCE = "legal-peripherals-mcp"
 
 
-def _media_store(*args: object, **kwargs: object) -> object:
-    """Build the required native ``MediaStore`` authority.
-
-    SDK-GAP: Always raises now; see KnowledgeGraphIngestUnavailable.
-    """
-    _kg_unavailable("_media_store")
+def _media_store() -> Any:
+    """Build the required native ``MediaStore`` authority."""
+    return _native_media_store()
 
 
 def _resolve_media_store(media_store: Any | None) -> Any:
@@ -111,23 +111,3 @@ def ingest_filing_file(
         "size_bytes": len(data),
         "media_type": "document",
     }
-
-
-class KnowledgeGraphIngestUnavailable(RuntimeError):
-    """Direct-to-graph ingestion is unavailable from this connector.
-
-    SDK-GAP (EH-48x, /var/tmp/l9/finish/au-decon-G4c/SDK-GAPS.md): raised in
-    place of the old ``agent_utilities.knowledge_graph`` native-ingest call --
-    agent-connector-sdk has no facade over EG's typed ingestion protocol yet,
-    and the fleet precedent (agents/world-reference-mcp) moves direct-to-graph
-    delivery to agent_connector_sdk.runner/sinks at the deployment layer, out
-    of connector scope.
-    """
-
-
-def _kg_unavailable(name: str) -> None:
-    raise KnowledgeGraphIngestUnavailable(
-        f"{name}: direct-to-graph ingestion moved out of connector code "
-        "(agent-utilities removed); no agent-connector-sdk facade exists yet "
-        "-- see SDK-GAPS.md"
-    )
