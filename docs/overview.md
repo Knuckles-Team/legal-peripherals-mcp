@@ -1,6 +1,6 @@
 # Architectural Overview
 
-The Legal Peripherals MCP package leverages FastMCP to expose three core domains to LLM agents:
+The Legal Peripherals MCP package use FastMCP to expose three core domains to LLM agents:
 
 1. **Secretary of State (SOS) Crawlers**:
    - Uses Playwright to query state business registry pages dynamically.
