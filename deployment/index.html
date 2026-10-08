@@ -1105,7 +1105,7 @@ set:</p>
 </table>
 <p>Plus <code>HOST</code> / <code>PORT</code> / <code>TRANSPORT</code> for HTTP transports. Copy
 <a href="https://github.com/Knuckles-Team/legal-peripherals-mcp/blob/main/.env.example"><code>.env.example</code></a>
-to <code>.env</code> and populate only what you use; the connector remains inactive against the
+to <code>.env</code> and populate only what the operator use; the connector remains inactive against the
 backing API when <code>LEGAL_PERIPHERALS_TOKEN</code> is absent.</p>
 <h2 id="docker-compose">Docker Compose<a class="headerlink" href="#docker-compose" title="Permanent link">&para;</a></h2>
 <p>The repo ships <a href="https://github.com/Knuckles-Team/legal-peripherals-mcp/blob/main/docker/compose.yml"><code>docker/compose.yml</code></a>.
@@ -1147,7 +1147,7 @@ Pydantic-AI agent with an optional web UI. It connects to a running MCP server v
 </span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8001</span><span class="w"> </span>--web
 </span></code></pre></div>
 <p>The same published image runs the agent by overriding the entrypoint. Add a second
-service to your Compose stack that wires <code>MCP_URL</code> at the running MCP server:</p>
+service to the operator's Compose stack that wires <code>MCP_URL</code> at the running MCP server:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="w">  </span><span class="nt">legal-peripherals-agent</span><span class="p">:</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example/legal-peripherals-mcp@sha256:&lt;digest&gt;</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">legal-peripherals-agent</span>
@@ -1161,7 +1161,7 @@ service to your Compose stack that wires <code>MCP_URL</code> at the running MCP
 </span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"8001:8001"</span>
 </span></code></pre></div>
 <h2 id="behind-a-caddy-reverse-proxy">Behind a Caddy reverse proxy<a class="headerlink" href="#behind-a-caddy-reverse-proxy" title="Permanent link">&para;</a></h2>
-<p>Expose the HTTP server on a hostname with automatic TLS. Add to your <code>Caddyfile</code>:</p>
+<p>Expose the HTTP server on a hostname with automatic TLS. Add to the operator's <code>Caddyfile</code>:</p>
 <div class="language-caddy highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Internal (self-signed) — homelab .example.invalid zone</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>legal-peripherals-mcp.example.invalid<span class="w"> </span><span class="p">{</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="k">tls</span><span class="w"> </span>internal
@@ -1191,7 +1191,7 @@ Technitium web console (<code>http://technitium.example.invalid:5380</code>). Th
 <a href="https://knuckles-team.github.io/technitium-dns-mcp/"><code>technitium-dns-mcp</code></a> automates
 this as a tool.</p>
 <h2 id="register-with-an-mcp-client">Register with an MCP client<a class="headerlink" href="#register-with-an-mcp-client" title="Permanent link">&para;</a></h2>
-<p>Add to your client's <code>mcp_config.json</code>:</p>
+<p>Add to the operator's client's <code>mcp_config.json</code>:</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
 </span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="nt">"legal_peripherals_mcp"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
