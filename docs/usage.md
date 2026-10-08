@@ -1,7 +1,7 @@
 # Usage — API / MCP
 
 `legal-peripherals-mcp` exposes its capability two ways: as **MCP tools** an agent
-calls, and as a **Python API** (`Api`) you import to reach the backing
+calls, and as a **Python API** (`Api`) the operator import to reach the backing
 legal-peripherals platform. The three tool domains and the architecture are described
 in [Overview](overview.md).
 

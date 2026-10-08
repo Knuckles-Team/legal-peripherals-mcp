@@ -119,7 +119,7 @@ set:
 
 Plus `HOST` / `PORT` / `TRANSPORT` for HTTP transports. Copy
 [`.env.example`](https://github.com/Knuckles-Team/legal-peripherals-mcp/blob/main/.env.example)
-to `.env` and populate only what you use; the connector remains inactive against the
+to `.env` and populate only what the operator use; the connector remains inactive against the
 backing API when `LEGAL_PERIPHERALS_TOKEN` is absent.
 
 ## Docker Compose
@@ -172,7 +172,7 @@ legal-peripherals-agent \
 ```
 
 The same published image runs the agent by overriding the entrypoint. Add a second
-service to your Compose stack that wires `MCP_URL` at the running MCP server:
+service to the operator's Compose stack that wires `MCP_URL` at the running MCP server:
 
 ```yaml
   legal-peripherals-agent:
@@ -190,7 +190,7 @@ service to your Compose stack that wires `MCP_URL` at the running MCP server:
 
 ## Behind a Caddy reverse proxy
 
-Expose the HTTP server on a hostname with automatic TLS. Add to your `Caddyfile`:
+Expose the HTTP server on a hostname with automatic TLS. Add to the operator's `Caddyfile`:
 
 ```caddy
 # Internal (self-signed) — homelab .example.invalid zone
@@ -234,7 +234,7 @@ this as a tool.
 
 ## Register with an MCP client
 
-Add to your client's `mcp_config.json`:
+Add to the operator's client's `mcp_config.json`:
 
 ```json
 {
