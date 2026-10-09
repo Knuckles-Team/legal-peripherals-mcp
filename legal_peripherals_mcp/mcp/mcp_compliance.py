@@ -10,13 +10,12 @@ no fabrication. This is the KG-native grounding surface every new domain skill
 
 from __future__ import annotations
 
+import logging
 from typing import Any
-
-from agent_utilities.base_utilities import get_logger
 
 from legal_peripherals_mcp.compliance_kb import ComplianceLookupError, run_action
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 async def handle_compliance_lookup(

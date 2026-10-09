@@ -1,34 +1,68 @@
-"""Native epistemic-graph blob ingestion for drafted legal filings.
+"""Epistemic-graph blob ingestion for drafted legal filings.
 
 CONCEPT:AU-KG.ingest.list-durable-media. Drafted filing artifacts (SS-4 drafts, trust
 indentures, operating agreements — the ``drafts/*.txt`` files this package produces) are
 stored as content-addressed **blobs** with a ``:MediaAsset`` graph node carrying the
-filing metadata, in ONE cross-modal ACID commit, via the agent-utilities ``MediaStore``
-(surfaced through ``native_ingest.media_store``). This makes the raw filing bytes — not
-just a filesystem path — durable, deduped, and queryable inside the knowledge graph.
+filing metadata, in ONE cross-modal ACID commit, via ``agent_connector_sdk.ingest``'s
+``MediaAsset``/``ChangeSet`` + the synchronous ``ingest_changes`` bridge. This makes the
+raw filing bytes — not just a filesystem path — durable, deduped, and queryable inside
+the knowledge graph.
 
-The required native media authority surfaces engine failures explicitly.
+Ingestion failures surface explicitly (this seam is not best-effort).
 """
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import mimetypes
 import os
 from typing import Any
 
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    media_store as _native_media_store,
+from agent_connector_sdk.ingest import (
+    ChangeSet,
+    IngestBinding,
+    MediaAsset,
+    ingest_changes,
 )
 
 logger = logging.getLogger("legal_peripherals_mcp.kg_media")
 
 _SOURCE = "legal-peripherals-mcp"
+_DOMAIN = "legal"
+
+
+_BINDING = IngestBinding(connector=_SOURCE, stream=_DOMAIN, media_type="document")
+
+
+class _SdkMediaStore:
+    """Adapts ``agent_connector_sdk.ingest`` to the old ``MediaStore.store_media(...)`` shape."""
+
+    @staticmethod
+    def store_media(
+        data: bytes,
+        *,
+        media_type: str,
+        mime_type: str,
+        source: str = _SOURCE,
+        name: str = "",
+        extra: dict[str, Any] | None = None,
+    ) -> Any:
+        asset = MediaAsset(data=data, mime_type=mime_type, name=name, properties=extra or {})
+        ingest_changes(_BINDING, ChangeSet(media=(asset,)))
+        digest = hashlib.sha256(data).hexdigest()
+
+        class _StoredAsset:
+            asset_id = asset.id or f"blob:{digest}"
+
+        stored = _StoredAsset()
+        stored.digest = digest
+        return stored
 
 
 def _media_store() -> Any:
-    """Build the required native ``MediaStore`` authority."""
-    return _native_media_store()
+    """Build the ``agent_connector_sdk.ingest``-backed media-store adapter."""
+    return _SdkMediaStore()
 
 
 def _resolve_media_store(media_store: Any | None) -> Any:

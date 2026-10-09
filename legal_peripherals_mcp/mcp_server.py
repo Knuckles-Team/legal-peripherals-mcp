@@ -4,9 +4,9 @@ import asyncio
 import sys
 from typing import Any
 
-from agent_utilities.core.config import load_config
-from agent_utilities.mcp.server_factory import create_mcp_server
-from agent_utilities.mcp.verbose_tools import register_tool_surface
+from agent_connector_sdk.config import load_config
+from agent_connector_sdk.mcp.server import create_mcp_server
+from agent_connector_sdk.mcp.tool_surface import register_tool_surface
 from fastmcp.utilities.logging import get_logger
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -119,7 +119,7 @@ def register_ingest_tools(mcp: Any) -> None:
         )
         if ctx:
             await ctx.info(f"Fetched {len(entities)} SOS entities for ingestion")
-        result = ingest_sos_entities(entities)
+        result = await ingest_sos_entities(entities)
         return {"listed": len(entities), "entities": entities, "ingested": result}
 
     @mcp.tool()

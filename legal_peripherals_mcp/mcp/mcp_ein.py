@@ -1,14 +1,15 @@
 """CONCEPT:LP-OS.governance.legal-2 Form SS-4 EIN preparer and off-hours filing scheduler."""
 
 import asyncio
+import logging
 import os
 import re
 import zoneinfo
 from datetime import datetime, timedelta
 
-from agent_utilities.base_utilities import get_logger, to_boolean
+from agent_connector_sdk.utilities import to_boolean
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 # Maximum time (seconds) for EIN draft operations.
 EIN_TIMEOUT_SECONDS = int(os.getenv("EIN_TIMEOUT_SECONDS", "30"))
@@ -221,7 +222,7 @@ async def _do_ein_draft(
     rendered = (
         f"{draft_pdf_info}\n----------------------------------------\n{status_msg}"
     )
-    _maybe_ingest_ein(
+    await _maybe_ingest_ein(
         legal_name=legal_name,
         trade_name=trade_name,
         business_type=business_type,
@@ -234,15 +235,15 @@ async def _do_ein_draft(
     return rendered
 
 
-def _maybe_ingest_ein(**kwargs) -> None:
-    """Default-on authoritative native ingestion of the drafted SS-4.
+async def _maybe_ingest_ein(**kwargs) -> None:
+    """Default-on authoritative ingestion of the drafted SS-4.
 
     Pushes the draft into the epistemic-graph as an ``:EINApplication`` node linked to
     its ``:BusinessEntity``. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
-    native ingestion failures propagate.
+    ingestion failures propagate.
     """
     if not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
         return
     from legal_peripherals_mcp.kg_ingest import ingest_ein_application
 
-    ingest_ein_application(kwargs.pop("legal_name"), **kwargs)
+    await ingest_ein_application(kwargs.pop("legal_name"), **kwargs)

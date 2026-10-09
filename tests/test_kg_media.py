@@ -8,7 +8,7 @@ CONCEPT:AU-KG.ingest.list-durable-media.
 from __future__ import annotations
 
 import pytest
-from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
+from agent_connector_sdk.ingest import IngestUnavailableError
 
 from legal_peripherals_mcp.kg_media import ingest_filing_file
 
@@ -91,9 +91,9 @@ def test_ingest_native_store_failure_propagates(tmp_path, monkeypatch):
     p.write_text("hi")
     import legal_peripherals_mcp.kg_media as kg_media
 
-    def fail():
-        raise NativeIngestError("native media store is unavailable")
+    def fail(*_args, **_kwargs):
+        raise IngestUnavailableError("knowledge ingest is not configured")
 
-    monkeypatch.setattr(kg_media, "_native_media_store", fail)
-    with pytest.raises(NativeIngestError, match="unavailable"):
+    monkeypatch.setattr(kg_media, "ingest_changes", fail)
+    with pytest.raises(IngestUnavailableError, match="not configured"):
         ingest_filing_file(str(p), media_store=None)

@@ -1,20 +1,18 @@
-"""Native epistemic-graph typed-node ingestion — Wire-First coverage.
+"""Epistemic-graph typed-node ingestion — Wire-First coverage.
 
-Exercises the ``kg_ingest`` seam with a ChangeEnvelope-capable fake engine client
-(no engine required), asserting the native node/edge writes and the legal record →
-typed-node mappings. CONCEPT:AU-KG.ingest.enterprise-source-extractor.
+Exercises the ``kg_ingest`` seam against a fake transport one level below the SDK's
+own ``SourceIngest`` request builder (per the fleet SDK migration recipe), asserting
+the committed nodes/edges and the legal record → typed-node mappings.
+CONCEPT:AU-KG.ingest.enterprise-source-extractor.
 """
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Any
 
-import msgpack
 import pytest
-from agent_utilities.knowledge_graph.core.session import GraphSession, use_session
-from agent_utilities.knowledge_graph.memory.native_ingest import NativeIngestError
-from agent_utilities.security.actor_identity import ActorType
-from agent_utilities.security.brain_context import ActorContext, use_actor
+from agent_connector_sdk.ingest import IngestError, KnowledgeIngest
 
 from legal_peripherals_mcp.kg_ingest import (
     ingest_documents,
@@ -26,131 +24,75 @@ from legal_peripherals_mcp.kg_ingest import (
 )
 
 
-@pytest.fixture(autouse=True)
-def _governed_session():
-    """Bind the verified ambient GraphSession the native-ingest path requires.
-
-    ``kg_ingest`` delegates to ``agent_utilities`` native ingestion, whose
-    ``resolve_session(required_scope="kg:write")`` refuses to run without an
-    ambient authenticated session. Mirror agent-utilities' own native-ingest
-    test setup so these fake-client tests exercise the real ingest path.
-    """
-    actor = ActorContext(
-        actor_id="subject:opaque:synthetic",
-        actor_type=ActorType.AUTOMATED_SERVICE,
-        roles=(),
-        tenant_id="tenant:opaque:synthetic",
-        authenticated=True,
-    )
-    session = GraphSession(
-        actor=actor,
-        tenant=actor.tenant_id,
-        scopes=frozenset({"kg:write"}),
-        graph="graph:opaque:synthetic",
-        policy_version="policy:opaque:synthetic",
-        audience="epistemic-graph",
-    )
-    with use_actor(actor), use_session(session):
-        yield
-
-
-class _FakeNodes:
+class _FakeTransport:
     def __init__(self) -> None:
-        self.values: dict[str, dict[str, Any]] = {}
+        self.requests: list[Any] = []
 
-    def properties(self, node_id: str) -> dict[str, Any] | None:
-        return self.values.get(node_id)
+    async def source_status(self, connector: str, stream: str) -> Any:
+        return SimpleNamespace(accepted_checkpoint=None)
 
-    def list(self) -> list[tuple[str, dict[str, Any]]]:
-        return list(self.values.items())
+    async def submit(self, request: Any) -> Any:
+        self.requests.append(request)
+        return SimpleNamespace(
+            affected_count=len(request.records),
+            relationship_count=len(request.relationships),
+        )
 
-
-class _FakeChanges:
-    """ChangeEnvelope-capable fake: unpacks the applied envelope the way the
-    engine would, so the tests can assert the written nodes/edges. Mirrors
-    agent-utilities' own native-ingest test double."""
-
-    def __init__(self, nodes: _FakeNodes) -> None:
-        self.nodes = nodes
-        self.edges: list[tuple[str, str, dict[str, Any]]] = []
-        self.applied: list[dict[str, Any]] = []
-        self.records: dict[str, dict[str, Any]] = {}
-        self.versions: dict[str, dict[str, Any]] = {}
-
-    def get(self, envelope_id: str) -> dict[str, Any] | None:
-        return self.records.get(envelope_id)
-
-    def content_version(self, object_id: str) -> dict[str, Any] | None:
-        return self.versions.get(object_id)
-
-    def cursor(self, _source: str, _partition: str = "") -> None:
-        return None
-
-    def apply(self, envelope: dict[str, Any]) -> dict[str, Any]:
-        self.applied.append(envelope)
-        mutation = envelope["mutation"]
-        for operation in mutation["operations"]:
-            method = operation["method"]
-            params = method["params"]
-            properties = msgpack.unpackb(params["properties_msgpack"], raw=False)
-            if method["method"] == "AddNode":
-                self.nodes.values[params["node_id"]] = properties
-            elif method["method"] == "AddEdge":
-                self.edges.append(
-                    (params["source_id"], params["target_id"], properties)
-                )
-        version = envelope["content_version"]
-        self.versions[version["object_id"]] = version
-        self.records[envelope["envelope_id"]] = envelope
-        return {
-            "batch_id": mutation["batch_id"],
-            "replayed": False,
-            "projection_pending": False,
-        }
+    async def store_blob(self, data: bytes) -> str:
+        raise AssertionError("this connector's node/document ingestion carries no media")
 
 
-class _FakeRdf:
-    def validate_shacl(self, _shapes: str, _data_graph: str) -> dict[str, Any]:
-        return {"conforms": True, "results": []}
+@pytest.fixture
+def ingest() -> tuple[KnowledgeIngest, _FakeTransport]:
+    transport = _FakeTransport()
+    return KnowledgeIngest(transport, loop=None), transport
 
 
-class _FakeClient:
-    def __init__(self) -> None:
-        self.nodes = _FakeNodes()
-        self.changes = _FakeChanges(self.nodes)
-        self.rdf = _FakeRdf()
-
-    @staticmethod
-    def supports(operation: str) -> bool:
-        return operation == "ApplyChangeEnvelope"
+def _node(transport: _FakeTransport, node_id: str) -> dict[str, Any]:
+    for request in transport.requests:
+        for record in request.records:
+            if record.record_id == node_id:
+                return dict(record.payload)
+    raise AssertionError(f"no committed record {node_id!r}")
 
 
-def test_ingest_entities_writes_nodes_and_edges_with_provenance():
-    c = _FakeClient()
-    res = ingest_entities(
+def _edges(transport: _FakeTransport) -> set[tuple[str, str, str]]:
+    edges: set[tuple[str, str, str]] = set()
+    for request in transport.requests:
+        for rel in request.relationships:
+            relationship_name = rel.relation_reference.rsplit("/relations/", 1)[-1]
+            edges.add((rel.source.record_id, rel.target.record_id, relationship_name))
+    return edges
+
+
+@pytest.mark.asyncio
+async def test_ingest_entities_writes_nodes_and_edges_with_provenance(ingest):
+    service, transport = ingest
+    res = await ingest_entities(
         [
             {"id": "a", "node_type": "BusinessEntity", "name": "Acme"},
             {"id": "b", "node_type": "Jurisdiction"},
         ],
         [{"source": "a", "target": "b", "relationship": "incorporatedIn"}],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 2, "edges": 1}
-    assert len(c.changes.applied) >= 1
-    assert set(c.nodes.values) == {"a", "b"}
-    assert c.nodes.values["a"]["source"] == "legal-peripherals-mcp"
-    assert c.nodes.values["a"]["domain"] == "legal"
-    assert c.changes.edges == [("a", "b", {"relationship": "incorporatedIn"})]
+    record_ids = {record.record_id for record in transport.requests[0].records}
+    assert record_ids == {"a", "b"}
+    assert _edges(transport) == {("a", "b", "incorporatedIn")}
 
 
-def test_ingest_empty_is_rejected():
-    with pytest.raises(NativeIngestError, match="at least one entity"):
-        ingest_entities([], client=_FakeClient())
+@pytest.mark.asyncio
+async def test_ingest_empty_is_rejected(ingest):
+    service, _transport = ingest
+    with pytest.raises(IngestError, match="at least one entity"):
+        await ingest_entities([], ingest=service)
 
 
-def test_ingest_sos_entities_maps_business_entity_and_jurisdiction():
-    c = _FakeClient()
-    res = ingest_sos_entities(
+@pytest.mark.asyncio
+async def test_ingest_sos_entities_maps_business_entity_and_jurisdiction(ingest):
+    service, transport = ingest
+    res = await ingest_sos_entities(
         [
             {
                 "name": "Acme Holdings LLC",
@@ -163,91 +105,88 @@ def test_ingest_sos_entities_maps_business_entity_and_jurisdiction():
                 "opencorporates_url": "https://opencorporates.com/companies/us_de/1234567",
             }
         ],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 2, "edges": 1}
-    ent = c.nodes.values["legal:businessentity:us_de_1234567"]
-    assert ent["node_type"] == "BusinessEntity"
+    ent = _node(transport, "legal:businessentity:us_de_1234567")
     assert ent["name"] == "Acme Holdings LLC"
     assert ent["companyNumber"] == "1234567"
     assert ent["registryStatus"] == "Active"
     assert ent["incorporationDate"] == "2020-01-15"
     assert ent["externalToolId"] == "us_de_1234567"
-    jur = c.nodes.values["legal:jurisdiction:us_de"]
-    assert jur["node_type"] == "Jurisdiction"
-    assert c.changes.edges == [
+    jur = _node(transport, "legal:jurisdiction:us_de")
+    assert jur["name"] == "us_de"
+    assert _edges(transport) == {
         (
             "legal:businessentity:us_de_1234567",
             "legal:jurisdiction:us_de",
-            {"relationship": "incorporatedIn"},
+            "incorporatedIn",
         )
-    ]
+    }
 
 
-def test_ingest_ein_application_maps_filing_and_entity():
-    c = _FakeClient()
-    res = ingest_ein_application(
+@pytest.mark.asyncio
+async def test_ingest_ein_application_maps_filing_and_entity(ingest):
+    service, transport = ingest
+    res = await ingest_ein_application(
         "Acme Holdings LLC",
         business_type="LLC",
         county_state="Kent, DE",
         filing_status="queued",
         draft_text="=== SS-4 ...",
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 2, "edges": 1}
-    app = c.nodes.values["legal:einapplication:acme-holdings-llc"]
-    assert app["node_type"] == "EINApplication"
+    app = _node(transport, "legal:einapplication:acme-holdings-llc")
     assert app["filingType"] == "ss4_ein"
     assert app["filingAgency"] == "IRS"
     assert app["filingStatus"] == "queued"
     assert app["text"] == "=== SS-4 ..."
-    ent = c.nodes.values["legal:businessentity:acme-holdings-llc"]
-    assert ent["node_type"] == "BusinessEntity"
-    assert c.changes.edges == [
+    ent = _node(transport, "legal:businessentity:acme-holdings-llc")
+    assert ent["name"] == "Acme Holdings LLC"
+    assert _edges(transport) == {
         (
             "legal:einapplication:acme-holdings-llc",
             "legal:businessentity:acme-holdings-llc",
-            {"relationship": "appliesForEntity"},
+            "appliesForEntity",
         )
-    ]
+    }
 
 
-def test_ingest_ein_application_blank_name_is_rejected():
-    with pytest.raises(NativeIngestError, match="at least one entity"):
-        ingest_ein_application("   ", client=_FakeClient())
+@pytest.mark.asyncio
+async def test_ingest_ein_application_blank_name_is_rejected(ingest):
+    service, _transport = ingest
+    with pytest.raises(IngestError, match="at least one entity"):
+        await ingest_ein_application("   ", ingest=service)
 
 
-def test_ingest_documents_and_filing_document():
-    c = _FakeClient()
-    res = ingest_documents(
+@pytest.mark.asyncio
+async def test_ingest_documents_and_filing_document(ingest):
+    service, transport = ingest
+    res = await ingest_documents(
         [{"id": "legal:document:d1", "text": "hello", "doc_type": "statute_summary"}],
-        client=c,
+        ingest=service,
     )
     assert res == {"nodes": 1, "edges": 0}
-    node = c.nodes.values["legal:document:d1"]
-    assert node["node_type"] == "Document"
+    node = _node(transport, "legal:document:d1")
     assert node["text"] == "hello"
-    # Native authoritative ingestion stamps provenance on every node (the
-    # bitemporal timestamp lives on the ChangeEnvelope/content-version, not as a
-    # node-level ``created_at`` property).
-    assert node["source"] == "legal-peripherals-mcp"
-    assert node["domain"] == "legal"
 
-    c2 = _FakeClient()
-    res2 = ingest_filing_document(
+    res2 = await ingest_filing_document(
         "legal:document:de-llc-voting",
         "State: DE ... default voting rules",
         title="DE LLC voting",
         doc_type="statute_summary",
-        client=c2,
+        ingest=service,
     )
     assert res2 == {"nodes": 1, "edges": 0}
-    assert c2.nodes.values["legal:document:de-llc-voting"]["title"] == "DE LLC voting"
+    assert _node(transport, "legal:document:de-llc-voting")["title"] == "DE LLC voting"
 
 
-def test_ingest_filing_document_empty_text_is_rejected():
-    with pytest.raises(NativeIngestError, match="at least one document"):
-        ingest_filing_document("id", "   ", client=_FakeClient())
+@pytest.mark.asyncio
+async def test_ingest_filing_document_empty_text_is_rejected(ingest):
+    service, _transport = ingest
+    with pytest.raises(IngestError, match="at least one document"):
+        await ingest_filing_document("id", "   ", ingest=service)
 
 
 def test_search_companies_no_token_returns_empty(monkeypatch):
