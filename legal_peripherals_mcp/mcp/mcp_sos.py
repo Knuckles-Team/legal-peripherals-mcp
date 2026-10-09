@@ -8,12 +8,13 @@ is configured and returns NO fabricated record.
 """
 
 import asyncio
+import logging
 import os
 
 import requests
-from agent_utilities.base_utilities import get_logger, to_boolean
+from agent_connector_sdk.utilities import to_boolean
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 # Maximum time (seconds) for any SOS lookup before timeout.
 SOS_TIMEOUT_SECONDS = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
@@ -90,18 +91,18 @@ class SOSLookupError(Exception):
     """Raised when a Secretary of State entity lookup fails."""
 
 
-def _maybe_ingest_entities(companies: list[dict]) -> None:
-    """Default-on authoritative native ingestion of SOS company records.
+async def _maybe_ingest_entities(companies: list[dict]) -> None:
+    """Default-on authoritative ingestion of SOS company records.
 
     Pushes each looked-up business entity into the epistemic-graph as a
     ``:BusinessEntity`` node. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
-    native ingestion failures propagate.
+    ingestion failures propagate.
     """
     if not companies or not to_boolean(os.getenv("LEGAL_KG_INGEST", "true")):
         return
     from legal_peripherals_mcp.kg_ingest import ingest_sos_entities
 
-    ingest_sos_entities(companies)
+    await ingest_sos_entities(companies)
 
 
 def _validate_inputs(state: str, entity_name: str) -> tuple[str, str]:
@@ -218,11 +219,13 @@ async def _lookup_by_id(
             f"No Secretary-of-State record found in {state_upper} for "
             f"company number {entity_id}."
         )
-    _maybe_ingest_entities([company])
+    await _maybe_ingest_entities([company])
     return _format_company(state_upper, company)
 
 
-def _render_search_hits(state_upper: str, entity_name_clean: str, data: dict) -> str:
+async def _render_search_hits(
+    state_upper: str, entity_name_clean: str, data: dict
+) -> str:
     """Build the rendered result text for a name-search response's payload."""
     companies = (data.get("results") or {}).get("companies") or []
     if not companies:
@@ -237,7 +240,7 @@ def _render_search_hits(state_upper: str, entity_name_clean: str, data: dict) ->
         for hit in companies
         if isinstance(hit, dict) and hit.get("company")
     ]
-    _maybe_ingest_entities(hits)
+    await _maybe_ingest_entities(hits)
     rendered = [_format_company(state_upper, company) for company in hits]
     header = (
         f"Found {len(rendered)} Secretary-of-State match(es) for "
@@ -289,4 +292,4 @@ async def _do_lookup(
             f"OpenCorporates request failed for {state_upper}: {type(exc).__name__}"
         ) from exc
 
-    return _render_search_hits(state_upper, entity_name_clean, data)
+    return await _render_search_hits(state_upper, entity_name_clean, data)

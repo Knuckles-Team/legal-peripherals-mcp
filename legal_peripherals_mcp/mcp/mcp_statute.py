@@ -1,11 +1,10 @@
 """CONCEPT:LP-OS.identity.legal Statutory rules and dynamic charter templates lookup."""
 
 import asyncio
+import logging
 import os
 
-from agent_utilities.base_utilities import get_logger
-
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 # Maximum time (seconds) for statute lookups.
 STATUTE_TIMEOUT_SECONDS = int(os.getenv("STATUTE_TIMEOUT_SECONDS", "30"))

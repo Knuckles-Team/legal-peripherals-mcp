@@ -1,16 +1,15 @@
-"""Native epistemic-graph ingestion for legal-peripherals records (typed graph nodes).
+"""Epistemic-graph ingestion for legal-peripherals records (typed graph nodes).
 
-CONCEPT:AU-KG.ingest.enterprise-source-extractor. This package natively pushes its
-data into the ONE epistemic-graph knowledge graph as **typed OWL nodes** — Secretary
--of-State business entities (``:BusinessEntity`` + ``:Jurisdiction``) and IRS EIN
-applications (``:EINApplication``) — plus the text of drafted filings / statute
-summaries as ``:Document`` nodes for semantic search. Raw filing files (drafts) go in
-as blobs via :mod:`legal_peripherals_mcp.kg_media`.
+CONCEPT:AU-KG.ingest.enterprise-source-extractor. This package pushes its data into
+the ONE epistemic-graph knowledge graph as **typed OWL nodes** — Secretary-of-State
+business entities (``:BusinessEntity`` + ``:Jurisdiction``) and IRS EIN applications
+(``:EINApplication``) — plus the text of drafted filings / statute summaries as
+``:Document`` nodes for semantic search. Raw filing files (drafts) go in as blobs via
+:mod:`legal_peripherals_mcp.kg_media`.
 
-Everything rides the required
-``agent_utilities.knowledge_graph.memory.native_ingest`` authority. Node ids follow
-``legal:<class>:<externalId>`` and every ``node_type`` matches a class the package's
-``ontology`` federates.
+Everything rides ``agent_connector_sdk.ingest`` -- the generated ``SourceIngest``
+client, not a local ingestion helper. Node ids follow ``legal:<class>:<externalId>``
+and every ``node_type`` matches a class the package's ``ontology`` federates.
 """
 
 from __future__ import annotations
@@ -20,17 +19,26 @@ import os
 import re
 from typing import Any
 
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_documents as _native_ingest_documents,
-)
-from agent_utilities.knowledge_graph.memory.native_ingest import (
-    ingest_entities as _native_ingest_entities,
+from agent_connector_sdk.ingest import (
+    ChangeSet,
+    Document,
+    Entity,
+    IngestBinding,
+    IngestError,
+    KnowledgeIngest,
+    Relationship,
+    current_ingest,
 )
 
 logger = logging.getLogger("legal_peripherals_mcp.kg")
 
 _SOURCE = "legal-peripherals-mcp"
 _DOMAIN = "legal"
+
+_BINDING = IngestBinding(connector=_SOURCE, stream=_DOMAIN)
+
+_ENTITY_RESERVED_KEYS = frozenset({"id", "node_type"})
+_RELATIONSHIP_RESERVED_KEYS = frozenset({"source", "target", "relationship"})
 
 # OpenCorporates config mirrors legal_peripherals_mcp.mcp.mcp_sos so the wire-first
 # ingest tool queries the exact same real registry aggregator.
@@ -40,38 +48,79 @@ _OC_BASE_URL = os.getenv(
 _OC_TIMEOUT = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
 
 
-def ingest_entities(
+def _to_entity(record: dict[str, Any]) -> Entity:
+    return Entity(
+        id=record.get("id"),
+        node_type=record.get("node_type"),
+        properties={
+            key: value
+            for key, value in record.items()
+            if key not in _ENTITY_RESERVED_KEYS
+        },
+    )
+
+
+def _to_relationship(record: dict[str, Any]) -> Relationship:
+    properties = {
+        key: value
+        for key, value in record.items()
+        if key not in _RELATIONSHIP_RESERVED_KEYS
+    }
+    return Relationship(
+        source=record["source"],
+        target=record["target"],
+        relationship=record["relationship"],
+        properties=properties or None,
+    )
+
+
+async def ingest_entities(
     entities: list[dict[str, Any]],
     relationships: list[dict[str, Any]] | None = None,
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Write typed OWL nodes (+ edges) into epistemic-graph. See module docstring."""
-    return _native_ingest_entities(
-        entities,
-        relationships,
-        source=source,
-        domain=domain,
-        client=client,
-        graph=graph,
+    if not entities:
+        raise IngestError("ingest_entities needs at least one entity")
+    change_set = ChangeSet(
+        entities=tuple(_to_entity(entity) for entity in entities or ()),
+        relationships=tuple(
+            _to_relationship(relationship) for relationship in relationships or ()
+        ),
     )
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
-def ingest_documents(
+async def ingest_documents(
     documents: list[dict[str, Any]],
     *,
-    source: str = _SOURCE,
-    domain: str = _DOMAIN,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Write text records as ``:Document`` nodes (semantic-search fodder)."""
-    return _native_ingest_documents(
-        documents, source=source, domain=domain, client=client, graph=graph
+    if not documents:
+        raise IngestError("ingest_documents needs at least one document")
+    change_set = ChangeSet(
+        documents=tuple(
+            Document(
+                id=doc["id"],
+                text=doc["text"],
+                title=doc.get("title"),
+                source_uri=doc.get("source_uri"),
+                properties={
+                    key: value
+                    for key, value in doc.items()
+                    if key not in {"id", "text", "title", "source_uri"}
+                },
+            )
+            for doc in documents or ()
+        )
     )
+    service = ingest or current_ingest()
+    receipt = await service.submit(_BINDING, change_set)
+    return {"nodes": receipt.affected_count, "edges": receipt.relationship_count}
 
 
 # --------------------------------------------------------------------------- #
@@ -85,11 +134,10 @@ def _slug(value: str) -> str:
     )
 
 
-def ingest_sos_entities(
+async def ingest_sos_entities(
     companies: list[dict[str, Any]],
     *,
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map OpenCorporates company records → ``:BusinessEntity`` (+ ``:Jurisdiction``) nodes.
 
@@ -131,7 +179,7 @@ def ingest_sos_entities(
             relationships.append(
                 {"source": eid, "target": jid, "relationship": "incorporatedIn"}
             )
-    return ingest_entities(entities, relationships, client=client, graph=graph)
+    return await ingest_entities(entities, relationships, ingest=ingest)
 
 
 def _optional(value: str) -> str | None:
@@ -169,7 +217,7 @@ def _ein_application_entities(
     ]
 
 
-def ingest_ein_application(
+async def ingest_ein_application(
     legal_name: str,
     *,
     trade_name: str = "",
@@ -179,12 +227,11 @@ def ingest_ein_application(
     closing_month_tax_year: str = "",
     filing_status: str = "",
     draft_text: str = "",
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Map a drafted IRS SS-4 → ``:EINApplication`` (+ ``:BusinessEntity``) nodes."""
     if not (legal_name or "").strip():
-        return ingest_entities([], client=client, graph=graph)
+        return await ingest_entities([], ingest=ingest)
     slug = _slug(legal_name)
     aid = f"legal:einapplication:{slug}"
     bid = f"legal:businessentity:{slug}"
@@ -199,28 +246,27 @@ def ingest_ein_application(
     }
     entities = _ein_application_entities(legal_name, aid, bid, slug, fields)
     relationships = [{"source": aid, "target": bid, "relationship": "appliesForEntity"}]
-    return ingest_entities(entities, relationships, client=client, graph=graph)
+    return await ingest_entities(entities, relationships, ingest=ingest)
 
 
-def ingest_filing_document(
+async def ingest_filing_document(
     doc_id: str,
     text: str,
     *,
     title: str = "",
     doc_type: str = "legal_document",
     source_uri: str = "",
-    client: Any | None = None,
-    graph: str | None = None,
+    ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
     """Store a rendered filing / statute summary as a searchable ``:Document`` node."""
     if not doc_id or not (text or "").strip():
-        return ingest_documents([], client=client, graph=graph)
+        return await ingest_documents([], ingest=ingest)
     doc: dict[str, Any] = {"id": doc_id, "text": text, "doc_type": doc_type}
     if title:
         doc["title"] = title
     if source_uri:
         doc["source_uri"] = source_uri
-    return ingest_documents([doc], client=client, graph=graph)
+    return await ingest_documents([doc], ingest=ingest)
 
 
 # --------------------------------------------------------------------------- #
@@ -265,8 +311,8 @@ def search_companies(
     """List real OpenCorporates company records for a state + name (best-effort).
 
     Returns ``[]`` when no ``OPENCORPORATES_API_TOKEN`` is set or the request fails,
-    so the source query returns no records rather than fabricating data. Native
-    ingestion remains authoritative whenever records are available.
+    so the source query returns no records rather than fabricating data. Ingestion
+    remains authoritative whenever records are available.
     """
     token = os.getenv("OPENCORPORATES_API_TOKEN", "").strip()
     if _missing_search_inputs(token, state, entity_name):
