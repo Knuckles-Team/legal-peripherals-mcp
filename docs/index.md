@@ -27,7 +27,6 @@ deterministic MCP tools an agent can call. It provides:
 - **Statute catalog & charter templates** — programmatic lookup of state statutory
   default rules and corporate / LLC charter templates.
 
-The package also ships an optional **Pydantic-AI agent server** (`legal-peripherals-agent`)
 for conversational use of the same tool surface.
 
 ## Explore the documentation
@@ -35,7 +34,6 @@ for conversational use of the same tool surface.
 <div class="grid cards" markdown>
 
 - :material-rocket-start: **[Installation](installation.md)** — pip, source, extras, and the prebuilt Docker image.
-- :material-server-network: **[Deployment](deployment.md)** — run the MCP server, the agent server, Docker Compose, Caddy + Technitium.
 - :material-console: **[Usage](usage.md)** — the MCP tools, the `Api` client, and example prompts.
 - :material-sitemap: **[Overview](overview.md)** — the three core domains and how they fit together.
 - :material-tag-multiple: **[Concepts](concepts.md)** — the `CONCEPT:LEGAL-*` registry.
@@ -56,5 +54,4 @@ legal-peripherals-mcp --transport streamable-http --host 0.0.0.0 --port 8000
 ```
 
 See **[Installation](installation.md)** and **[Deployment](deployment.md)** for the
-full matrix (PyPI extras, Docker image, all transports, the agent server, reverse
 proxy, DNS).

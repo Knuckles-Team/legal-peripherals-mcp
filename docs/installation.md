@@ -23,15 +23,8 @@ The base install is intentionally minimal. Install the extra for what the operat
 | Extra | Install | Pulls in |
 |---|---|---|
 | `mcp` | `pip install "legal-peripherals-mcp[mcp]"` | FastMCP MCP-server runtime (`agent-connector-sdk`) |
-| `agent` | `pip install "legal-peripherals-mcp[agent]"` | Pydantic-AI agent server + Logfire tracing |
 | `all` | `pip install "legal-peripherals-mcp[all]"` | Everything above |
 | `test` | `pip install "legal-peripherals-mcp[test]"` | `pytest`, `pytest-asyncio`, `pytest-cov`, `pytest-xdist` |
-
-```bash
-# Typical: run the MCP server and the agent server
-pip install "legal-peripherals-mcp[all]"
-playwright install chromium
-```
 
 ## From source
 

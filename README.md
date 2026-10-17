@@ -9,7 +9,6 @@
 A premium Model Context Protocol (MCP) server powered by **FastMCP** that exposes highly robust tools for automating legal operations and filing compliance. This server handles state-level Secretary of State (SOS) entities, off-hours compliant IRS Form SS-4 EIN drafting/scheduling, and corporate/LLC charter templates lookup.
 
 > **Documentation** — Installation, deployment, usage across the API and MCP
-> interfaces, and the optional agent server are maintained in the
 > [official documentation](https://knuckles-team.github.io/legal-peripherals-mcp/).
 
 ---
@@ -232,7 +231,6 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
-
 <!-- BEGIN agent-connector-sdk-deployment (generated; do not edit between markers) -->
 
 ## Deploy with `agent-connector-sdk-deployment`
@@ -246,7 +244,6 @@ to **"deploy `legal-peripherals-mcp` with agent-connector-sdk-deployment"**.
 | Install mode | Command |
 |------|---------|
 | Installed package | `uv tool install "legal-peripherals-mcp[mcp]"`, then run `legal-peripherals-mcp` |
-| Editable source | `uv pip install -e ".[agent]"`, then run `legal-peripherals-mcp` |
 | Immutable container | deploy `registry.example.invalid/legal-peripherals-mcp@sha256:<digest>` through the operator-selected orchestrator |
 
 The repository embeds no deployment profile, credential value, certificate path, or
@@ -306,7 +303,6 @@ configured secret provider.
 | `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
 | `PROVIDER` | `openai` | LLM provider for the agent |
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
-| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
 _15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-connector-sdk set — do not edit._
 <!-- ENV-VARS-TABLE:END -->

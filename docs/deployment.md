@@ -63,13 +63,10 @@ Store the real remote URL, outbound identity reference, and TLS-profile referenc
 <!-- END GENERATED: deployment-options -->
 
 This page covers running `legal-peripherals-mcp` as a long-lived server: the
-transports, a Docker Compose stack, the optional agent server, putting it behind a
 Caddy reverse proxy, and giving it a DNS name with Technitium.
 
 > `legal-peripherals-mcp` ships an **MCP server** (console script
-> `legal-peripherals-mcp`) and an optional **Pydantic-AI agent server** (console
 > script `legal-peripherals-agent`). The MCP server is a typed, deterministic tool
-> surface a policy router / agent calls; the agent server wraps that surface for
 > conversational use.
 
 ## Run the MCP server
@@ -155,37 +152,6 @@ services:
 cp .env.example .env          # then edit the LEGAL_PERIPHERALS_* values
 docker compose -f docker/compose.yml up -d
 docker compose -f docker/compose.yml logs -f
-```
-
-## Agent server
-
-The agent server (`legal-peripherals-agent`) wraps the MCP tool surface in a
-Pydantic-AI agent with an optional web UI. It connects to a running MCP server via
-`--mcp-url` (or loads tools directly from `mcp_config.json`):
-
-```bash
-pip install "legal-peripherals-mcp[agent]"
-
-legal-peripherals-agent \
-  --mcp-url http://legal-peripherals-mcp:8000/mcp \
-  --host 0.0.0.0 --port 8001 --web
-```
-
-The same published image runs the agent by overriding the entrypoint. Add a second
-service to the operator's Compose stack that wires `MCP_URL` at the running MCP server:
-
-```yaml
-  legal-peripherals-agent:
-    image: example/legal-peripherals-mcp@sha256:<digest>
-    container_name: legal-peripherals-agent
-    entrypoint: ["legal-peripherals-agent"]
-    command: ["--host", "0.0.0.0", "--port", "8001", "--mcp-url", "http://legal-peripherals-mcp:8000/mcp"]
-    environment:
-      - MCP_URL=http://legal-peripherals-mcp:8000/mcp
-    depends_on:
-      - legal-peripherals-mcp
-    ports:
-      - "8001:8001"
 ```
 
 ## Behind a Caddy reverse proxy

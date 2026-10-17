@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools>=80.9.0", "wheel",]
+requires = [ "setuptools>=84.0.0", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 requires-python = ">=3.12, <3.15"
-dependencies = [ "agent-connector-sdk>=0.2.0,<1.0.0", "playwright>=1.61.0", "requests>=2.32.0",]
+dependencies = [ "agent-connector-sdk>=0.2.0,<1.0.0", "playwright>=1.64.0", "requests>=2.34.2",]
 [[project.authors]]
 name = "Project Maintainers"
 email = "maintainers@users.noreply.github.com"
@@ -86,7 +86,7 @@ where = [ ".", ]
 
 [tool.uv]
 override-dependencies = [
-    "fastmcp-slim[client,server]>=4.0.0b1",
+    "fastmcp-slim[client,server]>=4.1.0",
 ]
 
 

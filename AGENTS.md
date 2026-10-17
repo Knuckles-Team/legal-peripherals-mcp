@@ -44,43 +44,6 @@ pytest -v
 ## Project Structure
 
 ### File Tree
-```text
-.
-├── .bumpversion.cfg
-├── .gitignore
-├── .pre-commit-config.yaml
-├── AGENTS.md
-├── CHANGELOG.md
-├── LICENSE
-├── README.md
-├── pyproject.toml
-├── requirements.txt
-├── docs
-│   ├── concepts.md
-│   ├── index.md
-│   └── overview.md
-├── docker
-│   └── compose.yml
-└── legal_peripherals_mcp
-    ├── __init__.py
-    ├── agent_server.py
-    ├── api_client.py
-    ├── auth.py
-    ├── compliance_kb.py
-    ├── mcp
-    │   ├── __init__.py
-    │   ├── mcp_compliance.py
-    │   ├── mcp_ein.py
-    │   ├── mcp_sos.py
-    │   └── mcp_statute.py
-    ├── ontology
-    │   ├── compliance.ttl
-    │   ├── compliance_*.ttl (8 per-framework modules)
-    │   ├── domain_*.ttl (6 legal practice-area domain modules)
-    │   └── legal.ttl
-    ├── skills (21: 3 entity-formation + 18 domain)
-    └── mcp_server.py
-```
 
 ## Concept Registry
 
