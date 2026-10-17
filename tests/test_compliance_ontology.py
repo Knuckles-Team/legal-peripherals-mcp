@@ -4,7 +4,7 @@ CONCEPT:LP-OS.governance.compliance-ontology-suite. Validates that ``compliance.
 (the shared upper ontology) and each ``compliance_<framework>.ttl`` module parse as
 valid Turtle, declare the expected classes/individuals, import the upper ontology,
 reuse (never redefine) the shared hub/legal.ttl classes, and are discoverable through
-the package's ``agent_utilities.ontology_providers`` entry-point directory. Also proves
+the package's ``agent_connector_sdk.ontology_providers`` entry-point directory. Also proves
 the asset -> data-classification -> regulation join the suite exists for (e.g. a PHI
 asset resolves to HIPAA via :classifiedAs/:appliesToDataClass, and directly via
 :governedBy).
@@ -59,7 +59,7 @@ EXPECTED_UPPER_PROPERTIES = {
 }
 
 # Classes/properties this suite must REUSE (not redefine) — already declared in
-# agent_utilities' hub ontology.ttl or this package's legal.ttl.
+# agent_connector_sdk' hub ontology.ttl or this package's legal.ttl.
 SHARED_CLASSES_NOT_REDEFINED = {
     "Regulation",
     "DataClassification",

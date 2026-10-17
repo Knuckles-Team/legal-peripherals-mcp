@@ -1,8 +1,8 @@
 {
-  "algorithm": "agent-utilities:mcp-tool-schema-compat:v1",
+  "algorithm": "agent-connector-sdk:mcp-tool-contract-compat:v2",
   "connector": "legal-peripherals-mcp",
   "schema_version": "1",
   "tools": {
-    "legal_ingest_sos_entities": "55bccda5f05345d5cc0b80634b492547dc1e29ce7950b5557943283c55261f6b"
+    "legal_ingest_sos_entities": "e331d237e83ba93803fcf3e9c6bb1a4ace8aaf31d5789683f2ea82815f6a470e"
   }
 }

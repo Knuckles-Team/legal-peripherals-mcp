@@ -1,6 +1,6 @@
 # legal-peripherals-mcp
 
-Legal compliance automation **API + MCP Server** for the agent-utilities ecosystem
+Legal compliance automation **API + MCP Server** for the agent-connector-sdk ecosystem
 — Secretary of State entity lookups, IRS Form SS-4 (EIN) drafting with off-hours
 filing compliance, and corporate / LLC statute and charter templates.
 

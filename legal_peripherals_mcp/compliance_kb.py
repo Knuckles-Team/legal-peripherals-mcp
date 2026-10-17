@@ -1,7 +1,7 @@
 """CONCEPT:LP-OS.governance.legal-compliance-kb Ontology-native compliance lookups.
 
 Loads every ``*.ttl`` module bundled under ``legal_peripherals_mcp/ontology`` — the
-same directory the ``agent_utilities.ontology_providers`` hub federates — into one
+same directory the ``agent_connector_sdk.ontology_providers`` hub federates — into one
 in-memory rdflib graph and answers structured queries against it. No external API,
 no fabrication: every answer traces back to a declared ontology triple (a
 :Regulation, :Obligation, :Control, ...). Backs the ``legal_compliance_lookup``
@@ -45,7 +45,7 @@ def _graph():
 
     ``rdflib`` is a last-resort Python fallback kept out of the slim MCP serving
     image (the engine's native RDF/SPARQL surface is the primary path — see
-    agent-utilities' dependency-discipline note on the semantic-web stack);
+    agent-connector-sdk' dependency-discipline note on the semantic-web stack);
     this reports an honest unavailability notice instead of crashing when
     it isn't installed.
     """

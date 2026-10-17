@@ -15,11 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 requires-python = ">=3.12, <3.15"
-dependencies = [
-    "agent-connector-sdk>=0.1.0,<1.0.0",
-    "agent-utilities>=2.0.0,<3.0.0",
-    "playwright>=1.61.0",
-]
+dependencies = [ "agent-connector-sdk>=0.2.0,<1.0.0", "playwright>=1.61.0", "requests>=2.32.0",]
 [[project.authors]]
 name = "Project Maintainers"
 email = "maintainers@users.noreply.github.com"
@@ -28,38 +24,36 @@ email = "maintainers@users.noreply.github.com"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "agent-utilities[mcp]>=2.0.0,<3.0.0", ]
-agent = [ "agent-utilities[agent-runtime,logfire]>=2.0.0,<3.0.0", ]
+mcp = [ "agent-connector-sdk>=0.2.0,<1.0.0",]
 # Local rdflib-backed compliance-ontology lookup (legal_compliance_lookup tool /
 # compliance_kb.py). Kept out of core `dependencies` and out of the slim `mcp`
-# image per the fleet's owl-extra discipline (agent-utilities' dependency
+# image per the fleet's owl-extra discipline (agent-connector-sdk' dependency
 # discipline: rdflib/owlready2/pyshacl are a last-resort Python fallback, import-lazy, never
 # on the lean serving plane); the engine's native RDF/SPARQL surface is the
 # primary path. Without it the tool degrades honestly instead of crashing.
 ontology = [ "rdflib>=7.6.0", ]
-all = [ "agent-utilities[mcp,agent-runtime,logfire]>=2.0.0,<3.0.0", "rdflib>=7.6.0", ]
+all = [ "agent-connector-sdk>=0.2.0,<1.0.0", "rdflib>=7.6.0",]
 test = [ "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-cov>=7.1.0", "rdflib>=7.6.0", ]
 
 [project.scripts]
 legal-peripherals-mcp = "legal_peripherals_mcp.mcp_server:mcp_server"
-legal-peripherals-agent = "legal_peripherals_mcp.agent_server:agent_server"
 
-[project.entry-points."agent_utilities.skill_providers"]
+[project.entry-points."agent_connector_sdk.skill_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.skills"
 
-[project.entry-points."agent_utilities.prompt_providers"]
+[project.entry-points."agent_connector_sdk.prompt_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.prompts"
 
 # CONCEPT:AU-KG.ontology.package-federation-migration — federate this package's OWL/RDF ontology module into the
-# agent-utilities hub (legal). Resolved via iter_provider_dirs like the
+# agent-connector-sdk hub (legal). Resolved via iter_provider_dirs like the
 # skill/prompt providers; the hub globs every *.ttl in the dir.
-[project.entry-points."agent_utilities.ontology_providers"]
+[project.entry-points."agent_connector_sdk.ontology_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.ontology"
 
 # CONCEPT:AU-KG.ingest.mcp-tool-connector — Tier-1 declarative source presets so
-# the KG can sync this package's records with no agent-utilities code. Resolved via
+# the KG can sync this package's records with no agent-connector-sdk code. Resolved via
 # iter_provider_dirs; the hub globs connectors/mcp_source_presets.json.
-[project.entry-points."agent_utilities.source_connector_providers"]
+[project.entry-points."agent_connector_sdk.source_connector_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.connectors"
 
 [tool.uv.workspace]
@@ -95,9 +89,6 @@ override-dependencies = [
     "fastmcp-slim[client,server]>=4.0.0b1",
 ]
 
-[tool.uv.sources]
-agent-connector-sdk = { path = ".uv-workspace-siblings/agent-connector-sdk", editable = true }
-agent-utilities = { path = ".uv-workspace-siblings/agent-utilities", editable = true }
 
 [tool.pipelines_hooks.ste]
 exempt = ["specs/*", "specs/**/*"]
