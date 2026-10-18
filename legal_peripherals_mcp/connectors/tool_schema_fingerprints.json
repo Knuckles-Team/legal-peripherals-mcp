@@ -3,6 +3,6 @@
   "connector": "legal-peripherals-mcp",
   "schema_version": "1",
   "tools": {
-    "legal_ingest_sos_entities": "e331d237e83ba93803fcf3e9c6bb1a4ace8aaf31d5789683f2ea82815f6a470e"
+    "legal_ingest_sos_entities": ""
   }
 }
