@@ -1,9 +1,9 @@
 {
   "api_version": "arbora.io/v1",
   "artifacts": {
-    "connector_manifest.yml": "8826f88fb77d3fdf685220e30f6ae4b53545d76349c692c30cbc7eb6cbbe2c3b",
+    "connector_manifest.yml": "3c6eb1c840eae23b600e9c02879156416a8c7bbe80e9f13b1d7536416aaadbf5",
     "legal_peripherals_mcp/connectors/mcp_source_presets.json": "79b8a2e2397b85dd3a1210e6c389a2b9b4489e46346529aa7f1b1136d2edc821",
-    "legal_peripherals_mcp/connectors/tool_schema_fingerprints.json": "5b3530ecf8af26864fa84a0707ae9815b2cd76e77bec6a16cba22a83d5b45ae5",
+    "legal_peripherals_mcp/connectors/tool_schema_fingerprints.json": "fa9b53e1ebff0a09953297b678b3098d2fb0dc91d5996e4c9399e876d667c290",
     "legal_peripherals_mcp/ontology/compliance.ttl": "d9eaae06064301d3f9497ee23f267e47d3473c3aaf6ea006480aefd3a4997c41",
     "legal_peripherals_mcp/ontology/compliance_bsa_aml.ttl": "abea43fbf295425410bc76093c2c3f54c070285a848ea85a61b39f077bbe0171",
     "legal_peripherals_mcp/ontology/compliance_cfpb.ttl": "cbbe9278b429d308dce967b5874e016a110700ffad3d0ff46c65335be3164491",
