@@ -48,7 +48,9 @@ class _SdkMediaStore:
         name: str = "",
         extra: dict[str, Any] | None = None,
     ) -> Any:
-        asset = MediaAsset(data=data, mime_type=mime_type, name=name, properties=extra or {})
+        asset = MediaAsset(
+            data=data, mime_type=mime_type, name=name, properties=extra or {}
+        )
         ingest_changes(_BINDING, ChangeSet(media=(asset,)))
         digest = hashlib.sha256(data).hexdigest()
 
