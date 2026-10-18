@@ -14,7 +14,7 @@ This file acts as a machine-readable README for AI coding agents collaborating o
 
 ## Tech Stack & Architecture
 - **Language**: Python >= 3.11
-- **Ecosystem**: `agent-utilities` Dynamic Facade
+- **Ecosystem**: `agent-connector-sdk` Dynamic Facade
 - **MCP Server**: FastMCP (stdio and HTTP support)
 - **Key Files**:
   - `legal_peripherals_mcp/mcp_server.py`: FastMCP entry points and tool registration.
@@ -44,43 +44,6 @@ pytest -v
 ## Project Structure
 
 ### File Tree
-```text
-.
-├── .bumpversion.cfg
-├── .gitignore
-├── .pre-commit-config.yaml
-├── AGENTS.md
-├── CHANGELOG.md
-├── LICENSE
-├── README.md
-├── pyproject.toml
-├── requirements.txt
-├── docs
-│   ├── concepts.md
-│   ├── index.md
-│   └── overview.md
-├── docker
-│   └── compose.yml
-└── legal_peripherals_mcp
-    ├── __init__.py
-    ├── agent_server.py
-    ├── api_client.py
-    ├── auth.py
-    ├── compliance_kb.py
-    ├── mcp
-    │   ├── __init__.py
-    │   ├── mcp_compliance.py
-    │   ├── mcp_ein.py
-    │   ├── mcp_sos.py
-    │   └── mcp_statute.py
-    ├── ontology
-    │   ├── compliance.ttl
-    │   ├── compliance_*.ttl (8 per-framework modules)
-    │   ├── domain_*.ttl (6 legal practice-area domain modules)
-    │   └── legal.ttl
-    ├── skills (21: 3 entity-formation + 18 domain)
-    └── mcp_server.py
-```
 
 ## Concept Registry
 
@@ -222,10 +185,10 @@ alone).
 Working in parallel with other sessions/worktrees? **Reserve a concept id before you write its `CONCEPT:` marker** so two sessions never collide:
 
 ```bash
-agent-utilities --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
+agent-connector-sdk --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
 ```
 
-Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-utilities/concept_coordination/>
+Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-connector-sdk/concept_coordination/>
 <!-- END concept-coordination (generated) -->
 
 ## Version & lockfile drift edict (keep the version mirrors AND the lock in sync)
@@ -253,14 +216,14 @@ is what Dependabot flags. Rules:
 ## Upstream currency edict — target the newest release; a pin is a hypothesis, not a fact (READ BEFORE capping, deferring, or opt-in-gating an upgrade)
 
 This governs how this repository treat **other people's** releases, deprecations, and version caps in
-this repo (fleet-wide edict, propagated from `agent-utilities/AGENTS.md`).
+this repo (fleet-wide edict, propagated from `agent-connector-sdk/AGENTS.md`).
 
 1. **Latest by default.** Target the newest upstream release -- including a pre-release
    where the ecosystem has already moved onto it. Sitting on an old major because the
    upgrade is work is not a reason to defer it.
 2. **A conservative upstream pin is a hypothesis, not a fact -- test it, don't inherit
    it.** Upstream maintainers cap defensively (an unreleased major, an untested surface)
-   as often as they cap for a known break. Worked example (from `agent-utilities`):
+   as often as they cap for a known break. Worked example (from `agent-connector-sdk`):
    `pydantic-ai-slim` 2.18.0 declared `fastmcp-slim[client]>=3.3.0` with no upper bound;
    2.19.0 added `<4` purely as a defensive guard while fastmcp 4 was still pre-release --
    not because of an observed incompatibility. Blocking an upgrade on that kind of cap

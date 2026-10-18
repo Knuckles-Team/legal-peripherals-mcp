@@ -52,7 +52,6 @@ api = get_client()        # configured entirely from the environment / .env
 
 ## As an agent
 
-The optional agent server exposes the same tool surface conversationally. Start it
 against a running MCP server and interact through its web UI or API:
 
 ```bash

@@ -9,7 +9,6 @@
 A premium Model Context Protocol (MCP) server powered by **FastMCP** that exposes highly robust tools for automating legal operations and filing compliance. This server handles state-level Secretary of State (SOS) entities, off-hours compliant IRS Form SS-4 EIN drafting/scheduling, and corporate/LLC charter templates lookup.
 
 > **Documentation** — Installation, deployment, usage across the API and MCP
-> interfaces, and the optional agent server are maintained in the
 > [official documentation](https://knuckles-team.github.io/legal-peripherals-mcp/).
 
 ---
@@ -97,7 +96,7 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
 > **Install the connector-focused `[mcp]` extra.** Examples use `legal-peripherals-mcp[mcp]` to add
-> FastMCP / FastAPI through `agent-utilities[mcp]`; the required Agent Utilities core
+> FastMCP / FastAPI through `agent-connector-sdk`; the required Agent Connector SDK core
 > still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
 > enables model orchestration.
 
@@ -131,7 +130,7 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 }
 ```
 
-Runtime references require an alias-aware launcher such as GraphOS. Other
+Runtime references require an alias-aware launcher such as Arbora. Other
 launchers must omit those entries and inject the resolved values through their
 own runtime secret boundary.
 
@@ -232,28 +231,26 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
+<!-- BEGIN agent-connector-sdk-deployment (generated; do not edit between markers) -->
 
-<!-- BEGIN agent-utilities-deployment (generated; do not edit between markers) -->
+## Deploy with `agent-connector-sdk-deployment`
 
-## Deploy with `agent-utilities-deployment`
-
-Provision this package with the consolidated **`agent-utilities-deployment`**
+Provision this package with the consolidated **`agent-connector-sdk-deployment`**
 workflow. It selects an installed-package, editable-source, or immutable-container
 path; records only runtime secret and TLS-profile references in `AgentConfig`; and
 runs doctor, registration, policy, observability, and rollback gates. Ask your agent
-to **"deploy `legal-peripherals-mcp` with agent-utilities-deployment"**.
+to **"deploy `legal-peripherals-mcp` with agent-connector-sdk-deployment"**.
 
 | Install mode | Command |
 |------|---------|
 | Installed package | `uv tool install "legal-peripherals-mcp[mcp]"`, then run `legal-peripherals-mcp` |
-| Editable source | `uv pip install -e ".[agent]"`, then run `legal-peripherals-mcp` |
 | Immutable container | deploy `registry.example.invalid/legal-peripherals-mcp@sha256:<digest>` through the operator-selected orchestrator |
 
 The repository embeds no deployment profile, credential value, certificate path, or
 environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
 configured secret provider.
 
-<!-- END agent-utilities-deployment -->
+<!-- END agent-connector-sdk-deployment -->
 
 ## Environment Variables
 
@@ -279,7 +276,7 @@ configured secret provider.
 | `TLS_PROFILE_REF` | `secret://transport/provider` | Direct runtime profile reference |
 | `TLS_PROFILES_REF` | `secret://transport/catalog` | Named runtime profile catalog |
 
-#### Inherited agent-utilities variables (apply to every connector)
+#### Inherited agent-connector-sdk variables (apply to every connector)
 
 | Variable | Example | Description |
 |----------|---------|-------------|
@@ -306,9 +303,8 @@ configured secret provider.
 | `MCP_URL` | `http://localhost:8000/mcp` | URL of the MCP server the agent connects to |
 | `PROVIDER` | `openai` | LLM provider for the agent |
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
-| `ENABLE_WEB_UI` | `True` | Serve the AG-UI web interface |
 
-_15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-utilities set — do not edit._
+_15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-connector-sdk set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
 
 <!-- GOVERNED-CAPABILITY:START -->
@@ -324,5 +320,5 @@ historical per-task skill wrappers.
 Runtime endpoints, credentials, certificate trust, tenant identity, retention,
 and observability policy are deployment inputs and are never packaged values.
 See [Configuration, trust, and privacy](docs/configuration.md) before enabling a
-network transport, connector ingestion, GraphOS delegation, or trace export.
+network transport, connector ingestion, Arbora delegation, or trace export.
 <!-- GOVERNED-CAPABILITY:END -->

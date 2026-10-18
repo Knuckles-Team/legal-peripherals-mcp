@@ -13,7 +13,7 @@
 # gets this module's own IRI.
 #
 # Deliberately REUSES rather than redefines what already exists:
-#   - hub (agent_utilities ontology.ttl): :Regulation, :DataClassification, :governedBy,
+#   - hub (agent_connector_sdk ontology.ttl): :Regulation, :DataClassification, :governedBy,
 #     :classifiedAs, :Organization, :System, :Server, :GovernedEntity, :Policy.
 #   - this package (legal.ttl): :Jurisdiction, :Statute, :FederalStatute, :StateStatute,
 #     :RegulatoryFiling, :BusinessEntity, :LLCFormationFiling, :CorporateGovernanceDoc,
@@ -30,7 +30,7 @@
 # an :Attestation (:attestsTo) is the durable evidence that an :Obligation or :Control was met.
 #
 # Extending the suite (GDPR, SOX, PCI-DSS, FedRAMP/NIST, GLBA, …): drop a new
-# compliance_<name>.ttl into this directory — the agent_utilities.ontology_providers hub
+# compliance_<name>.ttl into this directory — the agent_connector_sdk.ontology_providers hub
 # loader globs every *.ttl here automatically, no code changes required. Each new module
 # should: (1) declare its own owl:Ontology IRI under http://knuckles.team/kg/legal-compliance-
 # <name> that owl:imports <http://knuckles.team/kg/legal-compliance>; (2) declare one

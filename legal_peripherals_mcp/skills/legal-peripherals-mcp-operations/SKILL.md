@@ -2,13 +2,13 @@
 name: legal-peripherals-mcp-operations
 skill_type: skill
 description: >-
-  Operate legal-peripherals-mcp through its governed MCP and GraphOS capabilities, including legal peripherals compliance watch, legal peripherals contract escalation, legal peripherals contract lifecycle, legal peripherals contract review, legal peripherals dsar response, legal peripherals ein filing, legal peripherals employment policy drafting, legal peripherals entity compliance tracker, and related workflows. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
+  Operate legal-peripherals-mcp through its governed MCP and Arbora capabilities, including legal peripherals compliance watch, legal peripherals contract escalation, legal peripherals contract lifecycle, legal peripherals contract review, legal peripherals dsar response, legal peripherals ein filing, legal peripherals employment policy drafting, legal peripherals entity compliance tracker, and related workflows. Use when a request requires this provider's read, change, automation, ingestion, troubleshooting, or evidence workflows.
 license: MIT
 ---
 
 # Legal Peripherals Mcp Operations
 
-Use the provider's governed MCP tools through GraphOS delegation.
+Use the provider's governed MCP tools through Arbora delegation.
 
 ## Workflow
 

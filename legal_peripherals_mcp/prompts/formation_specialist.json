@@ -4,7 +4,7 @@
   "schema_version": "1.0",
   "prompt_version": "0.1.0",
   "source": "legal-peripherals-mcp",
-  "extends": "agent-utilities:base",
+  "extends": "agent-connector-sdk:base",
   "compose": "append",
   "description": "Business-formation & filing-compliance specialist: Secretary-of-State entity lookup, IRS SS-4/EIN drafting, and statutory-default/charter templates over the legal-peripherals-mcp MCP server.",
   "metadata": {
