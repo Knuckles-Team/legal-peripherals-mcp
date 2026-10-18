@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Legal compliance automation API + MCP Server — Secretary of State lookups, IRS Form SS-4 (EIN) drafting, and statute / charter templates for the agent-utilities ecosystem.">
+        <meta name="description" content="Legal compliance automation API + MCP Server — Secretary of State lookups, IRS Form SS-4 (EIN) drafting, and statute / charter templates for the agent-connector-sdk ecosystem.">
       
       
       
@@ -826,8 +826,7 @@ in AgentConfig; certificate verification is mandatory:</p>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">api</span> <span class="o">=</span> <span class="n">get_client</span><span class="p">()</span>        <span class="c1"># configured entirely from the environment / .env</span>
 </span></code></pre></div>
 <h2 id="as-an-agent">As an agent<a class="headerlink" href="#as-an-agent" title="Permanent link">&para;</a></h2>
-<p>The optional agent server exposes the same tool surface conversationally. Start it
-against a running MCP server and interact through its web UI or API:</p>
+<p>against a running MCP server and interact through its web UI or API:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>legal-peripherals-agent<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--mcp-url<span class="w"> </span>http://localhost:8000/mcp<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8001</span><span class="w"> </span>--web
