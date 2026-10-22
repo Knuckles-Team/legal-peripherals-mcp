@@ -114,6 +114,20 @@ STATUTORY_DATABASE = {
 }
 
 
+def statute_coverage() -> dict[str, object]:
+    """The statute sources this connector answers from: covered pairs and topics."""
+    pairs = sorted(STATUTORY_DATABASE)
+    topics = sorted(
+        {t for entry in STATUTORY_DATABASE.values() for t in entry} - {"template"}
+    )
+    return {
+        "states": sorted(_VALID_STATES),
+        "entity_types": sorted(VALID_ENTITY_TYPES),
+        "specific_rules": [{"state": st, "entity_type": et} for st, et in pairs],
+        "topics": topics,
+    }
+
+
 class StatuteLookupError(Exception):
     """Raised when a statute lookup fails validation."""
 

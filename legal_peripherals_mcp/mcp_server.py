@@ -16,16 +16,19 @@ from legal_peripherals_mcp.auth import get_client
 from legal_peripherals_mcp.mcp.mcp_compliance import handle_compliance_lookup
 from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
-from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules
+from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules, statute_coverage
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 logger = get_logger(name="legal_peripherals_mcp")
+
+#: Annotations for a lookup that reads and changes nothing.
+READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True}
 
 
 def register_sos_tools(mcp: Any) -> None:
     """Register the Secretary of State entity-lookup tool (tag: sos)."""
 
-    @mcp.tool()
+    @mcp.tool(annotations={**READ_ONLY, "openWorldHint": True})
     async def sos_entity_lookup(
         state: str, entity_name: str, entity_id: str | None = None, ctx: Any = None
     ) -> str:
@@ -76,7 +79,7 @@ def register_ein_tools(mcp: Any) -> None:
 def register_statute_tools(mcp: Any) -> None:
     """Register the state statute / charter-template lookup tool (tag: statute)."""
 
-    @mcp.tool()
+    @mcp.tool(annotations={**READ_ONLY, "openWorldHint": False})
     async def lookup_statute_rules(
         state: str, entity_type: str, topic: str, ctx: Any = None
     ) -> str:
@@ -89,6 +92,11 @@ def register_statute_tools(mcp: Any) -> None:
             client=client,
             ctx=ctx,
         )
+
+    @mcp.tool(annotations={**READ_ONLY, "openWorldHint": False})
+    async def legal_list_statute_coverage() -> dict:
+        """List the states, entity types and topics that statute lookups answer from."""
+        return statute_coverage()
 
 
 def register_ingest_tools(mcp: Any) -> None:
@@ -145,7 +153,7 @@ def register_ingest_tools(mcp: Any) -> None:
 def register_compliance_tools(mcp: Any) -> None:
     """Register the action-routed compliance-ontology lookup tool (tag: compliance)."""
 
-    @mcp.tool()
+    @mcp.tool(annotations={**READ_ONLY, "openWorldHint": False})
     async def legal_compliance_lookup(
         action: str,
         regulation: str = "",

@@ -7,7 +7,6 @@
         "legal_peripherals_mcp.mcp_server"
       ],
       "env": {
-        "MCP_TOOL_MODE": "intent",
         "BYPASS_IRS_FILING_HOURS": "False",
         "COMPLIANCETOOL": "True",
         "EINTOOL": "True",

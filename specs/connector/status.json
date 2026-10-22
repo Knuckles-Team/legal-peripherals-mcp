@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "spec_id": "CONN-LEGAL-PERIPHERALS-MCP",
+  "owner_repo": "legal-peripherals-mcp",
+  "delivery_state": "SPECIFIED",
+  "requirement_ids": [
+    "CONN-LEGAL-PERIPHERALS-MCP-R001"
+  ],
+  "requirements": [
+    {
+      "id": "CONN-LEGAL-PERIPHERALS-MCP-R001",
+      "title": "Read-only lookups",
+      "delivery_state": "SPECIFIED",
+      "landed_in": [],
+      "verified_by": []
+    }
+  ]
+}
