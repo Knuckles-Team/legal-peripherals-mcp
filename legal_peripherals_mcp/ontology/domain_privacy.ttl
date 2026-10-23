@@ -50,10 +50,8 @@ DataClassification individuals.""" ;
     rdfs:comment "A record of a data-processing activity (a Record of Processing Activities / RoPA entry) — the unit a use-case triage or PIA evaluates." ;
     rdfs:subClassOf bfo:0000031 .
 
-:ConsentRecord a owl:Class ;
-    rdfs:label "Consent Record" ;
-    rdfs:comment "A durable record of the legal basis (consent, legitimate interest, contract, legal obligation) relied on for a ProcessingActivity." ;
-    rdfs:subClassOf bfo:0000031 .
+:ConsentRecord a owl:Class .
+
 
 #################################################################
 # object / datatype properties — new

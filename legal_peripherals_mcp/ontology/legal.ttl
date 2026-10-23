@@ -210,8 +210,8 @@
 
 <http://knuckles.team/kg/legal> a owl:Ontology ;
     rdfs:label "Legal Domain Ontology" ;
-    rdfs:comment "Legal domain ontology aligned to LKIF-Core and Akoma Ntoso." ;
-    owl:imports <http://knuckles.team/kg> .
+    rdfs:comment "Legal domain ontology aligned to LKIF-Core and Akoma Ntoso." .
+
 
 :ContractClause a owl:Class ;
     rdfs:label "Contract Clause" ;
@@ -321,4 +321,3 @@ produced by the ein drafting tool. A specialisation of a regulatory filing.""" ;
     rdfs:comment "Links an EIN application to the business entity it is filed for." ;
     rdfs:domain :EINApplication ;
     rdfs:range :BusinessEntity .
-
