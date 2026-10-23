@@ -2,7 +2,7 @@
   "schema_version": 2,
   "spec_id": "CONN-LEGAL-PERIPHERALS-MCP",
   "owner_repo": "legal-peripherals-mcp",
-  "delivery_state": "SPECIFIED",
+  "delivery_state": "VERIFIED",
   "requirement_ids": [
     "CONN-LEGAL-PERIPHERALS-MCP-R001"
   ],
@@ -10,9 +10,13 @@
     {
       "id": "CONN-LEGAL-PERIPHERALS-MCP-R001",
       "title": "Read-only lookups",
-      "delivery_state": "SPECIFIED",
-      "landed_in": [],
-      "verified_by": []
+      "delivery_state": "VERIFIED",
+      "landed_in": [
+        "9862c0cdc69c"
+      ],
+      "verified_by": [
+        "tests/test_read_only_tools.py:9"
+      ]
     }
   ]
 }
