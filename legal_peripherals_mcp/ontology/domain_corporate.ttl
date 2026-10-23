@@ -31,10 +31,8 @@ practice area, cross-linked to the LLC compliance module.""" ;
 # classes — new
 #################################################################
 
-:Company a owl:Class ;
-    rdfs:label "Company" ;
-    rdfs:comment "A business organization. Formally types legal.ttl's previously-undeclared :Company range/domain (:filedBy, :governedByDoc, :ownsIP, :hasBeneficiary)." ;
-    rdfs:subClassOf :Organization .
+:Company a owl:Class .
+
 
 :BoardResolution a owl:Class ;
     rdfs:label "Board Resolution" ;

@@ -18,7 +18,7 @@ from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules, statute_coverage
 
-__version__ = "2.3.2"
+__version__ = "2.3.3"
 logger = get_logger(name="legal_peripherals_mcp")
 
 #: Annotations for a lookup that reads and changes nothing.

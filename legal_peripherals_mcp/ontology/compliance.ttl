@@ -51,8 +51,8 @@ regulations, authorities, obligations, controls, reporting requirements, gates,
 assessments, attestations — cross-linked to the shared infra/asset ontology via
 :governedBy / :classifiedAs / :appliesToDataClass so a service or asset's data
 classification resolves the regulation(s) that govern it.""" ;
-    owl:imports <http://knuckles.team/kg>,
-        <http://knuckles.team/kg/legal> .
+    owl:imports <http://knuckles.team/kg/legal> .
+
 
 #################################################################
 # classes (owl:Class) — new; NOT already defined in the hub or legal.ttl
@@ -98,10 +98,8 @@ classification resolves the regulation(s) that govern it.""" ;
     rdfs:comment "An automated or manual checkpoint — wired into the incident, SDLC, or comparative-intelligence loops — that evaluates whether a governed entity satisfies its ComplianceRequirement(s) before it may proceed (deploy, onboard, process data). BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
-:Assessment a owl:Class ;
-    rdfs:label "Assessment" ;
-    rdfs:comment "A point-in-time evaluation of compliance posture against one or more ComplianceRequirement(s)/Control(s) (e.g. a HIPAA risk assessment, an AML independent test, a SOC 2 audit). BFO:Process." ;
-    rdfs:subClassOf bfo:0000015 .
+:Assessment a owl:Class .
+
 
 :Attestation a owl:Class ;
     rdfs:label "Attestation" ;

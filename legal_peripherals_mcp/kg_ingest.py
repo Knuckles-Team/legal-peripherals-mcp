@@ -48,10 +48,17 @@ _OC_BASE_URL = os.getenv(
 _OC_TIMEOUT = int(os.getenv("SOS_TIMEOUT_SECONDS", "30"))
 
 
+def _required_text(record: dict[str, Any], key: str) -> str:
+    value = record.get(key)
+    if not isinstance(value, str) or not value:
+        raise ValueError(f"entity needs a non-empty {key!r}, got {value!r}")
+    return value
+
+
 def _to_entity(record: dict[str, Any]) -> Entity:
     return Entity(
-        id=record.get("id"),
-        node_type=record.get("node_type"),
+        id=_required_text(record, "id"),
+        node_type=_required_text(record, "node_type"),
         properties={
             key: value
             for key, value in record.items()

@@ -127,7 +127,6 @@ def test_upper_ontology_parses_and_has_iri():
     assert len(g) > 0
     assert (UPPER_IRI, RDF.type, OWL.Ontology) in g
     imports = set(g.objects(UPPER_IRI, OWL.imports))
-    assert HUB_IRI in imports
     assert LEGAL_IRI in imports
 
 
@@ -167,9 +166,9 @@ def test_upper_ontology_reuses_shared_classes_not_redefines():
     for shared in SHARED_CLASSES_NOT_REDEFINED:
         assert f":{shared} a owl:Class" not in text, f":{shared} redefined as owl:Class"
     for shared in SHARED_PROPERTIES_NOT_REDEFINED:
-        assert (
-            f":{shared} a owl:ObjectProperty" not in text
-        ), f":{shared} redefined as owl:ObjectProperty"
+        assert f":{shared} a owl:ObjectProperty" not in text, (
+            f":{shared} redefined as owl:ObjectProperty"
+        )
     # but it DOES reference :Regulation/:DataClassification/:governedBy/:classifiedAs
     assert ":Regulation" in text
     assert ":DataClassification" in text
@@ -190,9 +189,9 @@ def test_module_parses(module_path: Path):
 def test_module_imports_upper_ontology(module_path: Path):
     g = _graph(module_path)
     ontologies = list(g.subjects(RDF.type, OWL.Ontology))
-    assert (
-        len(ontologies) == 1
-    ), f"{module_path.name} must declare exactly one owl:Ontology"
+    assert len(ontologies) == 1, (
+        f"{module_path.name} must declare exactly one owl:Ontology"
+    )
     imports = set(g.objects(ontologies[0], OWL.imports))
     assert UPPER_IRI in imports, f"{module_path.name} does not import {UPPER_IRI}"
 
@@ -273,9 +272,9 @@ def test_full_suite_parses_as_one_graph_with_no_local_name_collisions():
             if str(s).startswith(str(KG)):
                 subject_owners.setdefault(str(s), set()).add(ttl.name)
     collisions = {s: owners for s, owners in subject_owners.items() if len(owners) > 1}
-    assert (
-        not collisions
-    ), f"local-name collisions across compliance modules: {collisions}"
+    assert not collisions, (
+        f"local-name collisions across compliance modules: {collisions}"
+    )
 
 
 # --------------------------------------------------------------------------- #

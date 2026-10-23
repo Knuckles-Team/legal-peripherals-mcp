@@ -30,10 +30,8 @@ FLSA compliance module.""" ;
 # classes — new
 #################################################################
 
-:Employee a owl:Class ;
-    rdfs:label "Employee" ;
-    rdfs:comment "A natural person in an employment relationship. Formally types legal.ttl's previously-undeclared :Employee range (:involvesEmployee)." ;
-    rdfs:subClassOf :Person .
+:Employee a owl:Class .
+
 
 :EmploymentContract a owl:Class ;
     rdfs:label "Employment Contract" ;
