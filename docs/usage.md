@@ -47,7 +47,7 @@ in AgentConfig; certificate verification is mandatory:
 ```python
 from legal_peripherals_mcp.auth import get_client
 
-api = get_client()        # configured entirely from the environment / .env
+api = get_client()  # configured entirely from the environment / .env
 ```
 
 ## As an agent

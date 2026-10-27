@@ -413,7 +413,9 @@ async def _run_sos_check(path: int, inputs: StructuringInputs) -> str:
         print(
             f"{BLUE}Confirming active registration / status for existing LLC '{inputs.llc_name}' in state={inputs.state}...{RESET}"
         )
-    sos_result = await handle_sos_lookup(state=inputs.state, entity_name=inputs.llc_name)
+    sos_result = await handle_sos_lookup(
+        state=inputs.state, entity_name=inputs.llc_name
+    )
     print(f"{GREEN}SOS Response:{RESET}\n{sos_result}\n")
     return sos_result
 
@@ -593,7 +595,9 @@ Dated: {datetime.now().strftime("%Y-%m-%d")}
 def _draft_new_trust_agreement(inputs: StructuringInputs, drafts_dir: str) -> str:
     """Paths 1/2's Phase 3: draft a brand-new Trust Agreement."""
     print_section("PHASE 3: Trust Agreement Formulation")
-    print(f"{BLUE}Drafting brand-new Trust Agreement for '{inputs.trust_name}'...{RESET}")
+    print(
+        f"{BLUE}Drafting brand-new Trust Agreement for '{inputs.trust_name}'...{RESET}"
+    )
 
     trust_agreement = f"""========================================================================
                       TRUST AGREEMENT
@@ -645,7 +649,9 @@ def _run_trust_drafting_phase(
             dividend_resolution_file=dividend_resolution_file,
         )
     if path in (1, 2):
-        return TrustDraftFiles(trust_file=_draft_new_trust_agreement(inputs, drafts_dir))
+        return TrustDraftFiles(
+            trust_file=_draft_new_trust_agreement(inputs, drafts_dir)
+        )
     print_section("PHASE 3: Trust Agreement (Skipped)")
     print(
         f"{YELLOW}Trust already established. Skipping Trust Agreement drafting.{RESET}"
@@ -741,9 +747,7 @@ def _draft_ownership_transition_documents(
    Assignor: {inputs.current_owner_name}              Assignee: {inputs.trust_name}
                                           By: {inputs.trustee_name}, Trustee
 """
-    assignment_file = os.path.join(
-        drafts_dir, "assignment_of_membership_interest.txt"
-    )
+    assignment_file = os.path.join(drafts_dir, "assignment_of_membership_interest.txt")
     with open(assignment_file, "w") as f:
         f.write(assignment_agreement)
     print(
@@ -874,9 +878,7 @@ def _draft_sole_member_operating_agreement(
    By: ___________________________ ({inputs.trustee_name}, Trustee)
    Dated: {datetime.now().strftime("%Y-%m-%d")}
 """
-    operating_agreement_file = os.path.join(
-        drafts_dir, "llc_operating_agreement.txt"
-    )
+    operating_agreement_file = os.path.join(drafts_dir, "llc_operating_agreement.txt")
     with open(operating_agreement_file, "w") as f:
         f.write(llc_operating_agreement)
     print(
