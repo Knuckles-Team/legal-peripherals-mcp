@@ -5,7 +5,8 @@ import sys
 from typing import Any
 
 from agent_connector_sdk.config import load_config
-from agent_connector_sdk.mcp.server import create_mcp_server
+from agent_connector_sdk.connector import build_server
+from agent_connector_sdk.connector_identity import connector_version
 from agent_connector_sdk.mcp.tool_surface import register_tool_surface
 from fastmcp.utilities.logging import get_logger
 from starlette.requests import Request
@@ -18,7 +19,7 @@ from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
 from legal_peripherals_mcp.mcp.mcp_sos import handle_sos_lookup
 from legal_peripherals_mcp.mcp.mcp_statute import handle_statute_rules, statute_coverage
 
-__version__ = "2.3.3"
+__version__ = connector_version("legal_peripherals_mcp")
 logger = get_logger(name="legal_peripherals_mcp")
 
 #: Annotations for a lookup that reads and changes nothing.
@@ -181,13 +182,14 @@ def register_compliance_tools(mcp: Any) -> None:
         )
 
 
-def get_mcp_instance() -> Any:
+def get_mcp_instance(*, command_args=None) -> Any:
     load_config()
-    args, mcp, middlewares = create_mcp_server(
-        name="Legal Peripherals MCP",
-        version=__version__,
-        instructions="Legal Peripherals MCP Server - Automate state registrations and filing compliance.",
-    )
+    args, mcp = build_server("legal_peripherals_mcp", command_args=command_args)
+    return mcp, args, list(mcp.middleware)
+
+
+def register_server_surface(mcp: Any) -> None:
+    """Reuse the existing health route and domain registrars without provider calls."""
 
     @mcp.custom_route("/health", methods=["GET"])
     async def health_check(request: Request) -> JSONResponse:
@@ -201,10 +203,6 @@ def get_mcp_instance() -> Any:
         tools_module=sys.modules[__name__],
     )
     logger.info("Registered condensed tool surfaces: count=%d", len(registered_tags))
-
-    for mw in middlewares:
-        mcp.add_middleware(mw)
-    return mcp, args, middlewares
 
 
 def mcp_server() -> None:
