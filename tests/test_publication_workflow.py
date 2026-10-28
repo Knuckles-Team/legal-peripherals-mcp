@@ -35,13 +35,12 @@ def test_only_main_starts_package_publication(ref, expected):
 
 def test_each_package_publisher_uses_the_shared_pipelines():
     jobs = _workflow("pipeline.yml")["jobs"]
-    assert set(jobs) == {"publish-pypi"}
+    assert set(jobs) == {"publish-pypi", "publish-docker"}
     assert jobs["publish-pypi"]["uses"].endswith("/python_pipeline.yml@main")
-    assert _workflow("pipeline.yml")[True]["push"]["paths-ignore"] == [
-        "docker/Dockerfile",
-        ".bumpversion.cfg",
-        "specs/**/status.json",
-    ]
+    assert jobs["publish-pypi"]["with"] == {"connector": True}
+    assert jobs["publish-docker"]["needs"] == "publish-pypi"
+    assert jobs["publish-docker"]["uses"].endswith("/container_pipeline.yml@main")
+    assert jobs["publish-docker"]["with"] == {"render_connector": True}
     container = _workflow("container-release.yml")
     assert container[True]["push"] == {
         "branches": ["main"],
@@ -60,22 +59,3 @@ def test_each_package_publisher_uses_the_shared_pipelines():
         "distribution": "legal-peripherals-mcp",
         "module": "legal_peripherals_mcp",
     }
-
-
-@pytest.mark.parametrize(
-    "path, expected",
-    [
-        ("docker/Dockerfile", False),
-        (".bumpversion.cfg", False),
-        ("specs/sdk/status.json", False),
-        ("legal_peripherals_mcp/specs/openapi.json", True),
-        ("pyproject.toml", True),
-        ("uv.lock", True),
-        ("legal_peripherals_mcp/mcp_server.py", True),
-        ("README.md", True),
-        (".github/workflows/pipeline.yml", True),
-    ],
-)
-def test_package_publication_skips_only_container_pin_refresh(path, expected):
-    ignores = _workflow("pipeline.yml")[True]["push"]["paths-ignore"]
-    assert (not any(fnmatchcase(path, pattern) for pattern in ignores)) is expected
