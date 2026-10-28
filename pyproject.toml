@@ -17,8 +17,8 @@ classifiers = [
 requires-python = ">=3.12"
 dependencies = [ "scion-sdk[mcp]>=0.5.8,<1.0.0", "playwright>=1.64.0", "requests>=2.34.2",]
 [[project.authors]]
-name = "Project Maintainers"
-email = "maintainers@users.noreply.github.com"
+name = "Repository Maintainers"
+email = "maintainers@knuckles.team"
 
 [project.license]
 text = "MIT"
@@ -80,6 +80,10 @@ override-dependencies = [
     "fastmcp-slim[client,server]>=4.1.0",
 ]
 
+
+[tool.pipelines.codespell]
+# ND is the North Dakota state abbreviation in the SOS/statute state lists.
+ignore_words = ["nd"]
 
 [tool.pipelines_hooks.ste]
 exempt = ["specs/*", "specs/**/*"]

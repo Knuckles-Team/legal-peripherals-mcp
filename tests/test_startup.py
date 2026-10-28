@@ -9,5 +9,5 @@ def test_startup():
     import legal_peripherals_mcp
 
     # Match a semver string rather than a hardcoded literal so this test doesn't drift
-    # out of sync with .bumpversion.cfg-driven releases.
+    # out of sync with the pyproject.toml version.
     assert re.fullmatch(r"\d+\.\d+\.\d+", legal_peripherals_mcp.__version__)
