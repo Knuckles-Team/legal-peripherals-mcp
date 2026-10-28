@@ -9,7 +9,7 @@
 ```mermaid
 xychart-beta
     title "Domain Scores"
-    x-axis ["Project Anal", "Dependency A", "Codebase Opt", "Security Ana", "Test Coverag", "Documentatio", "Architecture", "Concept Trac", "Linting & Fo", "Pre-Commit C", "Test Executi", "Directory Or", "Version Sync", "Changelog Au", "Pytest Quali", "Environment "]
+    x-axis ["Project Anal", "Dependency A", "Codebase Opt", "Security Ana", "Test Coverag", "Documentatio", "Architecture", "Concept Trac", "Linting & Form", "Pre-Commit C", "Test Executi", "Directory Or", "Version Sync", "Changelog Au", "Pytest Quali", "Environment "]
     y-axis "Score" 0 --> 100
     bar [74, 100, 87, 100, 80, 86, 85, 86, 100, 97, 100, 100, 60, 75, 84, 100]
 ```
@@ -68,7 +68,7 @@ xychart-beta
 
 | Criterion | Points | Evidence | Reasoning |
 |-----------|--------|----------|-----------|
-| dependency_freshness | 100 | `source=${WORKSPACE_ROOT}/agent-packages/agents/legal-peri` | Audited 6 deps (6 installed, 0 constraint-only). 0 major, 0 minor, 0 patch updat |
+| dependency_freshness | 100 | `source=${WORKSPACE_ROOT}/agent-packages/agents/legal-peri` | Audited 6 deps (6 installed, 0 constraint-only). 0 major, 0 minor, 0 patch updates |
 
 ---
 
@@ -117,7 +117,7 @@ xychart-beta
 
 | Criterion | Points | Evidence | Reasoning |
 |-----------|--------|----------|-----------|
-| documentation_quality | 86 | `{"README.md": {"exists": true, "missing": ["overview", "usag` | Audited 6 standard docs + docs/ directory. 1 broken references, 5 docs present.  |
+| documentation_quality | 86 | `{"README.md": {"exists": true, "missing": ["overview", "usage` | Audited 6 standard docs + docs/ directory. 1 broken references, 5 docs present.  |
 
 **Findings:**
 - README.md is short (129 lines) — consider expanding
