@@ -1,5 +1,5 @@
 site_name: "legal-peripherals-mcp"
-site_description: "Legal compliance automation API + MCP Server — Secretary of State lookups, IRS Form SS-4 (EIN) drafting, and statute / charter templates for the agent-connector-sdk ecosystem."
+site_description: "Legal compliance automation API + MCP Server — Secretary of State lookups, IRS Form SS-4 (EIN) drafting, and statute / charter templates for the scion-sdk ecosystem."
 site_url: "https://knuckles-team.github.io/legal-peripherals-mcp/"
 repo_name: "Knuckles-Team/legal-peripherals-mcp"
 repo_url: "https://github.com/Knuckles-Team/legal-peripherals-mcp"

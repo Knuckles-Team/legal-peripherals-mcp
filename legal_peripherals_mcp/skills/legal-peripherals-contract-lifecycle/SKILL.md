@@ -12,7 +12,7 @@ description: >-
 license: MIT
 tags: [legal-peripherals, commercial, contract-lifecycle, renewal, amendment, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 

@@ -13,7 +13,7 @@ description: >-
 license: MIT
 tags: [legal-peripherals, employment, international-expansion, eor, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 

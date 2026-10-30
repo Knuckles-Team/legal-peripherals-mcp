@@ -7,7 +7,7 @@ business entities (``:BusinessEntity`` + ``:Jurisdiction``) and IRS EIN applicat
 ``:Document`` nodes for semantic search. Raw filing files (drafts) go in as blobs via
 :mod:`legal_peripherals_mcp.kg_media`.
 
-Everything rides ``agent_connector_sdk.ingest`` -- the generated ``SourceIngest``
+Everything rides ``scion_sdk.ingest`` -- the generated ``SourceIngest``
 client, not a local ingestion helper. Node ids follow ``legal:<class>:<externalId>``
 and every ``node_type`` matches a class the package's ``ontology`` federates.
 """
@@ -19,7 +19,7 @@ import os
 import re
 from typing import Any
 
-from agent_connector_sdk.ingest import (
+from scion_sdk.ingest import (
     ChangeSet,
     Document,
     Entity,

@@ -4,11 +4,11 @@ import asyncio
 import sys
 from typing import Any
 
-from agent_connector_sdk.config import load_config
-from agent_connector_sdk.connector import build_server
-from agent_connector_sdk.connector_identity import connector_version
-from agent_connector_sdk.mcp.tool_surface import register_tool_surface
 from fastmcp.utilities.logging import get_logger
+from scion_sdk.config import load_config
+from scion_sdk.connector import build_server
+from scion_sdk.connector_identity import connector_version
+from scion_sdk.mcp.tool_surface import register_tool_surface
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 

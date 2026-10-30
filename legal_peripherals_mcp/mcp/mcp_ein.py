@@ -7,7 +7,7 @@ import re
 import zoneinfo
 from datetime import datetime, timedelta
 
-from agent_connector_sdk.utilities import to_boolean
+from scion_sdk.utilities import to_boolean
 
 logger = logging.getLogger(__name__)
 

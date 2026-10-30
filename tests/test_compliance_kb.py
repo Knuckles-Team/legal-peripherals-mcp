@@ -13,12 +13,12 @@ import pytest
 
 pytest.importorskip("rdflib")
 
-# `compliance_kb` is pure stdlib + rdflib (no agent_connector_sdk dependency), so it's
-# imported at module level; `mcp_compliance` pulls in agent_connector_sdk for logging,
+# `compliance_kb` is pure stdlib + rdflib (no scion_sdk dependency), so it's
+# imported at module level; `mcp_compliance` pulls in scion_sdk for logging,
 # so its import is deferred into the two handler tests below that specifically
 # need it — keeping the rest of this file collectible even in an environment where
-# agent_connector_sdk itself is mid-refactor/broken (see AGENTS.md's pre-authorized
-# `agent_connector_sdk-MCPAgent` skip).
+# scion_sdk itself is mid-refactor/broken (see AGENTS.md's pre-authorized
+# `scion_sdk-MCPAgent` skip).
 from legal_peripherals_mcp import compliance_kb
 
 

@@ -1,11 +1,11 @@
-from agent_connector_sdk.connector_identity import connector_version
+from scion_sdk.connector_identity import connector_version
 
 __version__ = connector_version("legal_peripherals_mcp")
 _MCP_AVAILABLE = True
 
 
-from agent_connector_sdk.connector import Connector
-from agent_connector_sdk.connector_hooks import RegistrationContext
+from scion_sdk.connector import Connector
+from scion_sdk.connector_hooks import RegistrationContext
 
 
 def _register_legacy_surface(context: RegistrationContext) -> None:

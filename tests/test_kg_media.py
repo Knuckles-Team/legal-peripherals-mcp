@@ -8,7 +8,7 @@ CONCEPT:AU-KG.ingest.list-durable-media.
 from __future__ import annotations
 
 import pytest
-from agent_connector_sdk.ingest import IngestUnavailableError
+from scion_sdk.ingest import IngestUnavailableError
 
 from legal_peripherals_mcp.kg_media import ingest_filing_file
 

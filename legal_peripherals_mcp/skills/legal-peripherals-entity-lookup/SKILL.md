@@ -13,7 +13,7 @@ description: >-
 license: MIT
 tags: [legal-peripherals, sos, secretary-of-state, company-registry, kg-ingest, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 

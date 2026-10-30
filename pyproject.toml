@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 requires-python = ">=3.12"
-dependencies = [ "scion-sdk[mcp]>=0.5.9,<0.6.0", "playwright>=1.64.0", "requests>=2.34.2",]
+dependencies = [ "scion-sdk[mcp]>=0.6.0,<0.7.0", "playwright>=1.64.0", "requests>=2.34.2",]
 [[project.authors]]
 name = "Repository Maintainers"
 email = "maintainers@knuckles.team"
@@ -24,27 +24,27 @@ email = "maintainers@knuckles.team"
 text = "MIT"
 
 [project.optional-dependencies]
-mcp = [ "scion-sdk[mcp]>=0.5.9,<0.6.0",]
+mcp = [ "scion-sdk[mcp]>=0.6.0,<0.7.0",]
 # Local rdflib-backed compliance-ontology lookup (legal_compliance_lookup tool /
 # compliance_kb.py). Kept out of core `dependencies` and out of the slim `mcp`
-# image per the fleet's owl-extra discipline (agent-connector-sdk' dependency
+# image per the fleet's owl-extra discipline (scion-sdk' dependency
 # discipline: rdflib/owlready2/pyshacl are a last-resort Python fallback, import-lazy, never
 # on the lean serving plane); the engine's native RDF/SPARQL surface is the
 # primary path. Without it the tool degrades honestly instead of crashing.
 ontology = [ "rdflib>=7.6.0", ]
-all = [ "scion-sdk[mcp]>=0.5.9,<0.6.0", "rdflib>=7.6.0",]
+all = [ "scion-sdk[mcp]>=0.6.0,<0.7.0", "rdflib>=7.6.0",]
 test = [ "pytest-xdist>=3.8.0", "pytest>=9.1.1", "pytest-asyncio>=1.4.0", "pytest-cov>=7.1.0", "rdflib>=7.6.0", ]
 
 [project.scripts]
 legal-peripherals-mcp = "legal_peripherals_mcp.mcp_server:mcp_server"
 
-[project.entry-points."agent_connector_sdk.prompt_providers"]
+[project.entry-points."scion_sdk.prompt_providers"]
 legal-peripherals-mcp = "legal_peripherals_mcp.prompts"
 
 # CONCEPT:AU-KG.ontology.package-federation-migration — federate this package's OWL/RDF ontology module into the
-# agent-connector-sdk hub (legal). Resolved via iter_provider_dirs like the
+# scion-sdk hub (legal). Resolved via iter_provider_dirs like the
 # skill/prompt providers; the hub globs every *.ttl in the dir.
-[project.entry-points."agent_connector_sdk.connector"]
+[project.entry-points."scion_sdk.connector"]
 legal-peripherals-mcp = "legal_peripherals_mcp:connector"
 
 [tool.uv.workspace]
