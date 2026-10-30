@@ -12,7 +12,7 @@ import logging
 import os
 
 import requests
-from agent_connector_sdk.utilities import to_boolean
+from scion_sdk.utilities import to_boolean
 
 logger = logging.getLogger(__name__)
 

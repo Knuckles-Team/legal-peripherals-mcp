@@ -96,7 +96,7 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
 > **Install the connector-focused `[mcp]` extra.** Examples use `legal-peripherals-mcp[mcp]` to add
-> FastMCP / FastAPI through `agent-connector-sdk`; the required Agent Connector SDK core
+> FastMCP / FastAPI through `scion-sdk`; the required Scion SDK core
 > still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
 > enables model orchestration.
 
@@ -231,15 +231,15 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
-<!-- BEGIN agent-connector-sdk-deployment (generated; do not edit between markers) -->
+<!-- BEGIN scion-sdk-deployment (generated; do not edit between markers) -->
 
-## Deploy with `agent-connector-sdk-deployment`
+## Deploy with `scion-sdk-deployment`
 
-Provision this package with the consolidated **`agent-connector-sdk-deployment`**
+Provision this package with the consolidated **`scion-sdk-deployment`**
 workflow. It selects an installed-package, editable-source, or immutable-container
 path; records only runtime secret and TLS-profile references in `AgentConfig`; and
 runs doctor, registration, policy, observability, and rollback gates. Ask your agent
-to **"deploy `legal-peripherals-mcp` with agent-connector-sdk-deployment"**.
+to **"deploy `legal-peripherals-mcp` with scion-sdk-deployment"**.
 
 | Install mode | Command |
 |------|---------|
@@ -250,7 +250,7 @@ The repository embeds no deployment profile, credential value, certificate path,
 environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
 configured secret provider.
 
-<!-- END agent-connector-sdk-deployment -->
+<!-- END scion-sdk-deployment -->
 
 ## Environment Variables
 
@@ -276,7 +276,7 @@ configured secret provider.
 | `TLS_PROFILE_REF` | `secret://transport/provider` | Direct runtime profile reference |
 | `TLS_PROFILES_REF` | `secret://transport/catalog` | Named runtime profile catalog |
 
-#### Inherited agent-connector-sdk variables (apply to every connector)
+#### Inherited scion-sdk variables (apply to every connector)
 
 | Variable | Example | Description |
 |----------|---------|-------------|
@@ -304,7 +304,7 @@ configured secret provider.
 | `PROVIDER` | `openai` | LLM provider for the agent |
 | `MODEL_ID` | `gpt-4o` | Model id for the agent |
 
-_15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared agent-connector-sdk set — do not edit._
+_15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared scion-sdk set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
 
 <!-- GOVERNED-CAPABILITY:START -->

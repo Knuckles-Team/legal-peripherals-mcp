@@ -3,7 +3,7 @@
 CONCEPT:AU-KG.ingest.list-durable-media. Drafted filing artifacts (SS-4 drafts, trust
 indentures, operating agreements — the ``drafts/*.txt`` files this package produces) are
 stored as content-addressed **blobs** with a ``:MediaAsset`` graph node carrying the
-filing metadata, in ONE cross-modal ACID commit, via ``agent_connector_sdk.ingest``'s
+filing metadata, in ONE cross-modal ACID commit, via ``scion_sdk.ingest``'s
 ``MediaAsset``/``ChangeSet`` + the synchronous ``ingest_changes`` bridge. This makes the
 raw filing bytes — not just a filesystem path — durable, deduped, and queryable inside
 the knowledge graph.
@@ -19,7 +19,7 @@ import mimetypes
 import os
 from typing import Any
 
-from agent_connector_sdk.ingest import (
+from scion_sdk.ingest import (
     ChangeSet,
     IngestBinding,
     MediaAsset,
@@ -36,7 +36,7 @@ _BINDING = IngestBinding(connector=_SOURCE, stream=_DOMAIN, media_type="document
 
 
 class _SdkMediaStore:
-    """Adapts ``agent_connector_sdk.ingest`` to the old ``MediaStore.store_media(...)`` shape."""
+    """Adapts ``scion_sdk.ingest`` to the old ``MediaStore.store_media(...)`` shape."""
 
     @staticmethod
     def store_media(
@@ -63,7 +63,7 @@ class _SdkMediaStore:
 
 
 def _media_store() -> Any:
-    """Build the ``agent_connector_sdk.ingest``-backed media-store adapter."""
+    """Build the ``scion_sdk.ingest``-backed media-store adapter."""
     return _SdkMediaStore()
 
 

@@ -16,7 +16,7 @@ description: >-
 license: MIT
 tags: [legal-peripherals, cross-domain, compliance-watch, deadlines, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 
@@ -91,7 +91,7 @@ sweep — no per-vertical log file to reconcile.
 ## Gotchas
 - This skill's KG-native lookup describes what the ontology DECLARES is
   trackable; a live source connector is still needed to populate real
-  instance data per org (see `agent-connector-sdk-source-integration`) — don't
+  instance data per org (see `scion-sdk-source-integration`) — don't
   present the illustrative example individuals in the `.ttl` files as real
   deadlines.
 - Don't let the consolidated sweep bury domain-specific nuance — group by

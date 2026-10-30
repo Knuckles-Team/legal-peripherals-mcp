@@ -5,7 +5,7 @@ CONCEPT:LP-OS.governance.legal-domain-suite. Validates that each
 ``domain_regulatory.ttl`` / ``domain_employment.ttl`` / ``domain_commercial.ttl`` /
 ``domain_privacy.ttl`` / ``domain_corporate.ttl`` / ``domain_litigation.ttl`` module
 parses as valid Turtle, imports ``compliance.ttl`` + ``legal.ttl``, declares its
-expected classes, is discoverable through the ``agent_connector_sdk.ontology_providers``
+expected classes, is discoverable through the ``scion_sdk.ontology_providers``
 entry-point directory, and cross-links into the existing compliance/legal ontology
 (FLSA, HIPAA, LLC) rather than floating disconnected. Mirrors
 ``test_compliance_ontology.py``'s style.

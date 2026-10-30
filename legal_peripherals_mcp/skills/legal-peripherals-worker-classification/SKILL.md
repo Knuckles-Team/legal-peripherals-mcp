@@ -14,7 +14,7 @@ description: >-
 license: MIT
 tags: [legal-peripherals, employment, worker-classification, flsa, wage-hour, mcp]
 metadata:
-  author: Genius
+  author: Knuckles-Team
   version: '0.1.0'
 ---
 
