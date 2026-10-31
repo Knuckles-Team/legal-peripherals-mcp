@@ -919,7 +919,7 @@ wheels = [
 
 [[package]]
 name = "legal-peripherals-mcp"
-version = "2.3.5"
+version = "2.3.6"
 source = { editable = "." }
 dependencies = [
     { name = "playwright" },
