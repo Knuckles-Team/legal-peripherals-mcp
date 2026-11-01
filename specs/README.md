@@ -8,8 +8,9 @@ This repository owns the specs with the ID prefix `CONN-LEGAL-PERIPHERALS-MCP`. 
 
 ## Add a spec
 
-Read the existing specs first. Extend the spec that owns the behavior. Create a spec only for a capability that no spec owns. Copy [`_template/`](_template/) to `specs/<area>/`, set the ID to `CONN-LEGAL-PERIPHERALS-MCP` or `CONN-LEGAL-PERIPHERALS-MCP-<AREA>`, and add one index line below.
+Read the existing specs first. Extend the spec that owns the behavior. Create a spec only for a capability that no spec owns. Copy `.specify/templates/` to `specs/<area>/`, set the ID to `CONN-LEGAL-PERIPHERALS-MCP` or `CONN-LEGAL-PERIPHERALS-MCP-<AREA>`, and add one index line below.
 
 ## Local specifications
 
 - [CONN-LEGAL-PERIPHERALS-MCP](connector/spec.md): Read-only operations.
+- [`CONN-LEGAL-PERIPHERALS-MCP-CONNECTOR-CONTENT`](connector-content/spec.md) — The connector serves its packaged content.
