@@ -8,8 +8,7 @@
 
 <http://knuckles.team/kg/legal-compliance-flsa> a owl:Ontology ;
     rdfs:label "FLSA Compliance Module" ;
-    rdfs:comment "Fair Labor Standards Act — minimum wage, overtime, and payroll-recordkeeping obligations for covered employers." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "Fair Labor Standards Act — minimum wage, overtime, and payroll-recordkeeping obligations for covered employers." .
 
 :DOLWHD a :RegulatoryAuthority ;
     rdfs:label "DOL Wage and Hour Division" ;

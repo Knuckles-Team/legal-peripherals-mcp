@@ -48,13 +48,13 @@ requirement the entity-formation tools' ontology already declares.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup`. Entity lookups themselves use `SOSTOOL`/
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`). Entity lookups themselves use `SOSTOOL`/
 `EINTOOL`/`STATUTETOOL` (see `legal-peripherals-entity-lookup`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Pull `LLCFormationGovernance`'s full Obligation/Control/ReportingRequirement set |
+| `legal_get_regulation` | `regulation` | Pull `LLCFormationGovernance`'s full Obligation/Control/ReportingRequirement set |
 | `sos_entity_lookup` (existing) | — | Confirm current registry status before reporting "good standing" |
 | `lookup_statute_rules` (existing) | — | Confirm the specific state's report cadence/fee |
 | `legal_ingest_sos_entities` (existing) | — | Re-verify + re-ingest the entity's current SOS record |
@@ -62,7 +62,7 @@ for `legal_compliance_lookup`. Entity lookups themselves use `SOSTOOL`/
 ## Recipe
 1. Pull the general LLC compliance requirement set:
    ```
-   legal_compliance_lookup(action="regulation_detail", regulation="LLCFormationGovernance")
+   legal_get_regulation(regulation="LLCFormationGovernance")
    ```
    This returns `LLCAnnualReportObligation` → `LLCAnnualReportFilingControl`
    → `LLCAnnualReportRequirement`, plus `LLCRegisteredAgentControl` and

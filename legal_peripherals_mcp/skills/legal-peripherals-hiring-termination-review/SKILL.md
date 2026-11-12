@@ -38,12 +38,12 @@ at separation.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
-`legal_compliance_lookup` (FLSA final-pay obligations).
+the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) (FLSA final-pay obligations).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | FLSA obligations bearing on final pay / recordkeeping |
+| `legal_get_regulation` | `regulation` | FLSA obligations bearing on final pay / recordkeeping |
 
 ### Recipes
 **Hiring:** classify each restrictive covenant (`:RestrictiveCovenant`,
@@ -54,7 +54,7 @@ the jurisdiction has them (practice-specific, not modeled here).
 
 **Termination:** pull FLSA's obligations to confirm final-pay timing risk:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="FLSA")
+legal_get_regulation(regulation="FLSA")
 ```
 Flag high-risk terminations (recent complaint, protected-class proximity,
 performance-documentation gaps) and check severance/release language against

@@ -8,8 +8,7 @@
 
 <http://knuckles.team/kg/legal-compliance-cfpb> a owl:Ontology ;
     rdfs:label "CFPB Compliance Module" ;
-    rdfs:comment "CFPB consumer-financial-protection obligations — UDAAP prohibition, consumer-complaint handling, and lending-disclosure requirements." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "CFPB consumer-financial-protection obligations — UDAAP prohibition, consumer-complaint handling, and lending-disclosure requirements." .
 
 :CFPB a :RegulatoryAuthority ;
     rdfs:label "Consumer Financial Protection Bureau" ;

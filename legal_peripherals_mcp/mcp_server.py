@@ -12,7 +12,6 @@ from scion_sdk.mcp.tool_surface import register_tool_surface
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from legal_peripherals_mcp.api_client import Api
 from legal_peripherals_mcp.auth import get_client
 from legal_peripherals_mcp.mcp.mcp_compliance import handle_compliance_lookup
 from legal_peripherals_mcp.mcp.mcp_ein import handle_ein_draft
@@ -152,33 +151,51 @@ def register_ingest_tools(mcp: Any) -> None:
 
 
 def register_compliance_tools(mcp: Any) -> None:
-    """Register the action-routed compliance-ontology lookup tool (tag: compliance)."""
+    """Register the compliance-ontology lookup tools, one per query (tag: compliance)."""
 
-    @mcp.tool(annotations={**READ_ONLY, "openWorldHint": False})
-    async def legal_compliance_lookup(
-        action: str,
-        regulation: str = "",
-        sector: str = "",
-        data_class: str = "",
-        data_classes: str = "",
-        ctx: Any = None,
+    lookup = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True}
+    lookup["openWorldHint"] = False
+
+    @mcp.tool(annotations=lookup)
+    async def legal_list_compliance_domains(ctx: Any = None) -> dict:
+        """List the domains the bundled compliance and domain ontology suite covers."""
+        return await handle_compliance_lookup(action="list_domains", ctx=ctx)
+
+    @mcp.tool(annotations=lookup)
+    async def legal_list_regulations(
+        sector: str = "", data_class: str = "", ctx: Any = None
     ) -> dict:
-        """Query the bundled compliance + domain ontology suite (KG-native, no external API).
-
-        Actions: ``list_domains``, ``list_regulations`` (optional ``sector``/
-        ``data_class``), ``regulation_detail`` (needs ``regulation``), ``sector_lookup``
-        (needs ``sector``), ``dataclass_lookup`` (needs ``data_class``),
-        ``gate_requirements`` (needs comma-separated ``data_classes``, e.g. "PHI,PII")
-        — resolves the applicable Regulation(s) and required Control(s) the way a
-        ComplianceGate would for a governed entity carrying those data classifications.
-        """
+        """List regulations in the ontology suite, optionally filtered by sector or data class."""
         return await handle_compliance_lookup(
-            action=action,
-            regulation=regulation,
-            sector=sector,
-            data_class=data_class,
-            data_classes=data_classes,
-            ctx=ctx,
+            action="list_regulations", sector=sector, data_class=data_class, ctx=ctx
+        )
+
+    @mcp.tool(annotations=lookup)
+    async def legal_get_regulation(regulation: str, ctx: Any = None) -> dict:
+        """Return a regulation's authority, obligations, controls, penalties and reporting requirements."""
+        return await handle_compliance_lookup(
+            action="regulation_detail", regulation=regulation, ctx=ctx
+        )
+
+    @mcp.tool(annotations=lookup)
+    async def legal_lookup_sector(sector: str, ctx: Any = None) -> dict:
+        """Return the regulations that apply to an economic sector."""
+        return await handle_compliance_lookup(
+            action="sector_lookup", sector=sector, ctx=ctx
+        )
+
+    @mcp.tool(annotations=lookup)
+    async def legal_lookup_data_class(data_class: str, ctx: Any = None) -> dict:
+        """Return the regulations and controls that apply to one data classification."""
+        return await handle_compliance_lookup(
+            action="dataclass_lookup", data_class=data_class, ctx=ctx
+        )
+
+    @mcp.tool(annotations=lookup)
+    async def legal_gate_requirements(data_classes: str, ctx: Any = None) -> dict:
+        """Resolve the regulations and controls a compliance gate requires for comma-separated data classes such as "PHI,PII"."""
+        return await handle_compliance_lookup(
+            action="gate_requirements", data_classes=data_classes, ctx=ctx
         )
 
 
@@ -197,8 +214,6 @@ def register_server_surface(mcp: Any) -> None:
 
     registered_tags = register_tool_surface(
         mcp,
-        client_cls=Api,
-        get_client=get_client,
         service="legal-peripherals-mcp",
         tools_module=sys.modules[__name__],
     )

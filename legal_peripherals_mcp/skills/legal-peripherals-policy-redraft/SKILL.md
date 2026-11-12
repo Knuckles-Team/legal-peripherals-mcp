@@ -35,19 +35,19 @@ declares, so the draft's substance is traceable rather than freehand.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
-`legal_compliance_lookup`. This skill is drafting guidance — the agent
+the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`). This skill is drafting guidance — the agent
 composes the redline text; the tool supplies the grounded requirement list.
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Pull the Obligation/Control/Penalty set the redraft must satisfy |
-| `legal_compliance_lookup` | `gate_requirements` | Cross-check against every applicable Regulation when the policy spans data classes |
+| `legal_get_regulation` | `regulation` | Pull the Obligation/Control/Penalty set the redraft must satisfy |
+| `legal_gate_requirements` | `data_classes` | Cross-check against every applicable Regulation when the policy spans data classes |
 
 ## Recipes
 Pull the full obligation set for the regulation that changed:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="GDPR")
+legal_get_regulation(regulation="GDPR")
 ```
 For each `obligations[].controls[]` entry not yet reflected in current
 policy text, draft a redline clause implementing it — cite the control's

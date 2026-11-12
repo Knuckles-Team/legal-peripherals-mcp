@@ -8,8 +8,7 @@
 
 <http://knuckles.team/kg/legal-compliance-dodd-frank> a owl:Ontology ;
     rdfs:label "Dodd-Frank Compliance Module" ;
-    rdfs:comment "Dodd-Frank systemic-risk oversight (enhanced prudential standards, stress testing), the Volcker Rule, and the Title X consumer-protection mandate realized by the CFPB." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "Dodd-Frank systemic-risk oversight (enhanced prudential standards, stress testing), the Volcker Rule, and the Title X consumer-protection mandate realized by the CFPB." .
 
 :FSOC a :RegulatoryAuthority ;
     rdfs:label "Financial Stability Oversight Council" ;

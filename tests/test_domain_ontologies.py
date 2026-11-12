@@ -162,15 +162,16 @@ def test_module_parses(module_path: Path):
     sorted(DOMAIN_MODULES.items()),
     ids=lambda x: x if isinstance(x, str) else "",
 )
-def test_module_declares_ontology_iri_and_imports(module_name: str, spec: dict):
+def test_module_declares_ontology_iri_without_core_imports(
+    module_name: str, spec: dict
+):
     g = _graph(ONTOLOGY_DIR / module_name)
     onto_iri = rdflib.URIRef(spec["iri"])
     assert (onto_iri, RDF.type, OWL.Ontology) in g
-    imports = set(g.objects(onto_iri, OWL.imports))
-    assert UPPER_IRI in imports, (
-        f"{module_name} does not import the compliance upper ontology"
+    imports = {str(i) for i in g.objects(onto_iri, OWL.imports)}
+    assert not {i for i in imports if i.startswith("http://knuckles.team/kg")}, (
+        f"{module_name} imports the core ontology; extend core classes instead"
     )
-    assert LEGAL_IRI in imports, f"{module_name} does not import legal.ttl"
 
 
 @pytest.mark.parametrize(

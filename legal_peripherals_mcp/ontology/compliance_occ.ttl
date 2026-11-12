@@ -7,8 +7,7 @@
 
 <http://knuckles.team/kg/legal-compliance-occ> a owl:Ontology ;
     rdfs:label "OCC Compliance Module" ;
-    rdfs:comment "OCC prudential supervision — capital adequacy, safety-and-soundness examination, and BSA/AML program supervision for national banks and federal savings associations." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "OCC prudential supervision — capital adequacy, safety-and-soundness examination, and BSA/AML program supervision for national banks and federal savings associations." .
 
 :OCC a :RegulatoryAuthority ;
     rdfs:label "Office of the Comptroller of the Currency" ;

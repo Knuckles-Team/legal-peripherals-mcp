@@ -126,8 +126,7 @@ def test_upper_ontology_parses_and_has_iri():
     g = _graph(UPPER_TTL)
     assert len(g) > 0
     assert (UPPER_IRI, RDF.type, OWL.Ontology) in g
-    imports = set(g.objects(UPPER_IRI, OWL.imports))
-    assert LEGAL_IRI in imports
+    assert not set(g.objects(UPPER_IRI, OWL.imports))
 
 
 def test_upper_ontology_defines_expected_classes():
@@ -186,14 +185,16 @@ def test_module_parses(module_path: Path):
 
 
 @pytest.mark.parametrize("module_path", MODULE_TTLS, ids=lambda p: p.name)
-def test_module_imports_upper_ontology(module_path: Path):
+def test_module_declares_one_ontology_and_imports_no_core(module_path: Path):
     g = _graph(module_path)
     ontologies = list(g.subjects(RDF.type, OWL.Ontology))
     assert len(ontologies) == 1, (
         f"{module_path.name} must declare exactly one owl:Ontology"
     )
-    imports = set(g.objects(ontologies[0], OWL.imports))
-    assert UPPER_IRI in imports, f"{module_path.name} does not import {UPPER_IRI}"
+    imports = {str(i) for i in g.objects(ontologies[0], OWL.imports)}
+    assert not {i for i in imports if i.startswith("http://knuckles.team/kg")}, (
+        f"{module_path.name} imports the core ontology; extend core classes instead"
+    )
 
 
 @pytest.mark.parametrize("module_name,regulation", sorted(MODULE_REGULATIONS.items()))

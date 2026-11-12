@@ -36,12 +36,12 @@ Grounded in
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup` to confirm the applicable deadline.
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) to confirm the applicable deadline.
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Confirm the DSARFulfillmentControl + which Regulation(s) (GDPR/CCPA) govern this request |
+| `legal_get_regulation` | `regulation` | Confirm the DSARFulfillmentControl + which Regulation(s) (GDPR/CCPA) govern this request |
 
 ## Recipe
 1. **Identify the applicable regime.** If the requester is an EU/EEA data
@@ -49,8 +49,8 @@ for `legal_compliance_lookup` to confirm the applicable deadline.
    → CCPA (45 days, extendable once). Both regimes are declared in
    `domain_privacy.ttl`:
    ```
-   legal_compliance_lookup(action="regulation_detail", regulation="GDPR")
-   legal_compliance_lookup(action="regulation_detail", regulation="CCPA")
+   legal_get_regulation(regulation="GDPR")
+   legal_get_regulation(regulation="CCPA")
    ```
 2. **Verify identity** using a documented, proportionate method — never
    request MORE identifying information than needed to fulfill the request.

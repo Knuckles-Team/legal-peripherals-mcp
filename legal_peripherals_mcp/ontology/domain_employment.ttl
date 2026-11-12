@@ -22,9 +22,7 @@
     rdfs:comment """Employment lifecycle concepts — worker classification, hiring/
 termination review, handbook policy, internal investigations, leave tracking, and
 international expansion for the employment practice area, cross-linked to the
-FLSA compliance module.""" ;
-    owl:imports <http://knuckles.team/kg/legal-compliance>,
-        <http://knuckles.team/kg/legal> .
+FLSA compliance module.""" .
 
 #################################################################
 # classes — new
@@ -41,7 +39,8 @@ FLSA compliance module.""" ;
 :RestrictiveCovenant a owl:Class ;
     rdfs:label "Restrictive Covenant" ;
     rdfs:comment "A non-compete, non-solicit, or confidentiality clause within an EmploymentContract, subject to jurisdiction-specific enforceability limits." ;
-    rdfs:subClassOf :ContractClause .
+    rdfs:subClassOf :ContractClause ;
+    rdfs:subClassOf :Document .
 
 :HandbookPolicy a owl:Class ;
     rdfs:label "Employee Handbook Policy" ;

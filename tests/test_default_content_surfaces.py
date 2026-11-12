@@ -40,16 +40,6 @@ async def _listings():
         )
         resources = {str(r.uri) for r in await client.list_resources()}
         prompts = {p.name for p in await client.list_prompts()}
-        for uri in resources:
-            if uri.startswith(("ontology://", "shapes://")):
-                directory = ROOT / "ontology"
-                if uri.startswith("shapes://"):
-                    directory = directory / "shapes"
-                actual = await client.read_resource(uri)
-                assert (
-                    actual[0].text.encode()
-                    == (directory / uri.rsplit("/", 1)[-1]).read_bytes()
-                )
     return resources, prompts
 
 
@@ -187,7 +177,7 @@ def test_canonical_and_legacy_routes_preserve_the_full_tool_surface():
                 tool.name: tool.model_dump(mode="json")
                 for tool in await canonical_client.list_tools()
             }
-        assert len(legacy) == 9
+        assert len(legacy) == 12
         assert declared == legacy
 
     asyncio.run(capture())

@@ -8,8 +8,7 @@
 
 <http://knuckles.team/kg/legal-compliance-bsa-aml> a owl:Ontology ;
     rdfs:label "BSA/AML Compliance Module" ;
-    rdfs:comment "Bank Secrecy Act / Anti-Money Laundering program obligations — KYC/CDD, an AML compliance program, and SAR/CTR filing." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "Bank Secrecy Act / Anti-Money Laundering program obligations — KYC/CDD, an AML compliance program, and SAR/CTR filing." .
 
 :FinCEN a :RegulatoryAuthority ;
     rdfs:label "Financial Crimes Enforcement Network" ;

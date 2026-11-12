@@ -20,9 +20,7 @@
     rdfs:label "Regulatory Affairs Domain Module" ;
     rdfs:comment """Regulatory-change lifecycle: proposed/final rules, NPRM comment
 periods, agency guidance, enforcement actions, and compliance-gap remediation
-for the regulatory-change practice area.""" ;
-    owl:imports <http://knuckles.team/kg/legal-compliance>,
-        <http://knuckles.team/kg/legal> .
+for the regulatory-change practice area.""" .
 
 #################################################################
 # classes — new

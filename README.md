@@ -68,7 +68,7 @@ Auto-generated — do not edit between the markers below.
 | MCP Tool | Toggle Env Var | Description |
 |----------|----------------|-------------|
 | `draft_ein_form` | `EINTOOL` | Draft IRS Form SS-4 and schedule EIN filing with off-hours compliance (Mon-Fri 7:00 AM - 10:00 PM EST). |
-| `legal_compliance_lookup` | `COMPLIANCETOOL` | Query the bundled compliance + domain ontology suite (KG-native, no external API). |
+| the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) | `COMPLIANCETOOL` | Query the bundled compliance + domain ontology suite (KG-native, no external API). |
 | `legal_ingest_filing_file` | `INGESTTOOL` | Store a drafted filing file (e.g. drafts/*.txt) as a blob + :MediaAsset in the KG. |
 | `legal_ingest_sos_entities` | `INGESTTOOL` | Look up Secretary-of-State business entities and ingest them into the KG. |
 | `lookup_statute_rules` | `STATUTETOOL` | Query state statutory default rules and retrieve corporate/LLC charter templates. |

@@ -15,7 +15,8 @@
 :BeneficiaryRole a owl:Class ;
     rdfs:label "Beneficiary Role" ;
     rdfs:comment "The recipient of the trust benefits." ;
-    rdfs:subClassOf bfo:0000023 .
+    rdfs:subClassOf bfo:0000023 ;
+    rdfs:subClassOf :Concept .
 
 :LLCFormationFiling a owl:Class ;
     rdfs:label "LLC Formation Filing" ;
@@ -30,7 +31,8 @@
 :SettlorRole a owl:Class ;
     rdfs:label "Settlor Role" ;
     rdfs:comment "The creator and funder of the trust." ;
-    rdfs:subClassOf bfo:0000023 .
+    rdfs:subClassOf bfo:0000023 ;
+    rdfs:subClassOf :Concept .
 
 :StateStatute a owl:Class ;
     rdfs:label "State Statute" ;
@@ -40,7 +42,8 @@
 :TrusteeRole a owl:Class ;
     rdfs:label "Trustee Role" ;
     rdfs:comment "A role held by an individual or corporation administering trust assets." ;
-    rdfs:subClassOf bfo:0000023 .
+    rdfs:subClassOf bfo:0000023 ;
+    rdfs:subClassOf :Concept .
 
 :cfrPart a owl:DatatypeProperty ;
     rdfs:label "CFR Part" ;

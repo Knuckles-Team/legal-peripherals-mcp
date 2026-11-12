@@ -38,14 +38,14 @@ Grounded in `domain_commercial.ttl`'s `:Contract` hierarchy
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup` when the contract touches classified data
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) when the contract touches classified data
 (PHI/PII/PCI/FinancialData).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `dataclass_lookup` | If the contract handles PHI/PII/PCI/FinancialData, resolve the Regulation(s) + required Attestation it triggers |
-| `legal_compliance_lookup` | `regulation_detail` | Pull the specific Obligation (e.g. HIPAA's BAA obligation) the Attestation satisfies |
+| `legal_lookup_data_class` | `data_class` | If the contract handles PHI/PII/PCI/FinancialData, resolve the Regulation(s) + required Attestation it triggers |
+| `legal_get_regulation` | `regulation` | Pull the specific Obligation (e.g. HIPAA's BAA obligation) the Attestation satisfies |
 
 ## Recipe
 1. **Identify the type** from the document's title/structure — NDA, vendor
@@ -59,7 +59,7 @@ for `legal_compliance_lookup` when the contract touches classified data
 2. **Data-classification check** — if the agreement will process PHI, PII,
    PCI, or financial data, resolve what that triggers:
    ```
-   legal_compliance_lookup(action="dataclass_lookup", data_class="PHI")
+   legal_lookup_data_class(data_class="PHI")
    ```
    A PHI-handling vendor agreement needs a signed BAA before go-live — mirror
    `domain_commercial.ttl`'s `:ExamplePHIVendorAgreement` example

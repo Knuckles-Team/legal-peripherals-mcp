@@ -66,7 +66,7 @@ pytest -v
 | `CONCEPT:LP-OS.identity.legal` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
 | `CONCEPT:LP-OS.governance.compliance-ontology-suite` | Regulatory/Legal Compliance Ontology Suite | Shared compliance upper ontology plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC), federated into epistemic-graph and cross-linked to the shared infra/asset ontology by data classification |
 | `CONCEPT:LP-OS.governance.legal-domain-suite` | Legal Practice-Area Domain Ontology Suite | 6 broader domain modules (regulatory, employment, commercial, privacy, corporate, litigation) modeling each practice area's vocabulary, each importing compliance.ttl + legal.ttl and cross-linked into existing FLSA/HIPAA/LLC individuals; declares GDPR + CCPA as :Regulation individuals |
-| `CONCEPT:LP-OS.governance.legal-compliance-kb` | Compliance Ontology Lookup Tool | KG-native `legal_compliance_lookup` action-routed MCP tool querying the bundled ontology suite directly (no external API); backs the 18 new domain skills |
+| `CONCEPT:LP-OS.governance.legal-compliance-kb` | Compliance Ontology Lookup Tool | KG-native the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) action-routed MCP tool querying the bundled ontology suite directly (no external API); backs the 18 new domain skills |
 | `CONCEPT:AU-ECO.messaging.native-backend-abstraction` | Ecosystem Compliance | Multi-package integration compliance standard |
 
 ---
