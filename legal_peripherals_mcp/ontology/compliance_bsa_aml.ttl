@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -6,7 +7,7 @@
 # Suspicious Activity Report (SAR) and Currency Transaction Report (CTR) filing. Key
 # concepts/obligations/controls only, not exhaustive legal text.
 
-<http://knuckles.team/kg/legal-compliance-bsa-aml> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-compliance-bsa-aml> a owl:Ontology ;
     rdfs:label "BSA/AML Compliance Module" ;
     rdfs:comment "Bank Secrecy Act / Anti-Money Laundering program obligations — KYC/CDD, an AML compliance program, and SAR/CTR filing." .
 
@@ -14,7 +15,7 @@
     rdfs:label "Financial Crimes Enforcement Network" ;
     rdfs:comment "Treasury bureau that administers the BSA and receives SAR/CTR filings." .
 
-:BSA_AML a :Regulation ;
+:BSA_AML a core:Regulation ;
     rdfs:label "BSA/AML" ;
     rdfs:comment "Bank Secrecy Act (31 U.S.C. 5311 et seq.) and its implementing Anti-Money Laundering regulations — KYC/customer due diligence, a written AML program, recordkeeping, and suspicious-activity/large-currency-transaction reporting." ;
     :appliesToSector :FinanceSector ;

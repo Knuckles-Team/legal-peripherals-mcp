@@ -112,7 +112,7 @@ def register_ingest_tools(mcp: Any) -> None:
         """Look up Secretary-of-State business entities and ingest them into the KG.
 
         Lists real OpenCorporates company records for ``state`` + ``entity_name`` and
-        pushes them into epistemic-graph as typed ``:BusinessEntity`` (+ ``:Jurisdiction``
+        pushes them into medulla as typed ``:BusinessEntity`` (+ ``:Jurisdiction``
         / ``:incorporatedIn``) nodes via the fast engine client. Best-effort: returns
         ``{"ingested": None}`` when no engine or no OPENCORPORATES_API_TOKEN is set.
         CONCEPT:AU-KG.ingest.enterprise-source-extractor.

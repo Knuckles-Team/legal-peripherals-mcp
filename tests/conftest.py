@@ -6,7 +6,7 @@ def _isolate_live_kg_ingest(monkeypatch):
     """Disable default-on native KG ingestion for the unit suite.
 
     The MCP tools (`mcp_sos`, `mcp_ein`, ...) ingest their results into the
-    epistemic-graph by default, and that ingestion is authoritative — a failure
+    medulla by default, and that ingestion is authoritative — a failure
     propagates rather than being swallowed. No engine is reachable in the unit
     environment, so leaving ingestion on would make every draft/lookup test fail
     on `NativeIngestError` instead of exercising its own logic. Turn it off via

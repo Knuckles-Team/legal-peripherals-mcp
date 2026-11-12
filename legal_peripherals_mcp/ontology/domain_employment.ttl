@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -17,7 +18,7 @@
 # Key concepts/obligations/controls only, not exhaustive legal text.
 # CONCEPT:LP-OS.governance.legal-domain-employment
 
-<http://knuckles.team/kg/legal-domain-employment> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-domain-employment> a owl:Ontology ;
     rdfs:label "Employment Law Domain Module" ;
     rdfs:comment """Employment lifecycle concepts — worker classification, hiring/
 termination review, handbook policy, internal investigations, leave tracking, and
@@ -28,10 +29,12 @@ FLSA compliance module.""" .
 # classes — new
 #################################################################
 
-:Employee a owl:Class .
+:Employee a owl:Class ;
+    rdfs:subClassOf core:Employee .
 
 
 :EmploymentContract a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Employment Contract" ;
     rdfs:comment "An offer letter, employment agreement, or restrictive-covenant agreement (non-compete/non-solicit/confidentiality) between an employer and a worker." ;
     rdfs:subClassOf bfo:0000031 .
@@ -40,30 +43,34 @@ FLSA compliance module.""" .
     rdfs:label "Restrictive Covenant" ;
     rdfs:comment "A non-compete, non-solicit, or confidentiality clause within an EmploymentContract, subject to jurisdiction-specific enforceability limits." ;
     rdfs:subClassOf :ContractClause ;
-    rdfs:subClassOf :Document .
+    rdfs:subClassOf core:Document .
 
 :HandbookPolicy a owl:Class ;
     rdfs:label "Employee Handbook Policy" ;
     rdfs:comment "A house employment policy (leave, conduct, wage/hour, classification) published in the employee handbook, with per-state supplements where law differs. Doubles as the documented Control satisfying an employment Obligation." ;
-    rdfs:subClassOf :Policy,
+    rdfs:subClassOf core:Policy,
         :Control .
 
 :WorkerClassificationAssessment a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Worker Classification Assessment" ;
     rdfs:comment "A determination of whether an engagement is employee, independent contractor, temp, or vendor, applying the jurisdiction's applicable test(s). BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :InternalInvestigation a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Internal Investigation" ;
     rdfs:comment "A privileged internal investigation into a workplace complaint (discrimination, harassment, retaliation), from intake through the final memo. Specializes EmploymentLawMatter's process side. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :LeaveRequest a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Leave Request" ;
     rdfs:comment "A tracked employee leave (FMLA, ADA accommodation, parental, medical, or state-specific) with a deadline-bearing decision clock. BFO:GenericallyDependentContinuant." ;
     rdfs:subClassOf bfo:0000031 .
 
 :InternationalExpansionProject a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "International Expansion Project" ;
     rdfs:comment "A cross-functional project standing up employment in a new country, framed as an EOR-vs-entity decision with tax/finance/HR triggers. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
@@ -76,7 +83,7 @@ FLSA compliance module.""" .
     rdfs:label "employed by" ;
     rdfs:comment "Links an Employee to the employing Organization." ;
     rdfs:domain :Employee ;
-    rdfs:range :Organization .
+    rdfs:range core:Organization .
 
 :classificationOutcome a owl:DatatypeProperty ;
     rdfs:label "classification outcome" ;

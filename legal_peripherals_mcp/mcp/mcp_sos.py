@@ -94,7 +94,7 @@ class SOSLookupError(Exception):
 async def _maybe_ingest_entities(companies: list[dict]) -> None:
     """Default-on authoritative ingestion of SOS company records.
 
-    Pushes each looked-up business entity into the epistemic-graph as a
+    Pushes each looked-up business entity into the medulla as a
     ``:BusinessEntity`` node. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
     ingestion failures propagate.
     """
