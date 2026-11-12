@@ -1,4 +1,4 @@
-"""Epistemic-graph blob ingestion for drafted legal filings.
+"""Medulla blob ingestion for drafted legal filings.
 
 CONCEPT:AU-KG.ingest.list-durable-media. Drafted filing artifacts (SS-4 drafts, trust
 indentures, operating agreements — the ``drafts/*.txt`` files this package produces) are

@@ -1,4 +1,4 @@
-"""Epistemic-graph typed-node ingestion — Wire-First coverage.
+"""Medulla typed-node ingestion — Wire-First coverage.
 
 Exercises the ``kg_ingest`` seam against a fake transport one level below the SDK's
 own ``SourceIngest`` request builder (per the fleet SDK migration recipe), asserting

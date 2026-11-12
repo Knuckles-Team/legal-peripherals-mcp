@@ -55,7 +55,7 @@ def _graph():
         raise ComplianceLookupError(
             "rdflib is not installed; install legal-peripherals-mcp[ontology] "
             "(or [all]) to enable legal_compliance_lookup, or query the "
-            "epistemic-graph engine's native RDF/SPARQL surface instead."
+            "medulla engine's native RDF/SPARQL surface instead."
         ) from exc
 
     g = rdflib.Graph()
