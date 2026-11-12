@@ -8,9 +8,9 @@ no heavy imports so the hub can resolve it cheaply.
 
 Modules carried:
 
-- ``legal.ttl`` (``http://knuckles.team/kg/legal``) — the package's general legal
+- ``legal.ttl`` (``https://knuckles-team.github.io/ontology/connector/legal``) — the package's general legal
   domain ontology (statutes, case law, contracts, trusts, IP, business entities).
-- ``compliance.ttl`` (``http://knuckles.team/kg/legal-compliance``,
+- ``compliance.ttl`` (``https://knuckles-team.github.io/ontology/connector/legal-compliance``,
   CONCEPT:LP-OS.governance.compliance-ontology-suite) — the regulatory/legal
   compliance upper ontology: Regulation/Obligation/Control/ComplianceRequirement/
   Penalty/Sector/ReportingRequirement/ComplianceGate/Assessment/Attestation/

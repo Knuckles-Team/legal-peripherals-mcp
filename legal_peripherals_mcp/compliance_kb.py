@@ -14,7 +14,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-KG = "http://knuckles.team/kg#"
+KG = "https://knuckles-team.github.io/ontology/core#"
+CONNECTOR_NS = "https://knuckles-team.github.io/ontology/connector/legal-peripherals#"
 ONTOLOGY_DIR = Path(__file__).resolve().parent / "ontology"
 
 VALID_ACTIONS = frozenset(
@@ -36,7 +37,8 @@ class ComplianceLookupError(Exception):
 def _uri(name: str):
     import rdflib
 
-    return rdflib.URIRef(f"{KG}{name}")
+    local = rdflib.URIRef(f"{CONNECTOR_NS}{name}")
+    return local if (local, None, None) in _graph() else rdflib.URIRef(f"{KG}{name}")
 
 
 @lru_cache(maxsize=1)

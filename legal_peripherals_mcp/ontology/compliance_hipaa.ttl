@@ -1,11 +1,12 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 # HIPAA (Health Insurance Portability and Accountability Act) — medical/PHI compliance
 # module. Key concepts/obligations/controls only, not exhaustive legal text.
 
-<http://knuckles.team/kg/legal-compliance-hipaa> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-compliance-hipaa> a owl:Ontology ;
     rdfs:label "HIPAA Compliance Module" ;
     rdfs:comment "HIPAA Privacy Rule, Security Rule, Breach Notification Rule, and Business Associate Agreement obligations for entities handling Protected Health Information." .
 
@@ -13,7 +14,7 @@
     rdfs:label "HHS Office for Civil Rights" ;
     rdfs:comment "The HHS component that administers and enforces HIPAA." .
 
-:HIPAA a :Regulation ;
+:HIPAA a core:Regulation ;
     rdfs:label "HIPAA" ;
     rdfs:comment "Health Insurance Portability and Accountability Act of 1996, as amended by HITECH — privacy, security, and breach-notification requirements for Protected Health Information (PHI)." ;
     :appliesToSector :MedicalSector ;

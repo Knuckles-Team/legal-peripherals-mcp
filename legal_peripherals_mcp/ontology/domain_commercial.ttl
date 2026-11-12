@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -16,7 +17,7 @@
 # types/controls only, not exhaustive legal text.
 # CONCEPT:LP-OS.governance.legal-domain-commercial
 
-<http://knuckles.team/kg/legal-domain-commercial> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-domain-commercial> a owl:Ontology ;
     rdfs:label "Commercial Contracts Domain Module" ;
     rdfs:comment """Commercial-contract lifecycle concepts — NDAs, MSAs, vendor
 agreements, amendments, renewal deadlines, playbook review findings, and
@@ -28,6 +29,7 @@ the compliance suite via data classification.""" .
 #################################################################
 
 :Contract a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Contract" ;
     rdfs:comment "A legally binding commercial agreement. Formally types legal.ttl's previously-undeclared :Contract domain (:hasClause)." ;
     rdfs:subClassOf bfo:0000031 .
@@ -48,21 +50,25 @@ the compliance suite via data classification.""" .
     rdfs:subClassOf :Contract .
 
 :ContractAmendment a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Contract Amendment" ;
     rdfs:comment "A dated change to a base Contract, tracked so the full amendment history and provision-level trace are reconstructable." ;
     rdfs:subClassOf bfo:0000031 .
 
 :RenewalDeadline a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Renewal Deadline" ;
     rdfs:comment "A tracked cancel-by / auto-renewal notice-window deadline for a Contract." ;
     rdfs:subClassOf bfo:0000031 .
 
 :ContractReviewFinding a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Contract Review Finding" ;
     rdfs:comment "A flagged deviation from the team playbook found during Contract review, rated GREEN/YELLOW/RED for triage." ;
     rdfs:subClassOf bfo:0000031 .
 
 :EscalationRoute a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Escalation Route" ;
     rdfs:comment "The routing of a ContractReviewFinding to the correct approver per the escalation matrix. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
@@ -116,7 +122,7 @@ the compliance suite via data classification.""" .
 :routesToApprover a owl:ObjectProperty ;
     rdfs:label "routes to approver" ;
     rdfs:domain :EscalationRoute ;
-    rdfs:range :Person .
+    rdfs:range core:Person .
 
 :requiresAttestation a owl:ObjectProperty ;
     rdfs:label "requires attestation" ;
@@ -131,6 +137,6 @@ the compliance suite via data classification.""" .
 :ExamplePHIVendorAgreement a :VendorAgreement ;
     rdfs:label "Example: Vendor Agreement Handling PHI" ;
     rdfs:comment "Illustrative VendorAgreement classified as handling PHI, resolving to HIPAA and its signed-BAA Attestation before it may proceed." ;
-    :classifiedAs :PHI ;
-    :governedBy :HIPAA ;
+    core:classifiedAs :PHI ;
+    core:governedBy :HIPAA ;
     :requiresAttestation :HIPAABusinessAssociateAgreement .

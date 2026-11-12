@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -8,7 +9,7 @@
 # :Jurisdiction. Backs the package's existing Secretary-of-State / EIN capability
 # (legal_peripherals_mcp/mcp/mcp_sos.py, mcp_ein.py).
 
-<http://knuckles.team/kg/legal-compliance-llc> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-compliance-llc> a owl:Ontology ;
     rdfs:label "LLC Formation & Governance Compliance Module" ;
     rdfs:comment "State-level LLC formation, registered-agent, annual-report, and operating-agreement obligations." .
 
@@ -16,7 +17,7 @@
     rdfs:label "Secretary of State" ;
     rdfs:comment "The state-level office (varies by :Jurisdiction) that receives LLC formation filings, registered-agent designations, and annual reports." .
 
-:LLCFormationGovernance a :Regulation ;
+:LLCFormationGovernance a core:Regulation ;
     rdfs:label "LLC Formation & Governance" ;
     rdfs:comment "State LLC statutes (e.g. each state's LLC Act) governing formation, registered-agent maintenance, annual/biennial reporting, and internal governance documentation." ;
     :appliesToSector :PrivateSector ;

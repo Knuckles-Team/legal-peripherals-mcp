@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -16,7 +17,7 @@
 # :StateStatute / :Jurisdiction. Key concepts/obligations/controls only, not
 # exhaustive legal text. CONCEPT:LP-OS.governance.legal-domain-regulatory
 
-<http://knuckles.team/kg/legal-domain-regulatory> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-domain-regulatory> a owl:Ontology ;
     rdfs:label "Regulatory Affairs Domain Module" ;
     rdfs:comment """Regulatory-change lifecycle: proposed/final rules, NPRM comment
 periods, agency guidance, enforcement actions, and compliance-gap remediation
@@ -27,26 +28,31 @@ for the regulatory-change practice area.""" .
 #################################################################
 
 :RegulatoryChangeNotice a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Regulatory Change Notice" ;
     rdfs:comment "A proposed or final rule change published by a RegulatoryAuthority (e.g. a Federal Register NPRM/final rule, an agency bulletin). BFO:GenericallyDependentContinuant." ;
     rdfs:subClassOf bfo:0000031 .
 
 :RegulatoryComment a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Regulatory Comment" ;
     rdfs:comment "A comment submitted (or drafted for submission) during a RegulatoryChangeNotice's public comment period. BFO:GDC." ;
     rdfs:subClassOf bfo:0000031 .
 
 :AgencyGuidance a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Agency Guidance" ;
     rdfs:comment "Non-binding interpretive guidance, bulletin, or FAQ issued by a RegulatoryAuthority clarifying how it will apply a Regulation." ;
     rdfs:subClassOf bfo:0000031 .
 
 :EnforcementAction a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Enforcement Action" ;
     rdfs:comment "An investigation, consent order, or civil/administrative action a RegulatoryAuthority brings against an Organization for an alleged Obligation violation. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :ComplianceGapRemediation a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Compliance Gap Remediation" ;
     rdfs:comment "A tracked remediation plan closing a gap identified between current policy/practice and a ComplianceRequirement (e.g. by a policy redraft). BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
@@ -59,7 +65,7 @@ for the regulatory-change practice area.""" .
     rdfs:label "amends regulation" ;
     rdfs:comment "Links a RegulatoryChangeNotice to the Regulation it proposes to amend or finalize." ;
     rdfs:domain :RegulatoryChangeNotice ;
-    rdfs:range :Regulation .
+    rdfs:range core:Regulation .
 
 :issuedByAuthority a owl:ObjectProperty ;
     rdfs:label "issued by authority" ;
@@ -83,7 +89,7 @@ for the regulatory-change practice area.""" .
     rdfs:label "enforcement targets" ;
     rdfs:comment "Links an EnforcementAction to the Organization it was brought against." ;
     rdfs:domain :EnforcementAction ;
-    rdfs:range :Organization .
+    rdfs:range core:Organization .
 
 :arisesFromObligation a owl:ObjectProperty ;
     rdfs:label "arises from obligation" ;

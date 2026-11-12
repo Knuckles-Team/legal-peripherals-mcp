@@ -1,11 +1,12 @@
 @prefix fibo-fi: <https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix fibo-org: <https://spec.edmcouncil.org/fibo/ontology/FND/Organizations/Organizations/> .
 @prefix bibo: <http://purl.org/ontology/bibo/> .
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix dc: <http://purl.org/dc/terms/> .
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -16,7 +17,7 @@
     rdfs:label "Beneficiary Role" ;
     rdfs:comment "The recipient of the trust benefits." ;
     rdfs:subClassOf bfo:0000023 ;
-    rdfs:subClassOf :Concept .
+    rdfs:subClassOf core:Concept .
 
 :LLCFormationFiling a owl:Class ;
     rdfs:label "LLC Formation Filing" ;
@@ -32,7 +33,7 @@
     rdfs:label "Settlor Role" ;
     rdfs:comment "The creator and funder of the trust." ;
     rdfs:subClassOf bfo:0000023 ;
-    rdfs:subClassOf :Concept .
+    rdfs:subClassOf core:Concept .
 
 :StateStatute a owl:Class ;
     rdfs:label "State Statute" ;
@@ -43,7 +44,7 @@
     rdfs:label "Trustee Role" ;
     rdfs:comment "A role held by an individual or corporation administering trust assets." ;
     rdfs:subClassOf bfo:0000023 ;
-    rdfs:subClassOf :Concept .
+    rdfs:subClassOf core:Concept .
 
 :cfrPart a owl:DatatypeProperty ;
     rdfs:label "CFR Part" ;
@@ -60,8 +61,8 @@
         owl:SymmetricProperty ;
     rdfs:label "conflicts with party" ;
     rdfs:comment "Symmetric conflict of interest. ABA Rule 1.7." ;
-    rdfs:domain :Person ;
-    rdfs:range :Person .
+    rdfs:domain core:Person ;
+    rdfs:range core:Person .
 
 :effectiveDate a owl:DatatypeProperty ;
     rdfs:domain :CorporateGovernanceDoc ;
@@ -122,7 +123,7 @@
 
 :hasBeneficiary a owl:ObjectProperty ;
     rdfs:domain :LegalTrust ;
-    rdfs:range [ owl:unionOf ( :Person :Company ) ] .
+    rdfs:range [ owl:unionOf ( core:Person :Company ) ] .
 
 :hasClause a owl:ObjectProperty ;
     rdfs:label "has clause" ;
@@ -131,11 +132,11 @@
 
 :hasSettlor a owl:ObjectProperty ;
     rdfs:domain :LegalTrust ;
-    rdfs:range :Person .
+    rdfs:range core:Person .
 
 :hasTrustee a owl:ObjectProperty ;
     rdfs:domain :LegalTrust ;
-    rdfs:range [ owl:unionOf ( :Person :Company ) ] .
+    rdfs:range [ owl:unionOf ( core:Person :Company ) ] .
 
 :involvesEmployee a owl:ObjectProperty ;
     rdfs:label "involves employee" ;
@@ -211,12 +212,13 @@
     rdfs:domain :FederalStatute ;
     rdfs:range xsd:string .
 
-<http://knuckles.team/kg/legal> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal> a owl:Ontology ;
     rdfs:label "Legal Domain Ontology" ;
     rdfs:comment "Legal domain ontology aligned to LKIF-Core and Akoma Ntoso." .
 
 
 :ContractClause a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Contract Clause" ;
     rdfs:comment "A specific clause within a legal contract." ;
     rdfs:subClassOf bfo:0000031 .
@@ -224,7 +226,7 @@
 :Jurisdiction a owl:Class ;
     rdfs:label "Jurisdiction" ;
     rdfs:comment "A legal jurisdiction with authority scope." ;
-    rdfs:subClassOf :Place .
+    rdfs:subClassOf core:Place .
 
 :LegalPrecedent a owl:Class ;
     rdfs:label "Legal Precedent" ;
@@ -243,37 +245,44 @@ Discrimination claims, wrongful termination, wage disputes, etc.""" ;
     rdfs:subClassOf :Statute .
 
 :LegalMatter a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Legal Matter" ;
     rdfs:comment "Client matter lifecycle: intake, staffing, billing, outcome. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :CaseLaw a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Case Law" ;
     rdfs:comment "A judicial precedent. BFO:GDC. Aligned to LKIF-Core." ;
     rdfs:subClassOf bfo:0000031 .
 
 :CorporateGovernanceDoc a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Corporate Governance Document" ;
     rdfs:comment """Foundational legal documents governing company operations.
 BFO:GenericallyDependentContinuant.""" ;
     rdfs:subClassOf bfo:0000031 .
 
 :LegalTrust a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Legal Trust" ;
     rdfs:comment "A fiduciary relationship in which a settlor gives a trustee the right to hold title to assets for the benefit of a beneficiary." ;
     rdfs:subClassOf bfo:0000031 .
 
 :Statute a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Statute" ;
     rdfs:comment "A legislative enactment. BFO:GDC. Aligned to Akoma Ntoso." ;
     rdfs:subClassOf bfo:0000031 .
 
 :IntellectualProperty a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Intellectual Property" ;
     rdfs:comment "An IP asset owned by the company." ;
     rdfs:subClassOf bfo:0000031 .
 
 :RegulatoryFiling a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Regulatory Filing" ;
     rdfs:comment """A required filing with a government regulatory body.
 BFO:Process.""" ;
@@ -284,6 +293,7 @@ BFO:Process.""" ;
 #################################################################
 
 :BusinessEntity a owl:Class ;
+    rdfs:subClassOf core:LegalEntity ;
     rdfs:label "Business Entity" ;
     rdfs:comment """A Secretary-of-State / company-registry registered legal entity
 (LLC, corporation, trust, etc.) as sourced from OpenCorporates via the sos lookup.

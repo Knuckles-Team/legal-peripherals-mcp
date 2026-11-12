@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -18,7 +19,7 @@
 # concepts/document types/controls only, not exhaustive legal text.
 # CONCEPT:LP-OS.governance.legal-domain-corporate
 
-<http://knuckles.team/kg/legal-domain-corporate> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-domain-corporate> a owl:Ontology ;
     rdfs:label "Corporate / Entity Governance Domain Module" ;
     rdfs:comment """Corporate governance and M&A-diligence concepts — board
 resolutions, written consents, diligence findings, material-contract schedules,
@@ -29,22 +30,24 @@ practice area, cross-linked to the LLC compliance module.""" .
 # classes — new
 #################################################################
 
-:Company a owl:Class .
+:Company a owl:Class ;
+    rdfs:subClassOf core:Company .
 
 
 :BoardResolution a owl:Class ;
     rdfs:label "Board Resolution" ;
     rdfs:comment "A board or committee resolution in house format. Specializes legal.ttl's :CorporateGovernanceDoc (governanceDocType 'board_resolution')." ;
     rdfs:subClassOf :CorporateGovernanceDoc ;
-    rdfs:subClassOf :Document .
+    rdfs:subClassOf core:Document .
 
 :WrittenConsent a owl:Class ;
     rdfs:label "Written Consent" ;
     rdfs:comment "A unanimous written consent of the board or a committee, taken in lieu of a meeting." ;
     rdfs:subClassOf :CorporateGovernanceDoc ;
-    rdfs:subClassOf :Document .
+    rdfs:subClassOf core:Document .
 
 :DiligenceFinding a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Diligence Finding" ;
     rdfs:comment "An issue extracted from VDR documents during M&A diligence, categorized and rated against a materiality threshold. BFO:GenericallyDependentContinuant." ;
     rdfs:subClassOf bfo:0000031 .
@@ -53,14 +56,16 @@ practice area, cross-linked to the LLC compliance module.""" .
     rdfs:label "Material Contract" ;
     rdfs:comment "A Contract meeting the purchase agreement's Material Contract definition, scheduled on the disclosure schedule." ;
     rdfs:subClassOf :Contract ;
-    rdfs:subClassOf :Document .
+    rdfs:subClassOf core:Document .
 
 :ClosingChecklistItem a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Closing Checklist Item" ;
     rdfs:comment "A tracked item blocking (or clearing the path to) deal close, on the critical path or not." ;
     rdfs:subClassOf bfo:0000031 .
 
 :EntityComplianceDeadline a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Entity Compliance Deadline" ;
     rdfs:comment "A tracked instance of a recurring entity-compliance ReportingRequirement (e.g. this specific LLC's next annual-report due date) for a specific Company." ;
     rdfs:subClassOf bfo:0000031 .
