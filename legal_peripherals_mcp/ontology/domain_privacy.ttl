@@ -22,9 +22,7 @@
     rdfs:comment """Privacy-program concepts — DSARs, DPAs, PIAs/DPIAs, processing
 activities, and consent records — plus the GDPR and CCPA Regulation individuals,
 for the privacy practice area, cross-linked to the shared PII/PHI
-DataClassification individuals.""" ;
-    owl:imports <http://knuckles.team/kg/legal-compliance>,
-        <http://knuckles.team/kg/legal> .
+DataClassification individuals.""" .
 
 #################################################################
 # classes — new
@@ -38,7 +36,8 @@ DataClassification individuals.""" ;
 :DataProcessingAgreement a owl:Class ;
     rdfs:label "Data Processing Agreement" ;
     rdfs:comment "A DPA between controller and processor governing how PII/PHI is processed on the other party's behalf." ;
-    rdfs:subClassOf :Contract .
+    rdfs:subClassOf :Contract ;
+    rdfs:subClassOf :Document .
 
 :PrivacyImpactAssessment a owl:Class ;
     rdfs:label "Privacy Impact Assessment" ;

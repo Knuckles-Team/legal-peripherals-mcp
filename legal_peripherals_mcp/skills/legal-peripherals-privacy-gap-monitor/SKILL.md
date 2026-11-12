@@ -39,18 +39,18 @@ The privacy-specific counterpart of
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup`.
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Full GDPR/CCPA Obligation/Control set to diff against current policy |
-| `legal_compliance_lookup` | `gate_requirements` | Cross-regulation control set when the org's data spans PII + PHI + financial |
+| `legal_get_regulation` | `regulation` | Full GDPR/CCPA Obligation/Control set to diff against current policy |
+| `legal_gate_requirements` | `data_classes` | Cross-regulation control set when the org's data spans PII + PHI + financial |
 
 ## Recipes
 **Gap analysis:** pull the authoritative obligation set:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="CCPA")
+legal_get_regulation(regulation="CCPA")
 ```
 For each `obligations[].controls[]` not yet reflected in current
 policy/practice, add it to the gap list with a proposed owner and target

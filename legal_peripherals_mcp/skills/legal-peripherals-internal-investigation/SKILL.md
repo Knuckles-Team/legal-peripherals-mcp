@@ -41,7 +41,7 @@ Memo → Summarize — in one skill, grounded in `domain_employment.ttl`'s
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`. This skill is
 process/drafting guidance grounded in the ontology's shape; no external
-tool call is required to run the lifecycle, but `legal_compliance_lookup`
+tool call is required to run the lifecycle, but the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`)
 is available if the investigation implicates a specific regulatory
 obligation (e.g. an EEOC-adjacent Obligation).
 

@@ -8,7 +8,7 @@
 # Regulatory/legal compliance upper ontology — the reusable backbone every per-regulation
 # module in this directory (compliance_hipaa.ttl, compliance_bsa_aml.ttl, compliance_occ.ttl,
 # compliance_dodd_frank.ttl, compliance_cfpb.ttl, compliance_flsa.ttl, compliance_taxation.ttl,
-# compliance_llc.ttl, …) imports via owl:imports. All classes/properties live in the shared
+# compliance_llc.ttl, …) extend it. All classes/properties live in the shared
 # `:` (kg#) namespace per the fleet federation convention; only the owl:Ontology node below
 # gets this module's own IRI.
 #
@@ -33,7 +33,7 @@
 # compliance_<name>.ttl into this directory — the scion_sdk.ontology_providers hub
 # loader globs every *.ttl here automatically, no code changes required. Each new module
 # should: (1) declare its own owl:Ontology IRI under http://knuckles.team/kg/legal-compliance-
-# <name> that owl:imports <http://knuckles.team/kg/legal-compliance>; (2) declare one
+# <name> (modules do not import each other; the hub loads every file); (2) declare one
 # :Regulation individual tagged :appliesToSector / :appliesToDataClass / :enforcedBy /
 # :imposesObligation / (optionally) :hasReportingRequirement; (3) declare its
 # :RegulatoryAuthority individual(s); (4) declare 2-4 :Obligation individuals, each
@@ -50,8 +50,7 @@
 regulations, authorities, obligations, controls, reporting requirements, gates,
 assessments, attestations — cross-linked to the shared infra/asset ontology via
 :governedBy / :classifiedAs / :appliesToDataClass so a service or asset's data
-classification resolves the regulation(s) that govern it.""" ;
-    owl:imports <http://knuckles.team/kg/legal> .
+classification resolves the regulation(s) that govern it.""" .
 
 
 #################################################################
@@ -86,12 +85,14 @@ classification resolves the regulation(s) that govern it.""" ;
 :Sector a owl:Class ;
     rdfs:label "Sector" ;
     rdfs:comment "An economic/operational sector a Regulation applies to (finance, medical, government, private). Canonical individuals declared below." ;
-    rdfs:subClassOf skos:Concept .
+    rdfs:subClassOf skos:Concept ;
+    rdfs:subClassOf :Concept .
 
 :ReportingRequirement a owl:Class ;
     rdfs:label "Reporting Requirement" ;
     rdfs:comment "A recurring or triggered regulatory filing/notification obligation (e.g. a SAR, a CTR, a tax return, a breach notification). Specializes RegulatoryFiling with a compliance trigger and a target RegulatoryAuthority." ;
-    rdfs:subClassOf :RegulatoryFiling .
+    rdfs:subClassOf :RegulatoryFiling ;
+    rdfs:subClassOf :Policy .
 
 :ComplianceGate a owl:Class ;
     rdfs:label "Compliance Gate" ;

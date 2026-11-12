@@ -42,18 +42,18 @@ assertion.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
-`legal_compliance_lookup`.
+the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Pull FLSA's full Obligation/Control/Penalty set |
-| `legal_compliance_lookup` | `dataclass_lookup` | Confirm FLSA applies (PII data class) alongside any state-specific statute |
+| `legal_get_regulation` | `regulation` | Pull FLSA's full Obligation/Control/Penalty set |
+| `legal_lookup_data_class` | `data_class` | Confirm FLSA applies (PII data class) alongside any state-specific statute |
 
 ### Recipe
 Pull the FLSA obligation set an "employee" classification triggers:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="FLSA")
+legal_get_regulation(regulation="FLSA")
 ```
 Compare the proposed engagement against the applicable jurisdiction's test
 (economic-realities / ABC / common-law-control, per state) and, if the

@@ -35,12 +35,12 @@ individuals this module declares.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup`.
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Pull GDPR's/CCPA's Obligation set the DPA must reflect |
+| `legal_get_regulation` | `regulation` | Pull GDPR's/CCPA's Obligation set the DPA must reflect |
 
 ## Recipe
 1. **Auto-detect role** from the agreement's structure (who determines
@@ -51,7 +51,7 @@ for `legal_compliance_lookup`.
    timing.
 2. **Ground the review** in the actual Obligation set:
    ```
-   legal_compliance_lookup(action="regulation_detail", regulation="GDPR")
+   legal_get_regulation(regulation="GDPR")
    ```
    Confirm the DPA's breach-notification clause meets (or beats) the
    72-hour `:BreachNotification72HourControl`; confirm subprocessor and

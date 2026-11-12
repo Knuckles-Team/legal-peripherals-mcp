@@ -9,8 +9,7 @@
 
 <http://knuckles.team/kg/legal-compliance-taxation> a owl:Ontology ;
     rdfs:label "Taxation Compliance Module" ;
-    rdfs:comment "Federal (IRC-based) tax filing, withholding/deposit, and recordkeeping obligations for individuals and business entities." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "Federal (IRC-based) tax filing, withholding/deposit, and recordkeeping obligations for individuals and business entities." .
 
 :IRS a :RegulatoryAuthority ;
     rdfs:label "Internal Revenue Service" ;

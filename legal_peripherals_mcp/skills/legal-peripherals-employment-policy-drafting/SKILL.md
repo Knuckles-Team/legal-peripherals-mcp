@@ -37,18 +37,18 @@ in a real ontology obligation, not a blank page.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
-`legal_compliance_lookup`.
+the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | Pull the Obligation/Control the policy must document (e.g. FLSA timekeeping) |
-| `legal_compliance_lookup` | `sector_lookup` | Confirm which employment-adjacent regulations apply to the org's sector |
+| `legal_get_regulation` | `regulation` | Pull the Obligation/Control the policy must document (e.g. FLSA timekeeping) |
+| `legal_lookup_sector` | `sector` | Confirm which employment-adjacent regulations apply to the org's sector |
 
 ### Recipe
 Ground a timekeeping/overtime policy draft in FLSA's actual control set:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="FLSA")
+legal_get_regulation(regulation="FLSA")
 ```
 Draft the policy body implementing each relevant `Control`, then note, per
 jurisdiction in the org's footprint, any state supplement needed (meal/rest

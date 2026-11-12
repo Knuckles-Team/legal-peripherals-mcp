@@ -12,7 +12,12 @@ READ_ONLY_TOOLS = {
     "legal_list_statute_coverage",
     "lookup_statute_rules",
     "sos_entity_lookup",
-    "legal_compliance_lookup",
+    "legal_list_compliance_domains",
+    "legal_list_regulations",
+    "legal_get_regulation",
+    "legal_lookup_sector",
+    "legal_lookup_data_class",
+    "legal_gate_requirements",
 }
 
 

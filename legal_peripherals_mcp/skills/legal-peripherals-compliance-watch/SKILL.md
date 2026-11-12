@@ -34,7 +34,7 @@ across the ontology suite —
 `:RenewalDeadline`, `domain_employment.ttl`'s `:LeaveRequest`,
 `domain_corporate.ttl`'s `:EntityComplianceDeadline`,
 `domain_regulatory.ttl`'s `:RegulatoryChangeNotice.commentDeadline` — is
-queryable through **one** `legal_compliance_lookup` surface instead of five
+queryable through **one** the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) surface instead of five
 siloed watchers, each requiring its own connector adaptation. A real
 per-source connector (Ironclad, CourtListener, Jira/Linear, Box/Datasite)
 still needs wiring via `source_connector` to populate LIVE instances, but the
@@ -56,24 +56,24 @@ all at once — already exists.
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup`.
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `list_domains` | Inventory every deadline-bearing module currently federated |
-| `legal_compliance_lookup` | `gate_requirements` | Resolve every Regulation + Control a given data-classification profile must satisfy |
-| `legal_compliance_lookup` | `regulation_detail` | Drill into a specific Regulation's ReportingRequirement(s) |
+| `legal_list_compliance_domains` | - | Inventory every deadline-bearing module currently federated |
+| `legal_gate_requirements` | `data_classes` | Resolve every Regulation + Control a given data-classification profile must satisfy |
+| `legal_get_regulation` | `regulation` | Drill into a specific Regulation's ReportingRequirement(s) |
 
 ## Recipe
 1. Inventory what's tracked:
    ```
-   legal_compliance_lookup(action="list_domains")
+   legal_list_compliance_domains()
    ```
 2. For the org's actual data-classification profile, resolve every
    applicable Regulation and its reporting requirements in one call:
    ```
-   legal_compliance_lookup(action="gate_requirements", data_classes="PHI,PII,FinancialData")
+   legal_gate_requirements(data_classes="PHI,PII,FinancialData")
    ```
 3. Cross-reference against the LIVE instance data each domain skill
    maintains (renewal deadlines from `legal-peripherals-contract-lifecycle`,

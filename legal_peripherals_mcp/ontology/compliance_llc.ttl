@@ -10,8 +10,7 @@
 
 <http://knuckles.team/kg/legal-compliance-llc> a owl:Ontology ;
     rdfs:label "LLC Formation & Governance Compliance Module" ;
-    rdfs:comment "State-level LLC formation, registered-agent, annual-report, and operating-agreement obligations." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "State-level LLC formation, registered-agent, annual-report, and operating-agreement obligations." .
 
 :SecretaryOfState a :RegulatoryAuthority ;
     rdfs:label "Secretary of State" ;

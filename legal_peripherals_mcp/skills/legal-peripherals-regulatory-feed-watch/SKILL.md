@@ -46,26 +46,26 @@ the KG-native lookup (a live feed connector, if wired, is a separate
 `source_connector` concern — see Gotchas).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `list_domains` | Inventory every ontology module (incl. `domain_regulatory.ttl`'s change-notice/guidance vocabulary) |
-| `legal_compliance_lookup` | `regulation_detail` | Materiality check: does this Regulation apply to your Sector/DataClassification? |
-| `legal_compliance_lookup` | `sector_lookup` / `dataclass_lookup` | Narrow to only the Regulations that matter to your practice profile |
+| `legal_list_compliance_domains` | - | Inventory every ontology module (incl. `domain_regulatory.ttl`'s change-notice/guidance vocabulary) |
+| `legal_get_regulation` | `regulation` | Materiality check: does this Regulation apply to your Sector/DataClassification? |
+| the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) | `sector_lookup` / `dataclass_lookup` | Narrow to only the Regulations that matter to your practice profile |
 
 ## Recipes
 See what regulatory-domain vocabulary is available (change notices, agency
 guidance, enforcement actions):
 ```
-legal_compliance_lookup(action="list_domains")
+legal_list_compliance_domains()
 ```
 Materiality-filter: only regulations touching your sector matter:
 ```
-legal_compliance_lookup(action="sector_lookup", sector="Medical")
+legal_lookup_sector(sector="Medical")
 ```
 Then, for anything the org's real feed connector surfaces as changed, resolve
 which Obligations it affects:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="HIPAA")
+legal_get_regulation(regulation="HIPAA")
 ```
 
 ## KG grounding

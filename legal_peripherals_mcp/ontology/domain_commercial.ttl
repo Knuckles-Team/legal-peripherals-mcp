@@ -21,9 +21,7 @@
     rdfs:comment """Commercial-contract lifecycle concepts — NDAs, MSAs, vendor
 agreements, amendments, renewal deadlines, playbook review findings, and
 escalation routing for the commercial-contracts practice area, cross-linked to
-the compliance suite via data classification.""" ;
-    owl:imports <http://knuckles.team/kg/legal-compliance>,
-        <http://knuckles.team/kg/legal> .
+the compliance suite via data classification.""" .
 
 #################################################################
 # classes — new

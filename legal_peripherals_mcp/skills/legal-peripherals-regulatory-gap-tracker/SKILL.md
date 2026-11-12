@@ -42,16 +42,16 @@ Connect via the `mcp-client` skill against **`legal-peripherals-mcp`**.
 
 | Variable | Required | Notes |
 |----------|----------|-------|
-| `COMPLIANCETOOL` | optional | `True` (default) enables `legal_compliance_lookup` |
+| `COMPLIANCETOOL` | optional | `True` (default) enables the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) |
 
-`legal_compliance_lookup` degrades honestly (a clear error, no fabrication) if
+the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) degrades honestly (a clear error, no fabrication) if
 `rdflib` isn't installed — install `legal-peripherals-mcp[ontology]`.
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `regulation_detail` | List every Obligation + required Control for a Regulation |
-| `legal_compliance_lookup` | `gate_requirements` | Given a set of data classifications, resolve every applicable Regulation + required Control (the compliance-gate join) |
+| `legal_get_regulation` | `regulation` | List every Obligation + required Control for a Regulation |
+| `legal_gate_requirements` | `data_classes` | Given a set of data classifications, resolve every applicable Regulation + required Control (the compliance-gate join) |
 
 ### Key parameters
 - `regulation` — a Regulation's local id (e.g. `HIPAA`, `FLSA`, `GDPR`, `CCPA`, `LLCFormationGovernance`).
@@ -60,12 +60,12 @@ Connect via the `mcp-client` skill against **`legal-peripherals-mcp`**.
 ## Recipes
 List every obligation + control HIPAA imposes, to see what "closed" looks like:
 ```
-legal_compliance_lookup(action="regulation_detail", regulation="HIPAA")
+legal_get_regulation(regulation="HIPAA")
 ```
 Resolve the full control set a service handling PHI+PII must satisfy (the gap
 surface for a compliance gate):
 ```
-legal_compliance_lookup(action="gate_requirements", data_classes="PHI,PII")
+legal_gate_requirements(data_classes="PHI,PII")
 ```
 Then diff the returned `required_controls` against what the team's actual
 policy/practice currently documents — every missing control is an open gap;
@@ -80,7 +80,7 @@ class a remediation record should be typed as, `:trackedByAssessment` linking
 it back to the `:Assessment` that surfaced it.
 
 ## Gotchas
-- `legal_compliance_lookup` is read-only over the *bundled* ontology suite —
+- the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) is read-only over the *bundled* ontology suite —
   it does not track a live per-org gap register (that lives in the KG once
   ingested, not in this static suite). Use `legal_ingest_filing_file` /
   the engine's write path to persist a specific org's remediation record.

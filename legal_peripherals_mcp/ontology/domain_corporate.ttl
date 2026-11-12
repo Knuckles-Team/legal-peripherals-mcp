@@ -23,9 +23,7 @@
     rdfs:comment """Corporate governance and M&A-diligence concepts — board
 resolutions, written consents, diligence findings, material-contract schedules,
 closing checklists, and entity-compliance deadline tracking for the corporate
-practice area, cross-linked to the LLC compliance module.""" ;
-    owl:imports <http://knuckles.team/kg/legal-compliance>,
-        <http://knuckles.team/kg/legal> .
+practice area, cross-linked to the LLC compliance module.""" .
 
 #################################################################
 # classes — new
@@ -37,12 +35,14 @@ practice area, cross-linked to the LLC compliance module.""" ;
 :BoardResolution a owl:Class ;
     rdfs:label "Board Resolution" ;
     rdfs:comment "A board or committee resolution in house format. Specializes legal.ttl's :CorporateGovernanceDoc (governanceDocType 'board_resolution')." ;
-    rdfs:subClassOf :CorporateGovernanceDoc .
+    rdfs:subClassOf :CorporateGovernanceDoc ;
+    rdfs:subClassOf :Document .
 
 :WrittenConsent a owl:Class ;
     rdfs:label "Written Consent" ;
     rdfs:comment "A unanimous written consent of the board or a committee, taken in lieu of a meeting." ;
-    rdfs:subClassOf :CorporateGovernanceDoc .
+    rdfs:subClassOf :CorporateGovernanceDoc ;
+    rdfs:subClassOf :Document .
 
 :DiligenceFinding a owl:Class ;
     rdfs:label "Diligence Finding" ;
@@ -52,7 +52,8 @@ practice area, cross-linked to the LLC compliance module.""" ;
 :MaterialContract a owl:Class ;
     rdfs:label "Material Contract" ;
     rdfs:comment "A Contract meeting the purchase agreement's Material Contract definition, scheduled on the disclosure schedule." ;
-    rdfs:subClassOf :Contract .
+    rdfs:subClassOf :Contract ;
+    rdfs:subClassOf :Document .
 
 :ClosingChecklistItem a owl:Class ;
     rdfs:label "Closing Checklist Item" ;

@@ -7,8 +7,7 @@
 
 <http://knuckles.team/kg/legal-compliance-hipaa> a owl:Ontology ;
     rdfs:label "HIPAA Compliance Module" ;
-    rdfs:comment "HIPAA Privacy Rule, Security Rule, Breach Notification Rule, and Business Associate Agreement obligations for entities handling Protected Health Information." ;
-    owl:imports <http://knuckles.team/kg/legal-compliance> .
+    rdfs:comment "HIPAA Privacy Rule, Security Rule, Breach Notification Rule, and Business Associate Agreement obligations for entities handling Protected Health Information." .
 
 :HHSOCR a :RegulatoryAuthority ;
     rdfs:label "HHS Office for Civil Rights" ;

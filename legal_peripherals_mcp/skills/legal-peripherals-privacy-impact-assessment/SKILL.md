@@ -37,26 +37,26 @@ Grounded in `domain_privacy.ttl`'s `:ProcessingActivity`
 
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
-for `legal_compliance_lookup`.
+for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
 
 ## Tools & actions
-| Tool | Action | Purpose |
+| Tool | Arguments | Purpose |
 |------|--------|---------|
-| `legal_compliance_lookup` | `dataclass_lookup` | Which Regulation(s) does this activity's data classification trigger? |
-| `legal_compliance_lookup` | `regulation_detail` | Pull GDPR's DPIA obligation specifically, to test the mandatory-DPIA threshold |
+| `legal_lookup_data_class` | `data_class` | Which Regulation(s) does this activity's data classification trigger? |
+| `legal_get_regulation` | `regulation` | Pull GDPR's DPIA obligation specifically, to test the mandatory-DPIA threshold |
 
 ## Recipe
 1. **Classify the data** the activity touches (PII, PHI, financial, ...) and
    resolve what regime(s) apply:
    ```
-   legal_compliance_lookup(action="dataclass_lookup", data_class="PII")
+   legal_lookup_data_class(data_class="PII")
    ```
 2. **Triage against the DPIA threshold** — GDPR Art. 35 requires a DPIA for
    processing "likely to result in high risk" (large-scale profiling,
    systematic monitoring, special-category data at scale, new technology).
    Pull the obligation for the exact trigger language:
    ```
-   legal_compliance_lookup(action="regulation_detail", regulation="GDPR")
+   legal_get_regulation(regulation="GDPR")
    ```
    Below that threshold but still touching PII, a house-format PIA
    (lighter-weight) may suffice instead; genuinely low-risk activities need
