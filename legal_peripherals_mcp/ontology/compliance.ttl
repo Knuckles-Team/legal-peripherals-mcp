@@ -216,3 +216,13 @@ classification resolves the regulation(s) that govern it.""" .
 :CUI a :DataClassification ;
     rdfs:label "Controlled Unclassified Information" ;
     rdfs:comment "CUI as defined by 32 CFR Part 2002 — in scope for FedRAMP/NIST 800-171 government contracting." .
+<http://knuckles.team/kg#Assessment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
+<http://knuckles.team/kg#Attestation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#ComplianceGate> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
+<http://knuckles.team/kg#ComplianceRequirement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .
+<http://knuckles.team/kg#Control> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Policy> .
+<http://knuckles.team/kg#Obligation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Policy> .
+<http://knuckles.team/kg#Penalty> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
+<http://knuckles.team/kg#RegulatoryAuthority> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Organization> .
+<http://knuckles.team/kg#Sector> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
+<http://knuckles.team/kg#ReportingRequirement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .

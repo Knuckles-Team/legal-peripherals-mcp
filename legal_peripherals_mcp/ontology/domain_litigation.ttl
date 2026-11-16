@@ -125,3 +125,10 @@ events for the litigation practice area, all attached to legal.ttl's existing
     rdfs:label "Example: Missed Overtime Payment Event" ;
     :partOfMatter :ExampleWageHourMatter ;
     :eventSignificance "high" .
+<http://knuckles.team/kg#ChronologyEvent> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Event> .
+<http://knuckles.team/kg#ClaimChart> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#DemandLetter> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#Deposition> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Event> .
+<http://knuckles.team/kg#LegalHold> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Action> .
+<http://knuckles.team/kg#PrivilegeLogEntry> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#Subpoena> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
