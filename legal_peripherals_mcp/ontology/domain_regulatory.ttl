@@ -125,3 +125,8 @@ for the regulatory-change practice area.""" .
     rdfs:label "Example: PHI Encryption Gap Remediation" ;
     rdfs:comment "Illustrative remediation plan closing a gap against the HIPAAPHIEncryptionRequirement." ;
     :remediatesGap :HIPAAPHIEncryptionRequirement .
+<http://knuckles.team/kg#AgencyGuidance> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#ComplianceGapRemediation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Action> .
+<http://knuckles.team/kg#EnforcementAction> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Event> .
+<http://knuckles.team/kg#RegulatoryChangeNotice> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#RegulatoryComment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .

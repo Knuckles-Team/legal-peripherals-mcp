@@ -54,6 +54,7 @@ The repository pre-commit hooks apply: `ruff-format`, `connector-standard`, `sec
 ## Production caller chain
 
 1. `CONN-LEGAL-PERIPHERALS-MCP-CONNECTOR-CONTENT-R001`: the `legal-peripherals-mcp` console script (pyproject.toml) loads the `scion_sdk.connector` entry point `legal_peripherals_mcp:connector` -> legal_peripherals_mcp/__init__.py::connector (a Connector with no content= argument) -> the SDK default content registration serves skill://, ontology:// and prompts.
+2. `CONN-LEGAL-PERIPHERALS-MCP-CONNECTOR-CONTENT-R002`: the `legal-peripherals-mcp` console script (pyproject.toml) loads the `scion_sdk.connector` entry point `legal_peripherals_mcp:connector` -> legal_peripherals_mcp/__init__.py::connector -> the SDK default content registration serves the ontology modules, whose root classes extend core classes.
 
 ## Cross-repo seams
 

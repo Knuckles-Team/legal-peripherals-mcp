@@ -134,3 +134,8 @@ the compliance suite via data classification.""" .
     :classifiedAs :PHI ;
     :governedBy :HIPAA ;
     :requiresAttestation :HIPAABusinessAssociateAgreement .
+<http://knuckles.team/kg#Contract> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#ContractAmendment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#ContractReviewFinding> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Evidence> .
+<http://knuckles.team/kg#EscalationRoute> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
+<http://knuckles.team/kg#RenewalDeadline> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .
