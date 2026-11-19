@@ -1,7 +1,7 @@
-"""Epistemic-graph ingestion for legal-peripherals records (typed graph nodes).
+"""Medulla ingestion for legal-peripherals records (typed graph nodes).
 
 CONCEPT:AU-KG.ingest.enterprise-source-extractor. This package pushes its data into
-the ONE epistemic-graph knowledge graph as **typed OWL nodes** — Secretary-of-State
+the ONE medulla knowledge graph as **typed OWL nodes** — Secretary-of-State
 business entities (``:BusinessEntity`` + ``:Jurisdiction``) and IRS EIN applications
 (``:EINApplication``) — plus the text of drafted filings / statute summaries as
 ``:Document`` nodes for semantic search. Raw filing files (drafts) go in as blobs via
@@ -87,7 +87,7 @@ async def ingest_entities(
     *,
     ingest: KnowledgeIngest | None = None,
 ) -> dict[str, int]:
-    """Write typed OWL nodes (+ edges) into epistemic-graph. See module docstring."""
+    """Write typed OWL nodes (+ edges) into medulla. See module docstring."""
     if not entities:
         raise IngestError("ingest_entities needs at least one entity")
     change_set = ChangeSet(

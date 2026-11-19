@@ -97,7 +97,7 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 
 > **Install the connector-focused `[mcp]` extra.** Examples use `legal-peripherals-mcp[mcp]` to add
 > FastMCP / FastAPI through `scion-sdk`; the required Scion SDK core
-> still carries `epistemic-graph[full]`. The `[agent-runtime]` extra additionally
+> still carries `medulla[full]`. The `[agent-runtime]` extra additionally
 > enables model orchestration.
 
 #### stdio Transport (local IDEs — Cursor, Claude Desktop, VS Code)

@@ -64,7 +64,7 @@ pytest -v
 | `CONCEPT:LP-OS.governance.legal` | Secretary of State Crawlers | Dynamic business entity lookup & verifications across 50 states |
 | `CONCEPT:LP-OS.governance.legal-2` | IRS EIN & Off-Hours Filing | SS-4 PDF drafting and scheduling compliance operations |
 | `CONCEPT:LP-OS.identity.legal` | Statutes & Charter Templates | LLC/corporate filing guidelines and dynamic template lookups |
-| `CONCEPT:LP-OS.governance.compliance-ontology-suite` | Regulatory/Legal Compliance Ontology Suite | Shared compliance upper ontology plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC), federated into epistemic-graph and cross-linked to the shared infra/asset ontology by data classification |
+| `CONCEPT:LP-OS.governance.compliance-ontology-suite` | Regulatory/Legal Compliance Ontology Suite | Shared compliance upper ontology plus per-framework modules (HIPAA, BSA/AML+SARs, OCC, Dodd-Frank, CFPB, FLSA, Taxation, LLC), federated into medulla and cross-linked to the shared infra/asset ontology by data classification |
 | `CONCEPT:LP-OS.governance.legal-domain-suite` | Legal Practice-Area Domain Ontology Suite | 6 broader domain modules (regulatory, employment, commercial, privacy, corporate, litigation) modeling each practice area's vocabulary, each importing compliance.ttl + legal.ttl and cross-linked into existing FLSA/HIPAA/LLC individuals; declares GDPR + CCPA as :Regulation individuals |
 | `CONCEPT:LP-OS.governance.legal-compliance-kb` | Compliance Ontology Lookup Tool | KG-native the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) action-routed MCP tool querying the bundled ontology suite directly (no external API); backs the 18 new domain skills |
 | `CONCEPT:AU-ECO.messaging.native-backend-abstraction` | Ecosystem Compliance | Multi-package integration compliance standard |
@@ -200,7 +200,7 @@ Working in parallel with other sessions/worktrees? **Reserve a concept id before
 scion-sdk --json concept reserve --ns EG-KG.compute.backend   # or a package prefix, e.g. KEY
 ```
 
-Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/agent-connector-sdk/concept_coordination/>
+Full protocol (ledger, merge=union, reconcile, MCP/REST): <https://knuckles-team.github.io/scion-sdk/concept_coordination/>
 <!-- END concept-coordination (generated) -->
 
 ## Version & lockfile drift edict (keep the version mirrors AND the lock in sync)

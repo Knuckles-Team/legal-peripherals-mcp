@@ -238,7 +238,7 @@ async def _do_ein_draft(
 async def _maybe_ingest_ein(**kwargs) -> None:
     """Default-on authoritative ingestion of the drafted SS-4.
 
-    Pushes the draft into the epistemic-graph as an ``:EINApplication`` node linked to
+    Pushes the draft into the medulla as an ``:EINApplication`` node linked to
     its ``:BusinessEntity``. Disable with ``LEGAL_KG_INGEST=false``. When enabled,
     ingestion failures propagate.
     """

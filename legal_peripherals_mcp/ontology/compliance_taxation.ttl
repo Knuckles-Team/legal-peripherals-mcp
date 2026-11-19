@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -7,7 +8,7 @@
 # package's existing :EINApplication (legal.ttl) — an EIN is a prerequisite for most
 # business tax filings — and compliance_llc.ttl for entity-level tax elections.
 
-<http://knuckles.team/kg/legal-compliance-taxation> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-compliance-taxation> a owl:Ontology ;
     rdfs:label "Taxation Compliance Module" ;
     rdfs:comment "Federal (IRC-based) tax filing, withholding/deposit, and recordkeeping obligations for individuals and business entities." .
 
@@ -15,7 +16,7 @@
     rdfs:label "Internal Revenue Service" ;
     rdfs:comment "Treasury bureau that administers and enforces the Internal Revenue Code, and issues the EIN a business entity files under." .
 
-:FederalTaxation a :Regulation ;
+:FederalTaxation a core:Regulation ;
     rdfs:label "Federal Taxation" ;
     rdfs:comment "Internal Revenue Code obligations — income tax return filing, payroll tax withholding/deposit, and supporting recordkeeping — applicable to individuals and business entities across every sector." ;
     :appliesToSector :PrivateSector,

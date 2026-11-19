@@ -1,11 +1,12 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 # OCC (Office of the Comptroller of the Currency) — prudential supervision of national banks
 # and federal savings associations. Key concepts/obligations/controls only.
 
-<http://knuckles.team/kg/legal-compliance-occ> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-compliance-occ> a owl:Ontology ;
     rdfs:label "OCC Compliance Module" ;
     rdfs:comment "OCC prudential supervision — capital adequacy, safety-and-soundness examination, and BSA/AML program supervision for national banks and federal savings associations." .
 
@@ -13,7 +14,7 @@
     rdfs:label "Office of the Comptroller of the Currency" ;
     rdfs:comment "Treasury bureau that charters, regulates, and supervises national banks and federal savings associations." .
 
-:OCCBankSupervision a :Regulation ;
+:OCCBankSupervision a core:Regulation ;
     rdfs:label "OCC Bank Supervision" ;
     rdfs:comment "12 CFR prudential supervision framework for national banks/federal savings associations — capital adequacy, safety and soundness, and examination authority, including supervision of each bank's BSA/AML program." ;
     :appliesToSector :FinanceSector ;

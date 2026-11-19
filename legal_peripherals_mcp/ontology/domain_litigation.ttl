@@ -1,4 +1,5 @@
-@prefix : <http://knuckles.team/kg#> .
+@prefix : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#> .
+@prefix core: <https://knuckles-team.github.io/ontology/core#> .
 @prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -14,7 +15,7 @@
 # concepts/document types/controls only, not exhaustive legal text.
 # CONCEPT:LP-OS.governance.legal-domain-litigation
 
-<http://knuckles.team/kg/legal-domain-litigation> a owl:Ontology ;
+<https://knuckles-team.github.io/ontology/connector/legal-domain-litigation> a owl:Ontology ;
     rdfs:label "Litigation Domain Module" ;
     rdfs:comment """Litigation-lifecycle artifacts — demand letters, legal holds,
 depositions, privilege log entries, subpoenas, claim charts, and chronology
@@ -26,36 +27,43 @@ events for the litigation practice area, all attached to legal.ttl's existing
 #################################################################
 
 :DemandLetter a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Demand Letter" ;
     rdfs:comment "An outbound or inbound demand letter, gated on a privilege / FRE 408 / waiver / admission checklist before send." ;
     rdfs:subClassOf bfo:0000031 .
 
 :LegalHold a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Legal Hold" ;
     rdfs:comment "A litigation/preservation hold notice, tracked through issue, refresh, and release. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :Deposition a owl:Class ;
+    rdfs:subClassOf core:Activity ;
     rdfs:label "Deposition" ;
     rdfs:comment "A witness deposition, prepared around the case theory and organized by topic. BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
 :PrivilegeLogEntry a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Privilege Log Entry" ;
     rdfs:comment "A first-pass or attorney-reviewed privilege call for a withheld document." ;
     rdfs:subClassOf bfo:0000031 .
 
 :Subpoena a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Subpoena" ;
     rdfs:comment "A subpoena served on or by the company, triaged for scope, burden, and privilege." ;
     rdfs:subClassOf bfo:0000031 .
 
 :ClaimChart a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Claim Chart" ;
     rdfs:comment "An element chart mapping a cause of action's (or a patent claim's) elements to supporting/rebutting evidence." ;
     rdfs:subClassOf bfo:0000031 .
 
 :ChronologyEvent a owl:Class ;
+    rdfs:subClassOf core:Document ;
     rdfs:label "Chronology Event" ;
     rdfs:comment "A dated, de-duplicated event in a matter's chronology, tagged by significance to the case theory." ;
     rdfs:subClassOf bfo:0000031 .
@@ -81,7 +89,7 @@ events for the litigation practice area, all attached to legal.ttl's existing
 
 :depositionWitness a owl:ObjectProperty ;
     rdfs:domain :Deposition ;
-    rdfs:range :Person .
+    rdfs:range core:Person .
 
 :privilegeStatus a owl:DatatypeProperty ;
     rdfs:comment "privileged, not_privileged, or needs_review." ;
