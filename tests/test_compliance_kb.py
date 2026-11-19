@@ -27,9 +27,18 @@ def test_list_domains_includes_all_domain_and_compliance_modules():
     domains = compliance_kb.run_action("list_domains")
     iris = {d["iri"] for d in domains}
     assert "https://knuckles-team.github.io/ontology/connector/legal-compliance" in iris
-    assert "https://knuckles-team.github.io/ontology/connector/legal-domain-employment" in iris
-    assert "https://knuckles-team.github.io/ontology/connector/legal-domain-commercial" in iris
-    assert "https://knuckles-team.github.io/ontology/connector/legal-domain-privacy" in iris
+    assert (
+        "https://knuckles-team.github.io/ontology/connector/legal-domain-employment"
+        in iris
+    )
+    assert (
+        "https://knuckles-team.github.io/ontology/connector/legal-domain-commercial"
+        in iris
+    )
+    assert (
+        "https://knuckles-team.github.io/ontology/connector/legal-domain-privacy"
+        in iris
+    )
 
 
 @pytest.mark.concept("LEGAL-002")
