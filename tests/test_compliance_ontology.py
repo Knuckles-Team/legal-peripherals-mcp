@@ -629,8 +629,9 @@ def test_asset_with_phi_dataclass_resolves_to_hipaa_via_applies_to_data_class():
 
     query = """
     PREFIX : <https://knuckles-team.github.io/ontology/connector/legal-peripherals#>
+    PREFIX core: <https://knuckles-team.github.io/ontology/core#>
     SELECT ?regulation WHERE {
-        ?asset :classifiedAs ?dataclass .
+        ?asset core:classifiedAs ?dataclass .
         ?regulation :appliesToDataClass ?dataclass .
     }
     """
