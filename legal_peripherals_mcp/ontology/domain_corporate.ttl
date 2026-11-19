@@ -122,3 +122,10 @@ practice area, cross-linked to the LLC compliance module.""" .
     rdfs:comment "Illustrative Company-specific instance of compliance_llc.ttl's LLCAnnualReportRequirement, the same reporting requirement this package's SOS/EIN entity-formation tools already back." ;
     :tracksRequirement :LLCAnnualReportRequirement ;
     :nextDueDate "2027-03-01"^^xsd:date .
+<http://knuckles.team/kg#ClosingChecklistItem> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .
+<http://knuckles.team/kg#Company> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Organization> .
+<http://knuckles.team/kg#DiligenceFinding> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Evidence> .
+<http://knuckles.team/kg#EntityComplianceDeadline> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .
+<http://knuckles.team/kg#BoardResolution> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#MaterialContract> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Agreement> .
+<http://knuckles.team/kg#WrittenConsent> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .

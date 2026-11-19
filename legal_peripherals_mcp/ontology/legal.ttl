@@ -334,3 +334,16 @@ produced by the ein drafting tool. A specialisation of a regulatory filing.""" ;
     rdfs:comment "Links an EIN application to the business entity it is filed for." ;
     rdfs:domain :EINApplication ;
     rdfs:range :BusinessEntity .
+<http://knuckles.team/kg#BeneficiaryRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .
+<http://knuckles.team/kg#BusinessEntity> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#LegalEntity> .
+<http://knuckles.team/kg#CaseLaw> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#ContractClause> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#CorporateGovernanceDoc> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#IntellectualProperty> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
+<http://knuckles.team/kg#Jurisdiction> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Place> .
+<http://knuckles.team/kg#LegalMatter> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
+<http://knuckles.team/kg#LegalTrust> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#RegulatoryFiling> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#SettlorRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .
+<http://knuckles.team/kg#Statute> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .
+<http://knuckles.team/kg#TrusteeRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .

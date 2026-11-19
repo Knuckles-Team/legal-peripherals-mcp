@@ -216,3 +216,8 @@ DataClassification individuals.""" .
     rdfs:label "Example: DPIA for the Marketing Analytics Activity" ;
     :assessesActivity :ExampleMarketingProcessingActivity ;
     :evaluatesRequirement :CCPAOptOutComplianceRequirement .
+<http://knuckles.team/kg#ConsentRecord> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
+<http://knuckles.team/kg#DataSubjectRequest> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Action> .
+<http://knuckles.team/kg#ProcessingActivity> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
+<http://knuckles.team/kg#DataProcessingAgreement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Agreement> .
+<http://knuckles.team/kg#PrivacyImpactAssessment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
