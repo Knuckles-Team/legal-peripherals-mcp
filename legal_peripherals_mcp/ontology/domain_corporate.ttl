@@ -4,7 +4,6 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 # Corporate / entity-governance domain module — the corporate practice area
 # (board resolutions, written consents, closing checklists, M&A diligence
@@ -52,7 +51,7 @@ practice area, cross-linked to the LLC compliance module.""" .
 :MaterialContract a owl:Class ;
     rdfs:label "Material Contract" ;
     rdfs:comment "A Contract meeting the purchase agreement's Material Contract definition, scheduled on the disclosure schedule." ;
-    rdfs:subClassOf sdd:Contract ;
+    rdfs:subClassOf core:Agreement ;
     rdfs:subClassOf core:Document .
 
 :ClosingChecklistItem a owl:Class ;

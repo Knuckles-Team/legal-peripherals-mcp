@@ -4,7 +4,6 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 # Privacy domain module — the privacy practice area (DSARs, DPAs, PIAs/DPIAs,
 # processing-activity triage, and privacy-policy gap monitoring).
@@ -39,7 +38,7 @@ DataClassification individuals.""" .
 :DataProcessingAgreement a owl:Class ;
     rdfs:label "Data Processing Agreement" ;
     rdfs:comment "A DPA between controller and processor governing how PII/PHI is processed on the other party's behalf." ;
-    rdfs:subClassOf sdd:Contract ;
+    rdfs:subClassOf core:Agreement ;
     rdfs:subClassOf core:Document .
 
 :PrivacyImpactAssessment a owl:Class ;

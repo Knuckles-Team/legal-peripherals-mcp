@@ -4,7 +4,6 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 # Commercial-contracts domain module — the commercial-contracts practice area
 # (NDA / vendor / SaaS-MSA review, amendment history, renewal tracking, review
@@ -32,17 +31,17 @@ the compliance suite via data classification.""" .
 :NDAAgreement a owl:Class ;
     rdfs:label "NDA Agreement" ;
     rdfs:comment "A non-disclosure / confidentiality agreement, inbound or mutual." ;
-    rdfs:subClassOf sdd:Contract, core:Agreement .
+    rdfs:subClassOf core:Agreement .
 
 :MSAAgreement a owl:Class ;
     rdfs:label "SaaS / Master Service Agreement" ;
     rdfs:comment "A SaaS subscription or master service agreement — auto-renewal, price escalation, SLA, and data-processing terms are the typical review focus." ;
-    rdfs:subClassOf sdd:Contract, core:Agreement .
+    rdfs:subClassOf core:Agreement .
 
 :VendorAgreement a owl:Class ;
     rdfs:label "Vendor Agreement" ;
     rdfs:comment "An inbound vendor/supplier agreement reviewed against the team playbook." ;
-    rdfs:subClassOf sdd:Contract, core:Agreement .
+    rdfs:subClassOf core:Agreement .
 
 :ContractAmendment a owl:Class ;
     rdfs:subClassOf core:Document ;
@@ -75,11 +74,11 @@ the compliance suite via data classification.""" .
 :amendsContract a owl:ObjectProperty ;
     rdfs:label "amends contract" ;
     rdfs:domain :ContractAmendment ;
-    rdfs:range sdd:Contract .
+    rdfs:range core:Agreement .
 
 :hasRenewalDeadline a owl:ObjectProperty ;
     rdfs:label "has renewal deadline" ;
-    rdfs:domain sdd:Contract ;
+    rdfs:domain core:Agreement ;
     rdfs:range :RenewalDeadline .
 
 :cancelByDate a owl:DatatypeProperty ;
@@ -96,7 +95,7 @@ the compliance suite via data classification.""" .
 :flaggedIn a owl:ObjectProperty ;
     rdfs:label "flagged in" ;
     rdfs:domain :ContractReviewFinding ;
-    rdfs:range sdd:Contract .
+    rdfs:range core:Agreement .
 
 :deviatesFromClause a owl:ObjectProperty ;
     rdfs:label "deviates from clause" ;
@@ -122,7 +121,7 @@ the compliance suite via data classification.""" .
 :requiresAttestation a owl:ObjectProperty ;
     rdfs:label "requires attestation" ;
     rdfs:comment "Links a data-classified Contract to the compliance Attestation (e.g. a signed BAA) required before it may proceed." ;
-    rdfs:domain sdd:Contract ;
+    rdfs:domain core:Agreement ;
     rdfs:range :Attestation .
 
 #################################################################

@@ -12,7 +12,6 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 :BeneficiaryRole a owl:Class ;
     rdfs:label "Beneficiary Role" ;
@@ -118,7 +117,7 @@
 
 :hasClause a owl:ObjectProperty ;
     rdfs:label "has clause" ;
-    rdfs:domain sdd:Contract ;
+    rdfs:domain core:Agreement ;
     rdfs:range :ContractClause .
 
 :hasSettlor a owl:ObjectProperty ;
