@@ -11,10 +11,22 @@ from rdflib.namespace import OWL, RDF, RDFS  # noqa: E402
 
 pytestmark = pytest.mark.spec("CONN-LEGAL-PERIPHERALS-MCP-CONNECTOR-CONTENT-R002")
 
-ONTOLOGY_DIR = Path(__file__).resolve().parent.parent / "legal_peripherals_mcp" / "ontology"
+ONTOLOGY_DIR = (
+    Path(__file__).resolve().parent.parent / "legal_peripherals_mcp" / "ontology"
+)
 CONNECTOR_NS = "/ontology/connector/"
 # Terms the core ontology already declares; the pack references them and never redeclares them.
-CORE_OWNED = ['Assessment', 'Company', 'ConsentRecord', 'Contract', 'Employee', 'ProcessingActivity', 'effectiveDate', 'filingStatus', 'requestedBy']
+CORE_OWNED = [
+    "Assessment",
+    "Company",
+    "ConsentRecord",
+    "Contract",
+    "Employee",
+    "ProcessingActivity",
+    "effectiveDate",
+    "filingStatus",
+    "requestedBy",
+]
 _KINDS = (
     RDFS.Class,
     OWL.Class,
