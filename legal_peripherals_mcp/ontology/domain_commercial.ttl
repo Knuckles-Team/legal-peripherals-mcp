@@ -4,6 +4,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 # Commercial-contracts domain module — the commercial-contracts practice area
 # (NDA / vendor / SaaS-MSA review, amendment history, renewal tracking, review
@@ -28,26 +29,20 @@ the compliance suite via data classification.""" .
 # classes — new
 #################################################################
 
-:Contract a owl:Class ;
-    rdfs:subClassOf core:Document ;
-    rdfs:label "Contract" ;
-    rdfs:comment "A legally binding commercial agreement. Formally types legal.ttl's previously-undeclared :Contract domain (:hasClause)." ;
-    rdfs:subClassOf bfo:0000031 .
-
 :NDAAgreement a owl:Class ;
     rdfs:label "NDA Agreement" ;
     rdfs:comment "A non-disclosure / confidentiality agreement, inbound or mutual." ;
-    rdfs:subClassOf :Contract .
+    rdfs:subClassOf sdd:Contract, core:Agreement .
 
 :MSAAgreement a owl:Class ;
     rdfs:label "SaaS / Master Service Agreement" ;
     rdfs:comment "A SaaS subscription or master service agreement — auto-renewal, price escalation, SLA, and data-processing terms are the typical review focus." ;
-    rdfs:subClassOf :Contract .
+    rdfs:subClassOf sdd:Contract, core:Agreement .
 
 :VendorAgreement a owl:Class ;
     rdfs:label "Vendor Agreement" ;
     rdfs:comment "An inbound vendor/supplier agreement reviewed against the team playbook." ;
-    rdfs:subClassOf :Contract .
+    rdfs:subClassOf sdd:Contract, core:Agreement .
 
 :ContractAmendment a owl:Class ;
     rdfs:subClassOf core:Document ;
@@ -80,11 +75,11 @@ the compliance suite via data classification.""" .
 :amendsContract a owl:ObjectProperty ;
     rdfs:label "amends contract" ;
     rdfs:domain :ContractAmendment ;
-    rdfs:range :Contract .
+    rdfs:range sdd:Contract .
 
 :hasRenewalDeadline a owl:ObjectProperty ;
     rdfs:label "has renewal deadline" ;
-    rdfs:domain :Contract ;
+    rdfs:domain sdd:Contract ;
     rdfs:range :RenewalDeadline .
 
 :cancelByDate a owl:DatatypeProperty ;
@@ -101,7 +96,7 @@ the compliance suite via data classification.""" .
 :flaggedIn a owl:ObjectProperty ;
     rdfs:label "flagged in" ;
     rdfs:domain :ContractReviewFinding ;
-    rdfs:range :Contract .
+    rdfs:range sdd:Contract .
 
 :deviatesFromClause a owl:ObjectProperty ;
     rdfs:label "deviates from clause" ;
@@ -127,7 +122,7 @@ the compliance suite via data classification.""" .
 :requiresAttestation a owl:ObjectProperty ;
     rdfs:label "requires attestation" ;
     rdfs:comment "Links a data-classified Contract to the compliance Attestation (e.g. a signed BAA) required before it may proceed." ;
-    rdfs:domain :Contract ;
+    rdfs:domain sdd:Contract ;
     rdfs:range :Attestation .
 
 #################################################################
@@ -140,8 +135,3 @@ the compliance suite via data classification.""" .
     core:classifiedAs :PHI ;
     core:governedBy :HIPAA ;
     :requiresAttestation :HIPAABusinessAssociateAgreement .
-<http://knuckles.team/kg#Contract> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#ContractAmendment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#ContractReviewFinding> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Evidence> .
-<http://knuckles.team/kg#EscalationRoute> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#RenewalDeadline> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .

@@ -29,10 +29,6 @@ FLSA compliance module.""" .
 # classes — new
 #################################################################
 
-:Employee a owl:Class ;
-    rdfs:subClassOf core:Employee .
-
-
 :EmploymentContract a owl:Class ;
     rdfs:subClassOf core:Document ;
     rdfs:label "Employment Contract" ;
@@ -82,7 +78,7 @@ FLSA compliance module.""" .
 :employedBy a owl:ObjectProperty ;
     rdfs:label "employed by" ;
     rdfs:comment "Links an Employee to the employing Organization." ;
-    rdfs:domain :Employee ;
+    rdfs:domain core:Employee ;
     rdfs:range core:Organization .
 
 :classificationOutcome a owl:DatatypeProperty ;
@@ -113,7 +109,7 @@ FLSA compliance module.""" .
     rdfs:label "subject of investigation" ;
     rdfs:comment "Links an InternalInvestigation to the Employee(s) it concerns." ;
     rdfs:domain :InternalInvestigation ;
-    rdfs:range :Employee .
+    rdfs:range core:Employee .
 
 :leaveType a owl:DatatypeProperty ;
     rdfs:comment "fmla, ada_accommodation, parental, medical, state_specific." ;
@@ -124,11 +120,6 @@ FLSA compliance module.""" .
     rdfs:label "leave decision deadline" ;
     rdfs:domain :LeaveRequest ;
     rdfs:range xsd:date .
-
-:requestedBy a owl:ObjectProperty ;
-    rdfs:label "requested by" ;
-    rdfs:domain :LeaveRequest ;
-    rdfs:range :Employee .
 
 :expandsToJurisdiction a owl:ObjectProperty ;
     rdfs:label "expands to jurisdiction" ;
@@ -157,11 +148,3 @@ FLSA compliance module.""" .
     :classificationOutcome "employee" ;
     :classificationTriggersObligation :FLSAMinimumWageObligation,
         :FLSAOvertimeObligation .
-<http://knuckles.team/kg#Employee> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Person> .
-<http://knuckles.team/kg#EmploymentContract> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#InternalInvestigation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#InternationalExpansionProject> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#LeaveRequest> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Action> .
-<http://knuckles.team/kg#WorkerClassificationAssessment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#HandbookPolicy> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Policy> .
-<http://knuckles.team/kg#RestrictiveCovenant> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .

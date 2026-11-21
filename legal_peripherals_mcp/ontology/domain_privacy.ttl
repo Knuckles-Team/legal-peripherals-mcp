@@ -4,6 +4,7 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sdd: <https://knuckles-team.github.io/ontology/sdd-spec#> .
 
 # Privacy domain module — the privacy practice area (DSARs, DPAs, PIAs/DPIAs,
 # processing-activity triage, and privacy-policy gap monitoring).
@@ -38,24 +39,14 @@ DataClassification individuals.""" .
 :DataProcessingAgreement a owl:Class ;
     rdfs:label "Data Processing Agreement" ;
     rdfs:comment "A DPA between controller and processor governing how PII/PHI is processed on the other party's behalf." ;
-    rdfs:subClassOf :Contract ;
+    rdfs:subClassOf sdd:Contract ;
     rdfs:subClassOf core:Document .
 
 :PrivacyImpactAssessment a owl:Class ;
     rdfs:subClassOf core:Assessment ;
     rdfs:label "Privacy Impact Assessment" ;
     rdfs:comment "A PIA, or a mandatory GDPR Data Protection Impact Assessment (DPIA), evaluating a ProcessingActivity's privacy risk. Specializes compliance.ttl's :Assessment." ;
-    rdfs:subClassOf :Assessment .
-
-:ProcessingActivity a owl:Class ;
-    rdfs:subClassOf core:ProcessingActivity ;
-    rdfs:label "Processing Activity" ;
-    rdfs:comment "A record of a data-processing activity (a Record of Processing Activities / RoPA entry) — the unit a use-case triage or PIA evaluates." ;
-    rdfs:subClassOf bfo:0000031 .
-
-:ConsentRecord a owl:Class ;
-    rdfs:subClassOf core:ConsentRecord .
-
+    rdfs:subClassOf core:Assessment .
 
 #################################################################
 # object / datatype properties — new
@@ -84,21 +75,21 @@ DataClassification individuals.""" .
 :assessesActivity a owl:ObjectProperty ;
     rdfs:label "assesses activity" ;
     rdfs:domain :PrivacyImpactAssessment ;
-    rdfs:range :ProcessingActivity .
+    rdfs:range core:ProcessingActivity .
 
 :processesDataClass a owl:ObjectProperty ;
     rdfs:label "processes data class" ;
     rdfs:comment "Links a ProcessingActivity to the DataClassification(s) it handles — the join used by use-case triage to decide whether a PIA or a mandatory DPIA is required." ;
-    rdfs:domain :ProcessingActivity ;
+    rdfs:domain core:ProcessingActivity ;
     rdfs:range core:DataClassification .
 
 :recordsConsent a owl:ObjectProperty ;
-    rdfs:domain :ProcessingActivity ;
-    rdfs:range :ConsentRecord .
+    rdfs:domain core:ProcessingActivity ;
+    rdfs:range core:ConsentRecord .
 
 :legalBasis a owl:DatatypeProperty ;
     rdfs:comment "consent, legitimate_interest, contract, or legal_obligation." ;
-    rdfs:domain :ConsentRecord ;
+    rdfs:domain core:ConsentRecord ;
     rdfs:range xsd:string .
 
 #################################################################
@@ -201,7 +192,7 @@ DataClassification individuals.""" .
 # canonical / illustrative individuals — the DataClassification cross-link
 #################################################################
 
-:ExampleMarketingProcessingActivity a :ProcessingActivity ;
+:ExampleMarketingProcessingActivity a core:ProcessingActivity ;
     rdfs:label "Example: Marketing Analytics Processing Activity" ;
     rdfs:comment "Illustrative ProcessingActivity handling PII, resolving to both GDPR and CCPA via :processesDataClass / the shared :PII individual." ;
     :processesDataClass :PII .
@@ -216,8 +207,3 @@ DataClassification individuals.""" .
     rdfs:label "Example: DPIA for the Marketing Analytics Activity" ;
     :assessesActivity :ExampleMarketingProcessingActivity ;
     :evaluatesRequirement :CCPAOptOutComplianceRequirement .
-<http://knuckles.team/kg#ConsentRecord> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#DataSubjectRequest> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Action> .
-<http://knuckles.team/kg#ProcessingActivity> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#DataProcessingAgreement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Agreement> .
-<http://knuckles.team/kg#PrivacyImpactAssessment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
