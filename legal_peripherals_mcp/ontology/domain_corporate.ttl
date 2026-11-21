@@ -30,10 +30,6 @@ practice area, cross-linked to the LLC compliance module.""" .
 # classes — new
 #################################################################
 
-:Company a owl:Class ;
-    rdfs:subClassOf core:Company .
-
-
 :BoardResolution a owl:Class ;
     rdfs:label "Board Resolution" ;
     rdfs:comment "A board or committee resolution in house format. Specializes legal.ttl's :CorporateGovernanceDoc (governanceDocType 'board_resolution')." ;
@@ -55,7 +51,7 @@ practice area, cross-linked to the LLC compliance module.""" .
 :MaterialContract a owl:Class ;
     rdfs:label "Material Contract" ;
     rdfs:comment "A Contract meeting the purchase agreement's Material Contract definition, scheduled on the disclosure schedule." ;
-    rdfs:subClassOf :Contract ;
+    rdfs:subClassOf core:Agreement ;
     rdfs:subClassOf core:Document .
 
 :ClosingChecklistItem a owl:Class ;
@@ -76,8 +72,8 @@ practice area, cross-linked to the LLC compliance module.""" .
 
 :subsidiaryOf a owl:ObjectProperty ;
     rdfs:label "subsidiary of" ;
-    rdfs:domain :Company ;
-    rdfs:range :Company .
+    rdfs:domain core:Company ;
+    rdfs:range core:Company .
 
 :materialityThreshold a owl:DatatypeProperty ;
     rdfs:domain :DiligenceFinding ;
@@ -107,7 +103,7 @@ practice area, cross-linked to the LLC compliance module.""" .
 :deadlineFor a owl:ObjectProperty ;
     rdfs:label "deadline for" ;
     rdfs:domain :EntityComplianceDeadline ;
-    rdfs:range :Company .
+    rdfs:range core:Company .
 
 :nextDueDate a owl:DatatypeProperty ;
     rdfs:domain :EntityComplianceDeadline ;
@@ -122,10 +118,3 @@ practice area, cross-linked to the LLC compliance module.""" .
     rdfs:comment "Illustrative Company-specific instance of compliance_llc.ttl's LLCAnnualReportRequirement, the same reporting requirement this package's SOS/EIN entity-formation tools already back." ;
     :tracksRequirement :LLCAnnualReportRequirement ;
     :nextDueDate "2027-03-01"^^xsd:date .
-<http://knuckles.team/kg#ClosingChecklistItem> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .
-<http://knuckles.team/kg#Company> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Organization> .
-<http://knuckles.team/kg#DiligenceFinding> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Evidence> .
-<http://knuckles.team/kg#EntityComplianceDeadline> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Task> .
-<http://knuckles.team/kg#BoardResolution> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#MaterialContract> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Agreement> .
-<http://knuckles.team/kg#WrittenConsent> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .

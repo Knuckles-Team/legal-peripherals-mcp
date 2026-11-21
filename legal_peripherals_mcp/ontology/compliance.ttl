@@ -10,7 +10,7 @@
 # module in this directory (compliance_hipaa.ttl, compliance_bsa_aml.ttl, compliance_occ.ttl,
 # compliance_dodd_frank.ttl, compliance_cfpb.ttl, compliance_flsa.ttl, compliance_taxation.ttl,
 # compliance_llc.ttl, …) extend it. All classes/properties live in the shared
-# `:` (kg#) namespace per the fleet federation convention; only the owl:Ontology node below
+# `:` (connector) namespace; only the owl:Ontology node below
 # gets this module's own IRI.
 #
 # Deliberately REUSES rather than redefines what already exists:
@@ -105,10 +105,6 @@ classification resolves the regulation(s) that govern it.""" .
     rdfs:comment "An automated or manual checkpoint — wired into the incident, SDLC, or comparative-intelligence loops — that evaluates whether a governed entity satisfies its ComplianceRequirement(s) before it may proceed (deploy, onboard, process data). BFO:Process." ;
     rdfs:subClassOf bfo:0000015 .
 
-:Assessment a owl:Class ;
-    rdfs:subClassOf core:Assessment .
-
-
 :Attestation a owl:Class ;
     rdfs:subClassOf core:Document ;
     rdfs:label "Attestation" ;
@@ -176,7 +172,7 @@ classification resolves the regulation(s) that govern it.""" .
 :evaluatesRequirement a owl:ObjectProperty ;
     rdfs:label "evaluates requirement" ;
     rdfs:comment "Links an Assessment or ComplianceGate to the ComplianceRequirement(s) it evaluates." ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( :Assessment :ComplianceGate ) ] ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( core:Assessment :ComplianceGate ) ] ;
     rdfs:range :ComplianceRequirement .
 
 :attestsTo a owl:ObjectProperty ;
@@ -224,13 +220,3 @@ classification resolves the regulation(s) that govern it.""" .
 :CUI a core:DataClassification ;
     rdfs:label "Controlled Unclassified Information" ;
     rdfs:comment "CUI as defined by 32 CFR Part 2002 — in scope for FedRAMP/NIST 800-171 government contracting." .
-<http://knuckles.team/kg#Assessment> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#Attestation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#ComplianceGate> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Procedure> .
-<http://knuckles.team/kg#ComplianceRequirement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .
-<http://knuckles.team/kg#Control> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Policy> .
-<http://knuckles.team/kg#Obligation> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Policy> .
-<http://knuckles.team/kg#Penalty> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
-<http://knuckles.team/kg#RegulatoryAuthority> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Organization> .
-<http://knuckles.team/kg#Sector> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
-<http://knuckles.team/kg#ReportingRequirement> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .

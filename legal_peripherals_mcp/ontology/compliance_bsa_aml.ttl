@@ -91,7 +91,7 @@
     :derivedFromRegulation :BSA_AML ;
     :requiresControl :BSATransactionMonitoringControl .
 
-:BSAAMLIndependentTestingAssessment a :Assessment ;
+:BSAAMLIndependentTestingAssessment a core:Assessment ;
     rdfs:label "AML Independent Testing Assessment" ;
     rdfs:comment "The periodic independent-test engagement (BSAAMLIndependentTestingControl in practice) that evaluates the SAR filing compliance requirement." ;
     :evaluatesRequirement :BSASARComplianceRequirement .

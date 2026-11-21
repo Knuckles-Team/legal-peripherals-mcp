@@ -64,10 +64,6 @@
     rdfs:domain core:Person ;
     rdfs:range core:Person .
 
-:effectiveDate a owl:DatatypeProperty ;
-    rdfs:domain :CorporateGovernanceDoc ;
-    rdfs:range xsd:date .
-
 :employmentLawType a owl:DatatypeProperty ;
     rdfs:comment "discrimination, wrongful_termination, wage_dispute, harassment, retaliation, nlra_violation." ;
     rdfs:domain :EmploymentLawMatter ;
@@ -75,7 +71,7 @@
 
 :filedBy a owl:ObjectProperty ;
     rdfs:domain :RegulatoryFiling ;
-    rdfs:range :Company .
+    rdfs:range core:Company .
 
 :filingAgency a owl:DatatypeProperty ;
     rdfs:label "filing agency" ;
@@ -86,12 +82,6 @@
 :filingDeadline a owl:DatatypeProperty ;
     rdfs:domain :RegulatoryFiling ;
     rdfs:range xsd:date .
-
-:filingStatus a owl:DatatypeProperty ;
-    rdfs:label "filing status" ;
-    rdfs:comment "pending, filed, overdue, accepted, rejected." ;
-    rdfs:domain :RegulatoryFiling ;
-    rdfs:range xsd:string .
 
 :filingType a owl:DatatypeProperty ;
     rdfs:label "filing type" ;
@@ -107,7 +97,7 @@
 
 :governedByDoc a owl:ObjectProperty ;
     rdfs:label "governed by document" ;
-    rdfs:domain :Company ;
+    rdfs:domain core:Company ;
     rdfs:range :CorporateGovernanceDoc .
 
 :governedByEmploymentStatute a owl:ObjectProperty ;
@@ -123,11 +113,11 @@
 
 :hasBeneficiary a owl:ObjectProperty ;
     rdfs:domain :LegalTrust ;
-    rdfs:range [ owl:unionOf ( core:Person :Company ) ] .
+    rdfs:range [ owl:unionOf ( core:Person core:Company ) ] .
 
 :hasClause a owl:ObjectProperty ;
     rdfs:label "has clause" ;
-    rdfs:domain :Contract ;
+    rdfs:domain core:Agreement ;
     rdfs:range :ContractClause .
 
 :hasSettlor a owl:ObjectProperty ;
@@ -136,12 +126,12 @@
 
 :hasTrustee a owl:ObjectProperty ;
     rdfs:domain :LegalTrust ;
-    rdfs:range [ owl:unionOf ( core:Person :Company ) ] .
+    rdfs:range [ owl:unionOf ( core:Person core:Company ) ] .
 
 :involvesEmployee a owl:ObjectProperty ;
     rdfs:label "involves employee" ;
     rdfs:domain :EmploymentLawMatter ;
-    rdfs:range :Employee .
+    rdfs:range core:Employee .
 
 :ipExpirationDate a owl:DatatypeProperty ;
     rdfs:domain :IntellectualProperty ;
@@ -177,7 +167,7 @@
 
 :ownsIP a owl:ObjectProperty ;
     rdfs:label "owns IP" ;
-    rdfs:domain :Company ;
+    rdfs:domain core:Company ;
     rdfs:range :IntellectualProperty .
 
 :precedentFor a owl:ObjectProperty,
@@ -334,16 +324,3 @@ produced by the ein drafting tool. A specialisation of a regulatory filing.""" ;
     rdfs:comment "Links an EIN application to the business entity it is filed for." ;
     rdfs:domain :EINApplication ;
     rdfs:range :BusinessEntity .
-<http://knuckles.team/kg#BeneficiaryRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .
-<http://knuckles.team/kg#BusinessEntity> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#LegalEntity> .
-<http://knuckles.team/kg#CaseLaw> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#ContractClause> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#CorporateGovernanceDoc> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#IntellectualProperty> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
-<http://knuckles.team/kg#Jurisdiction> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Place> .
-<http://knuckles.team/kg#LegalMatter> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Concept> .
-<http://knuckles.team/kg#LegalTrust> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#RegulatoryFiling> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Document> .
-<http://knuckles.team/kg#SettlorRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .
-<http://knuckles.team/kg#Statute> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Regulation> .
-<http://knuckles.team/kg#TrusteeRole> rdfs:subClassOf <https://knuckles-team.github.io/ontology/core#Role> .
