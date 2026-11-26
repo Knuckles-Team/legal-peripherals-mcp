@@ -2,13 +2,7 @@
 name: legal-peripherals-regulatory-gap-tracker
 skill_type: skill
 description: >-
-  Track open compliance gaps between current policy/practice and the
-  regulatory obligations declared in the compliance ontology suite, and
-  produce a remediation plan. Use when the user asks "what
-  gaps are open", wants a gap tracker or remediation status, or wants to close
-  a gap against a named regulation/obligation. Do NOT use for the live
-  regulatory-feed sweep (legal-peripherals-regulatory-feed-watch) or for
-  drafting the actual redlined policy text (legal-peripherals-policy-redraft).
+  Track open compliance gaps between current policy/practice and the regulatory obligations declared in the compliance ontology suite, and produce a remediation plan. Use when the user asks "what gaps are open", wants a gap tracker or remediation status, or wants to close a gap against a named regulation/obligation.
 license: MIT
 tags: [legal-peripherals, regulatory, compliance-gap, ontology, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Regulatory Gap Tracker
+
+Scope: Track open compliance gaps between current policy/practice and the regulatory obligations declared in the compliance ontology suite, and produce a remediation plan. Use when the user asks "what gaps are open", wants a gap tracker or remediation status, or wants to close a gap against a named regulation/obligation. Do NOT use for the live regulatory-feed sweep (legal-peripherals-regulatory-feed-watch) or for drafting the actual redlined policy text (legal-peripherals-policy-redraft).
 
 KG-native gap tracking against the `legal_peripherals_mcp` compliance ontology
 suite (`compliance.ttl` + per-framework modules + `domain_regulatory.ttl`'s
@@ -46,6 +42,22 @@ Connect via the `mcp-client` skill against **`legal-peripherals-mcp`**.
 
 the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) degrades honestly (a clear error, no fabrication) if
 `rdflib` isn't installed — install `legal-peripherals-mcp[ontology]`.
+
+## Steps
+
+1. Pick the regulation by its local id. Verify the id is exact, since `regulation` is case-sensitive.
+2. List its requirements with `legal_get_regulation`(regulation="HIPAA"). Verify obligations and required controls are returned.
+3. For services spanning data classes, call `legal_gate_requirements`(data_classes="PHI,PII"). Verify `required_controls` is non-empty.
+4. Diff the required controls against documented policy and practice. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify each missing control is listed as an open gap.
+5. Record each remediation as a `:ComplianceGapRemediation` with `:remediatesGap` to the `:ComplianceRequirement`. Verify it links back via `:trackedByAssessment`.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `legal_get_regulation` returns no regulation | Free-text label used instead of local id | List ids with `legal_list_regulations` and use the exact one |
+| Compliance tools return an error | `rdflib` not installed | Install `legal-peripherals-mcp[ontology]` |
+| Org-specific gaps not persisted | Bundled ontology is static | Persist remediation records with `legal_ingest_filing_file` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

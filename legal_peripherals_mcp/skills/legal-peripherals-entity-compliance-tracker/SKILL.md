@@ -2,17 +2,7 @@
 name: legal-peripherals-entity-compliance-tracker
 skill_type: skill
 description: >-
-  Track a formed business entity's ongoing compliance deadlines (annual/
-  biennial report, registered-agent maintenance, operating-agreement
-  currency) and run a health audit, grounded in the corporate domain
-  ontology's EntityComplianceDeadline cross-linked to the LLC compliance
-  module's LLCAnnualReportRequirement — the same entity this package's
-  Secretary-of-State and EIN tools already formed. Use for
-  post-formation compliance tracking of an entity looked up via
-  `legal-peripherals-entity-lookup`. Do NOT use for the initial formation
-  lookup/filing itself (legal-peripherals-entity-lookup,
-  legal-peripherals-ein-filing) or cross-domain deadline sweeps spanning
-  other practice areas (legal-peripherals-compliance-watch).
+  Track a formed entity's ongoing compliance deadlines (annual or biennial report, registered agent, operating agreement) and run a health audit. Use after an entity was looked up or formed. Do NOT use for the lookup or EIN filing (entity-lookup, ein-filing) or cross-domain sweeps (compliance-watch).
 license: MIT
 tags: [legal-peripherals, corporate, entity-compliance, llc, sos, mcp]
 metadata:
@@ -21,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Entity Compliance Tracker
+
+Scope: Track a formed business entity's ongoing compliance deadlines (annual/ biennial report, registered-agent maintenance, operating-agreement currency) and run a health audit, grounded in the corporate domain ontology's EntityComplianceDeadline cross-linked to the LLC compliance module's LLCAnnualReportRequirement — the same entity this package's Secretary-of-State and EIN tools already formed. Use for post-formation compliance tracking of an entity looked up via `legal-peripherals-entity-lookup`. Do NOT use for the initial formation lookup/filing itself (legal-peripherals-entity-lookup, legal-peripherals-ein-filing) or cross-domain deadline sweeps spanning other practice areas (legal-peripherals-compliance-watch).
 
 Tracks a formed entity's ongoing compliance, closing the loop this package's
 SOS/EIN entity-formation tools opened:
@@ -50,6 +42,22 @@ requirement the entity-formation tools' ontology already declares.
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`). Entity lookups themselves use `SOSTOOL`/
 `EINTOOL`/`STATUTETOOL` (see `legal-peripherals-entity-lookup`).
+
+## Steps
+
+1. Pull the LLC requirement set with `legal_get_regulation`(regulation="LLCFormationGovernance"). Verify it returns `LLCAnnualReportRequirement`, registered-agent, and operating-agreement controls.
+2. Confirm the state's report cadence and fee with `lookup_statute_rules`(state, entity_type, topic). Verify the cadence is read from the result rather than assumed annual.
+3. Create an `:EntityComplianceDeadline` with `:tracksRequirement`, `:deadlineFor` the `:Company`, and `:nextDueDate`. Verify the date follows the state's cadence.
+4. Run a health audit by re-checking each tracked entity with `sos_entity_lookup`(state, entity_name). Verify the status is freshly returned as active or good standing.
+5. Report deadlines sorted by `:nextDueDate`, flagging past-due items as dissolution risk. Verify each flagged entity cites `:LLCAdministrativeDissolutionPenalty`.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `sos_entity_lookup` reports not configured | `OPENCORPORATES_API_TOKEN` is not set | Set the token in the server environment and repeat the lookup before reporting standing |
+| Entity not found in registry | Wrong state or name | Search again with the correct `state` and a shorter `entity_name`, or fetch by `entity_id` |
+| Cadence unknown for the state | `lookup_statute_rules` returned a general fallback | Mark the due date unconfirmed and cite the state's primary source |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

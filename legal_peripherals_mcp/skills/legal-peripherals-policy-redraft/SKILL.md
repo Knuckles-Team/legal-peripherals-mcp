@@ -2,13 +2,7 @@
 name: legal-peripherals-policy-redraft
 skill_type: skill
 description: >-
-  Diff a regulatory change against current policy and produce a proposed
-  marked-up redraft closing the gap, grounded in the compliance ontology's
-  Obligation/Control set. Use when a
-  regulation has changed (or a gap was found) and the user needs a first-draft
-  policy fix for internal review. Do NOT use for tracking which gaps are
-  still open (legal-peripherals-regulatory-gap-tracker) or for drafting an
-  employment handbook policy specifically (legal-peripherals-employment-policy-drafting).
+  Diff a regulatory change against current policy and produce a proposed marked-up redraft closing the gap, grounded in the compliance ontology's Obligation/Control set. Use when a regulation has changed (or a gap was found) and the user needs a first-draft policy fix for internal review.
 license: MIT
 tags: [legal-peripherals, regulatory, policy-redraft, drafting, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Regulatory Policy Redraft
+
+Scope: Diff a regulatory change against current policy and produce a proposed marked-up redraft closing the gap, grounded in the compliance ontology's Obligation/Control set. Use when a regulation has changed (or a gap was found) and the user needs a first-draft policy fix for internal review. Do NOT use for tracking which gaps are still open (legal-peripherals-regulatory-gap-tracker) or for drafting an employment handbook policy specifically (legal-peripherals-employment-policy-drafting).
 
 Given a regulatory change (or a known gap), produce a first-draft policy
 redline closing it — grounded in the exact Obligation/Control set the ontology
@@ -37,6 +33,22 @@ declares, so the draft's substance is traceable rather than freehand.
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
 the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`). This skill is drafting guidance — the agent
 composes the redline text; the tool supplies the grounded requirement list.
+
+## Steps
+
+1. Identify the changed regulation or the open gap. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the regulation id is stated.
+2. Pull the set with `legal_get_regulation`(regulation="GDPR"), substituting the changed regulation. Verify obligations, controls, and penalties are returned.
+3. For policies spanning data classes, cross-check with `legal_gate_requirements`(data_classes). Verify every applicable regulation is covered.
+4. Draft a redline clause for each `obligations[].controls[]` entry missing from current policy. Verify each clause cites its `:Control` id.
+5. Output what changed, the redline, the traceability, and open questions, labelled a first draft for internal review. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify jurisdiction nuance is listed as open, not guessed.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `legal_get_regulation` returns no regulation | Regulation id mistyped | List ids with `legal_list_regulations` and pass the exact id |
+| Control comment is empty | Ontology gives no substance for it | List it under open questions for attorney review |
+| Compliance tools missing | `COMPLIANCETOOL` disabled or `rdflib` missing | Enable `COMPLIANCETOOL` and install `legal-peripherals-mcp[ontology]` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

@@ -2,14 +2,7 @@
 name: legal-peripherals-contract-escalation
 skill_type: skill
 description: >-
-  Route a contract review finding to the right approver per the escalation
-  matrix and draft the ask, or translate a contract review into a
-  two-minute stakeholder summary ("can I sign this and what do I need to
-  change"), grounded in the commercial domain ontology's EscalationRoute
-  class. Use after a contract review produced findings that need routing or
-  business-friendly translation. Do NOT use for the review itself
-  (legal-peripherals-contract-review) or lifecycle/renewal tracking
-  (legal-peripherals-contract-lifecycle).
+  Route a contract review finding to the right approver per the escalation matrix and draft the ask, or translate a contract review into a two-minute stakeholder summary ("can I sign this and what do I need to change"), grounded in the commercial domain ontology's EscalationRoute class. Use after a contract review produced findings that need routing or business-friendly translation.
 license: MIT
 tags: [legal-peripherals, commercial, escalation, stakeholder-summary, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Contract Escalation & Stakeholder Summary
+
+Scope: Route a contract review finding to the right approver per the escalation matrix and draft the ask, or translate a contract review into a two-minute stakeholder summary ("can I sign this and what do I need to change"), grounded in the commercial domain ontology's EscalationRoute class. Use after a contract review produced findings that need routing or business-friendly translation. Do NOT use for the review itself (legal-peripherals-contract-review) or lifecycle/renewal tracking (legal-peripherals-contract-lifecycle).
 
 Grounded in
 `domain_commercial.ttl`'s `:EscalationRoute` (`:escalatesFinding`,
@@ -39,6 +34,22 @@ Grounded in
 Connect via `mcp-client` against `legal-peripherals-mcp`. Process/drafting
 guidance grounded in the ontology's `:EscalationRoute` shape; no external
 tool call is required.
+
+## Steps
+
+1. List the `:ContractReviewFinding` items rated YELLOW or RED from the review. Verify each finding has a severity and a clause reference before routing.
+2. Select the approver for each finding from the org's escalation matrix (severity, contract value, data classification). Verify a named `:Person` exists for every finding.
+3. Create an `:EscalationRoute` with `:escalatesFinding` and `:routesToApprover` for each finding. Verify the ask states what is flagged, why it matters, and the decision needed.
+4. Compress the review into a stakeholder summary with the bottom line, the one to three points that matter, and the changes. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify no RED finding is omitted from the summary.
+5. For a proposed playbook update, compare it with current practice and apply it only after explicit approval. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the approval is recorded and no risk threshold was loosened.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| No approver can be determined | The escalation matrix is missing or does not cover the finding | Ask the requester for the matrix row and do not guess a `:Person` |
+| Summary omits a RED finding | Language was compressed past risk disclosure | Rewrite the summary so every RED finding appears in plain words before sending |
+| Playbook change was drafted without approval | Approval step skipped | Hold the change unapplied and request explicit approval first |
 
 ## Recipes
 **Escalation:** for each `:ContractReviewFinding` rated YELLOW/RED, create an

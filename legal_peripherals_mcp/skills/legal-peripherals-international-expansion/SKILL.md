@@ -2,14 +2,7 @@
 name: legal-peripherals-international-expansion
 skill_type: skill
 description: >-
-  Kick off (or update the status of) international employment-expansion
-  planning for a new country — EOR vs. entity framing, cross-functional
-  tax/finance/HR triggers, and country-specific structural considerations —
-  grounded in the employment domain ontology's InternationalExpansionProject
-  class. Use when planning to hire in a new country. Do NOT use for a
-  single hire's offer-letter review (legal-peripherals-hiring-termination-review)
-  or entity-formation filings in the US (the package's existing
-  `legal-peripherals-entity-lookup`/`legal-peripherals-ein-filing` skills).
+  Kick off (or update the status of) international employment-expansion planning for a new country — EOR vs. entity framing, cross-functional tax/finance/HR triggers, and country-specific structural considerations — grounded in the employment domain ontology's InternationalExpansionProject class. Use when planning to hire in a new country.
 license: MIT
 tags: [legal-peripherals, employment, international-expansion, eor, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — International Expansion Planning
+
+Scope: Kick off (or update the status of) international employment-expansion planning for a new country — EOR vs. entity framing, cross-functional tax/finance/HR triggers, and country-specific structural considerations — grounded in the employment domain ontology's InternationalExpansionProject class. Use when planning to hire in a new country. Do NOT use for a single hire's offer-letter review (legal-peripherals-hiring-termination-review) or entity-formation filings in the US (the package's existing `legal-peripherals-entity-lookup`/`legal-peripherals-ein-filing` skills).
 
 Grounded in
 `domain_employment.ttl`'s `:InternationalExpansionProject`
@@ -42,6 +37,22 @@ Grounded in
 Connect via `mcp-client` against `legal-peripherals-mcp`. Process/planning
 guidance grounded in the ontology's project shape; no external tool call is
 required to run the framing exercise.
+
+## Steps
+
+1. Create an `:InternationalExpansionProject` with `:expandsToJurisdiction` set to the target `:Jurisdiction`. Verify the jurisdiction node exists.
+2. Frame `:expansionStructureType` as `employer_of_record` or `local_entity` with the trade-offs. Verify both options are presented and no choice is made unilaterally.
+3. Draft the cross-functional trigger list for tax (Finance), payroll and benefits (HR), and data residency (Privacy). Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify each trigger has an owner.
+4. On update, mark resolved triggers and flag overdue ones against target dates. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the single next-priority action is stated.
+5. List country-specific items (notice periods, statutory severance, works councils) for local-counsel review. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify none is assumed to match US at-will employment.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Target jurisdiction not in the graph | `:Jurisdiction` node was never created | Create the node, then link the project with `:expandsToJurisdiction` |
+| Trigger has no owner | Cross-functional input missing | Ask the owning team lead for a name and target date before logging it |
+| Country rules requested | Not modeled per country | Route to local counsel and record the open question |
 
 ## Recipe
 **Kickoff:** create an `:InternationalExpansionProject`

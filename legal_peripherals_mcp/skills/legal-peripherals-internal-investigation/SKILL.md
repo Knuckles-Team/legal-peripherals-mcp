@@ -2,13 +2,7 @@
 name: legal-peripherals-internal-investigation
 skill_type: skill
 description: >-
-  Run a privileged internal investigation lifecycle — open, add evidence,
-  query the log, draft the memo, and produce an audience-specific summary —
-  grounded in the employment domain ontology's InternalInvestigation class
-  linked to an EmploymentLawMatter. Use when a workplace complaint (discrimination, harassment, retaliation)
-  needs a privileged investigation. Do NOT use for a routine hiring/
-  termination review (legal-peripherals-hiring-termination-review) or a
-  litigation-stage matter (subpoena/legal hold — see domain_litigation.ttl).
+  Run a privileged internal investigation lifecycle — open, add evidence, query the log, draft the memo, and produce an audience-specific summary — grounded in the employment domain ontology's InternalInvestigation class linked to an EmploymentLawMatter. Use when a workplace complaint (discrimination, harassment, retaliation) needs a privileged investigation.
 license: MIT
 tags: [legal-peripherals, employment, investigation, privilege, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Internal Investigation Lifecycle
+
+Scope: Run a privileged internal investigation lifecycle — open, add evidence, query the log, draft the memo, and produce an audience-specific summary — grounded in the employment domain ontology's InternalInvestigation class linked to an EmploymentLawMatter. Use when a workplace complaint (discrimination, harassment, retaliation) needs a privileged investigation. Do NOT use for a routine hiring/ termination review (legal-peripherals-hiring-termination-review) or a litigation-stage matter (subpoena/legal hold — see domain_litigation.ttl).
 
 Spans the full internal-investigation arc — Open → Add evidence → Query →
 Memo → Summarize — in one skill, grounded in `domain_employment.ttl`'s
@@ -44,6 +40,22 @@ process/drafting guidance grounded in the ontology's shape; no external
 tool call is required to run the lifecycle, but the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`)
 is available if the investigation implicates a specific regulatory
 obligation (e.g. an EEOC-adjacent Obligation).
+
+## Steps
+
+1. Open the investigation by creating an `:InternalInvestigation` that `:investigates` an `:EmploymentLawMatter` with `employmentLawType` set. Verify `:subjectOfInvestigation` links each `:Employee`.
+2. Add evidence and interview notes as they arrive and persist drafted files with `legal_ingest_filing_file`(file_path, filing_type). Verify significant items and gaps are surfaced per addition.
+3. Answer targeted questions against the log, such as what a witness said. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify conflicting accounts are reported as conflicting.
+4. Draft the memo marked PRIVILEGED AND CONFIDENTIAL. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the marking appears on every artifact.
+5. Produce the audience-specific summary for HR, leadership, or outside counsel. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify it does not contradict the memo.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Artifact lacks privilege marking | Draft created without the header | Add the PRIVILEGED AND CONFIDENTIAL marking before sharing |
+| `legal_ingest_filing_file` fails | `file_path` does not exist | Write the memo under `drafts/` and pass that exact path |
+| Answer exceeds the log | Question asks beyond recorded evidence | State what is missing and add it to the gap list |
 
 ## Lifecycle
 1. **Open** — intake the complaint; create an `:InternalInvestigation`

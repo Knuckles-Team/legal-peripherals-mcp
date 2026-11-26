@@ -2,12 +2,7 @@
 name: legal-peripherals-leave-tracking
 skill_type: skill
 description: >-
-  Log a new employee leave and check open leaves for deadline alerts and
-  required decisions, grounded in the employment domain ontology's
-  LeaveRequest class (leave type + decision deadline + requester). Use when an employee goes on leave and the deadline clock needs
-  tracking, or weekly to check what requires action. Do NOT use for a
-  workplace-complaint investigation (legal-peripherals-internal-investigation)
-  or wage/hour questions (legal-peripherals-worker-classification).
+  Log a new employee leave and check open leaves for deadline alerts and required decisions, grounded in the employment domain ontology's LeaveRequest class (leave type + decision deadline + requester). Use when an employee goes on leave and the deadline clock needs tracking, or weekly to check what requires action.
 license: MIT
 tags: [legal-peripherals, employment, leave, fmla, ada, mcp]
 metadata:
@@ -16,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Leave Tracking
+
+Scope: Log a new employee leave and check open leaves for deadline alerts and required decisions, grounded in the employment domain ontology's LeaveRequest class (leave type + decision deadline + requester). Use when an employee goes on leave and the deadline clock needs tracking, or weekly to check what requires action. Do NOT use for a workplace-complaint investigation (legal-peripherals-internal-investigation) or wage/hour questions (legal-peripherals-worker-classification).
 
 Grounded in `domain_employment.ttl`'s `:LeaveRequest` (`:leaveType`,
 `:leaveDecisionDeadline`, `:requestedBy` an `:Employee`).
@@ -39,6 +36,22 @@ process/tracking guidance grounded in the ontology's `:LeaveRequest` shape;
 no external tool call is strictly required, though
 `legal_ingest_filing_file` can persist a drafted leave-decision letter as a
 KG-linked artifact.
+
+## Steps
+
+1. Capture `leaveType` (fmla, ada_accommodation, parental, medical, state_specific) and the requesting `:Employee`. Verify both are present.
+2. Compute `leaveDecisionDeadline` from the statute's clock (FMLA designation notice: 5 business days). Verify unfamiliar jurisdictions are flagged rather than guessed.
+3. Record the `:LeaveRequest` with `:requestedBy` the employee. Verify the node exists via `graph_query` over `:LeaveRequest`.
+4. For the weekly sweep, list open requests whose `leaveDecisionDeadline` is approaching or passed. Verify each row states the specific action required.
+5. If a decision letter is drafted, persist it with `legal_ingest_filing_file`(file_path, filing_type). Verify it links to the leave record.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Deadline rule unknown for the jurisdiction | Clock is statute-specific and not hardcoded | Flag for review and record the deadline as unconfirmed |
+| Sweep lists every leave | Filter on deadline not applied | Filter on `leaveDecisionDeadline` and rerun the `graph_query` over `:LeaveRequest` |
+| Medical detail exposed | Content beyond deadline tracking was copied | Remove the detail and keep only type, dates, and action |
 
 ## Recipe
 **Log a leave:** capture `leaveType` (`fmla` / `ada_accommodation` /

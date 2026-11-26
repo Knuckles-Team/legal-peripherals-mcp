@@ -2,14 +2,7 @@
 name: legal-peripherals-employment-policy-drafting
 skill_type: skill
 description: >-
-  Draft an employment handbook policy (with jurisdiction-specific state
-  supplements where law differs) and diff a proposed handbook change against
-  the current version, grounded in the employment domain ontology's
-  HandbookPolicy class (which doubles as the compliance Control it
-  implements). Use when the user says
-  "draft a [topic] policy" or "update the handbook". Do NOT use for a
-  regulatory (non-employment) policy redraft (legal-peripherals-policy-redraft)
-  or for classifying a specific worker (legal-peripherals-worker-classification).
+  Draft an employment handbook policy (with jurisdiction-specific state supplements where law differs) and diff a proposed handbook change against the current version, grounded in the employment domain ontology's HandbookPolicy class (which doubles as the compliance Control it implements). Use when the user says "draft a [topic] policy" or "update the handbook".
 license: MIT
 tags: [legal-peripherals, employment, handbook, policy-drafting, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Employment Policy / Handbook Drafting
+
+Scope: Draft an employment handbook policy (with jurisdiction-specific state supplements where law differs) and diff a proposed handbook change against the current version, grounded in the employment domain ontology's HandbookPolicy class (which doubles as the compliance Control it implements). Use when the user says "draft a [topic] policy" or "update the handbook". Do NOT use for a regulatory (non-employment) policy redraft (legal-peripherals-policy-redraft) or for classifying a specific worker (legal-peripherals-worker-classification).
 
 Drafts employment handbook policies grounded in the ontology.
 `domain_employment.ttl`'s `:HandbookPolicy` is declared `rdfs:subClassOf
@@ -38,6 +33,22 @@ in a real ontology obligation, not a blank page.
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
 the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
+
+## Steps
+
+1. Identify the policy topic and the obligation it documents. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the topic maps to a regulation such as FLSA for timekeeping.
+2. Pull the obligation and control set with `legal_get_regulation`(regulation="FLSA"). Verify the response lists the controls the policy must implement.
+3. Confirm sector applicability with `legal_lookup_sector`(sector). Verify the returned regulations match the org's sector.
+4. Draft the policy body implementing each control, and list state supplements (meal and rest breaks, paid sick leave, predictive scheduling) as jurisdiction-review items. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify no state rule is asserted without attorney review.
+5. Type the document as a `:HandbookPolicy` linked by `:documentedInPolicy` from its `:Control`. Verify the link exists and any ripple effect on other policies is called out.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `legal_get_regulation` returns no regulation | Regulation id mistyped | List ids with `legal_list_regulations` and pass the exact local id |
+| State supplement requested | State rules are not modeled in the ontology | Flag the item for jurisdiction-specific attorney review |
+| Compliance tools missing | `COMPLIANCETOOL` disabled or `rdflib` missing | Enable `COMPLIANCETOOL` and install `legal-peripherals-mcp[ontology]` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

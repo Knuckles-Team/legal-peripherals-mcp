@@ -2,14 +2,7 @@
 name: legal-peripherals-entity-lookup
 skill_type: skill
 description: >-
-  Secretary-of-State business-entity lookup over the legal-peripherals-mcp MCP
-  server — search a company registry (OpenCorporates-backed) by state + name or
-  fetch one by company number, and natively ingest the matches into the knowledge
-  graph as typed :BusinessEntity nodes. Use when the agent must verify a company's
-  registration status, jurisdiction, incorporation date, or registered address, or
-  seed the KG with SOS records. Do NOT use for drafting an EIN application
-  (legal-peripherals-ein-filing) or reading statutory default rules /charter
-  templates (legal-peripherals-statute-lookup).
+  Look up a US business entity in a Secretary-of-State registry by state and name or company number, and ingest matches into the knowledge graph as :BusinessEntity nodes. Use to verify registration status, jurisdiction, or address. Do NOT use for EIN drafting (ein-filing) or statutory rules (statute-lookup).
 license: MIT
 tags: [legal-peripherals, sos, secretary-of-state, company-registry, kg-ingest, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Secretary-of-State Entity Lookup
+
+Scope: Secretary-of-State business-entity lookup over the legal-peripherals-mcp MCP server — search a company registry (OpenCorporates-backed) by state + name or fetch one by company number, and natively ingest the matches into the knowledge graph as typed :BusinessEntity nodes. Use when the agent must verify a company's registration status, jurisdiction, incorporation date, or registered address, or seed the KG with SOS records. Do NOT use for drafting an EIN application (legal-peripherals-ein-filing) or reading statutory default rules /charter templates (legal-peripherals-statute-lookup).
 
 Domain-typed access to US Secretary-of-State / company-registry filings via the
 **`legal-peripherals-mcp`** MCP server, backed by the OpenCorporates aggregator
@@ -45,6 +40,21 @@ Connect via the `mcp-client` skill against the **`legal-peripherals-mcp`** MCP s
 | `OPENCORPORATES_BASE_URL` | optional | Override for a self-hosted/proxy registry (default `https://api.opencorporates.com/v0.4`) |
 | `SOS_TIMEOUT_SECONDS` | optional | Per-lookup timeout (default 30) |
 | `LEGAL_KG_INGEST` | optional | `true` (default) auto-ingests looked-up entities into the KG; set `false` to disable |
+
+## Steps
+
+1. Gather the two-letter `state` and the `entity_name`, or an `entity_id` for a direct fetch. Verify the state code is valid.
+2. Search with `sos_entity_lookup`(state, entity_name) or fetch with `sos_entity_lookup`(state, entity_name, entity_id). Verify the result contains a record or an honest not-found notice.
+3. Review status, entity type, jurisdiction, incorporation date, and registered address. Verify the `Company Number` matches the entity requested.
+4. To seed the graph, call `legal_ingest_sos_entities`(state, entity_name, limit). Verify the response includes `{"ingested": {...}}` with a nonzero count.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Result says not configured | `OPENCORPORATES_API_TOKEN` is not set | Set `OPENCORPORATES_API_TOKEN` in the server environment before calling again |
+| No matching entity | Name too specific or wrong state | Search with a shorter `entity_name` in the right `state`, then fetch by returned company number |
+| Ingestion error propagates | Engine or validation failure | Fix the reported engine error, or set `LEGAL_KG_INGEST=false` for lookup only |
 
 ## Tools & actions
 | Tool | Purpose |

@@ -2,14 +2,7 @@
 name: legal-peripherals-privacy-agreement-review
 skill_type: skill
 description: >-
-  Review a Data Processing Agreement, auto-detecting whether the org is
-  processor or controller and applying the right half of the playbook,
-  grounded in the privacy domain ontology's DataProcessingAgreement class
-  (subclass of Contract) and cross-linked to GDPR/CCPA. Use when reviewing an
-  inbound or outbound DPA. Do NOT use for a DSAR
-  (legal-peripherals-dsar-response), a PIA/DPIA
-  (legal-peripherals-privacy-impact-assessment), or a general commercial
-  contract review (legal-peripherals-contract-review).
+  Review a Data Processing Agreement, auto-detecting whether the org is processor or controller and applying the right half of the playbook, grounded in the privacy domain ontology's DataProcessingAgreement class (subclass of Contract) and cross-linked to GDPR/CCPA. Use when reviewing an inbound or outbound DPA.
 license: MIT
 tags: [legal-peripherals, privacy, dpa, gdpr, ccpa, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Data Processing Agreement Review
+
+Scope: Review a Data Processing Agreement, auto-detecting whether the org is processor or controller and applying the right half of the playbook, grounded in the privacy domain ontology's DataProcessingAgreement class (subclass of Contract) and cross-linked to GDPR/CCPA. Use when reviewing an inbound or outbound DPA. Do NOT use for a DSAR (legal-peripherals-dsar-response), a PIA/DPIA (legal-peripherals-privacy-impact-assessment), or a general commercial contract review (legal-peripherals-contract-review).
 
 Grounded in
 `domain_privacy.ttl`'s `:DataProcessingAgreement` (subclass of
@@ -36,6 +31,21 @@ individuals this module declares.
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
+
+## Steps
+
+1. Detect the org's role from the agreement (who sets purposes and means is the controller). Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the role is stated, or flag the agreement as ambiguous.
+2. Apply the matching half of the playbook (instructions and audit rights for controller, subprocessor flow-down and breach timing for processor). Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify each element is marked present or absent.
+3. Pull the obligation set with `legal_get_regulation`(regulation="GDPR") and CCPA where applicable. Verify the 72-hour breach notification, subprocessor, and data-subject assistance clauses are checked.
+4. Rate deviations GREEN, YELLOW, or RED and type the agreement as a `:DataProcessingAgreement` with `:processorRole`. Verify CCPA terms use business and service provider vocabulary.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Role is unclear | Joint controllership or sub-processing chain | Flag for attorney review instead of forcing one role |
+| `legal_get_regulation` returns no regulation | Regulation id mistyped | Pass `GDPR` or `CCPA` exactly |
+| Breach clause missing | DPA lacks notification timing | Mark RED and cite the 72-hour control |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

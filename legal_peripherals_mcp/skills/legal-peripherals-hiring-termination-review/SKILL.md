@@ -2,14 +2,7 @@
 name: legal-peripherals-hiring-termination-review
 skill_type: skill
 description: >-
-  Review an offer letter and restrictive covenants at hire, or run a
-  termination review (high-risk flag detection, severance/release, final-pay
-  timing by jurisdiction) at separation — grounded in the employment domain
-  ontology's EmploymentContract/RestrictiveCovenant classes and
-  EmploymentLawMatter. Use for offer-letter review
-  or termination risk review. Do NOT use for worker classification
-  (legal-peripherals-worker-classification) or an open harassment/discrimination
-  complaint (legal-peripherals-internal-investigation).
+  Review an offer letter and restrictive covenants at hire, or run a termination review (high-risk flag detection, severance/release, final-pay timing by jurisdiction) at separation — grounded in the employment domain ontology's EmploymentContract/RestrictiveCovenant classes and EmploymentLawMatter. Use for offer-letter review or termination risk review.
 license: MIT
 tags: [legal-peripherals, employment, hiring, termination, restrictive-covenant, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Hiring & Termination Review
+
+Scope: Review an offer letter and restrictive covenants at hire, or run a termination review (high-risk flag detection, severance/release, final-pay timing by jurisdiction) at separation — grounded in the employment domain ontology's EmploymentContract/RestrictiveCovenant classes and EmploymentLawMatter. Use for offer-letter review or termination risk review. Do NOT use for worker classification (legal-peripherals-worker-classification) or an open harassment/discrimination complaint (legal-peripherals-internal-investigation).
 
 Reviews hiring and termination around one lifecycle: `domain_employment.ttl`'s
 `:EmploymentContract` (offer letters, restrictive covenants) at hire, and
@@ -39,6 +34,22 @@ at separation.
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL` for
 the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) (FLSA final-pay obligations).
+
+## Steps
+
+1. Decide whether the review is hiring or termination. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the matter has no open harassment or discrimination complaint, which belongs to the investigation skill.
+2. For hiring, classify each restrictive covenant by jurisdiction enforceability. Verify each `:RestrictiveCovenant` is marked enforceable, limited, or flagged for state review.
+3. For termination, pull FLSA obligations with `legal_get_regulation`(regulation="FLSA"). Verify the final-pay and recordkeeping obligations are listed.
+4. Flag high-risk factors (recent complaint, protected-class proximity, documentation gaps) and check severance and release language. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify each flag cites its source fact.
+5. Type the matter as an `:EmploymentLawMatter` with `employmentLawType` set to `wrongful_termination` where risk is found. Verify the matter node is created or updated.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| State enforceability unknown | No state table is shipped in this skill | Flag the covenant for jurisdiction-specific attorney review |
+| `legal_get_regulation` returns no regulation | Regulation id mistyped or case differs | Pass `FLSA` exactly or list ids with `legal_list_regulations` |
+| Open complaint discovered | Termination follows a complaint | Stop and route to `legal-peripherals-internal-investigation` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |
