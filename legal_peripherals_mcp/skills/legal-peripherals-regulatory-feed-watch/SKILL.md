@@ -2,13 +2,7 @@
 name: legal-peripherals-regulatory-feed-watch
 skill_type: skill
 description: >-
-  Check for new/changed regulatory guidance and open NPRM comment periods
-  against the regulations tracked in the compliance ontology suite, and
-  report what's material. Use when the user says
-  "check the feeds", "what's new in regulation X", or an NPRM comment
-  window needs tracking. Do NOT use for gap remediation
-  (legal-peripherals-regulatory-gap-tracker) or entity-specific filing
-  deadlines (legal-peripherals-entity-compliance-tracker).
+  Check for new/changed regulatory guidance and open NPRM comment periods against the regulations tracked in the compliance ontology suite, and report what's material. Use when the user says "check the feeds", "what's new in regulation X", or an NPRM comment window needs tracking.
 license: MIT
 tags: [legal-peripherals, regulatory, feed-watch, nprm, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Regulatory Feed Watch
+
+Scope: Check for new/changed regulatory guidance and open NPRM comment periods against the regulations tracked in the compliance ontology suite, and report what's material. Use when the user says "check the feeds", "what's new in regulation X", or an NPRM comment window needs tracking. Do NOT use for gap remediation (legal-peripherals-regulatory-gap-tracker) or entity-specific filing deadlines (legal-peripherals-entity-compliance-tracker).
 
 A KG-grounded feed check: every tracked Regulation's current
 obligation/control/reporting-requirement set, plus the illustrative
@@ -44,6 +40,21 @@ Connect via `mcp-client` against `legal-peripherals-mcp`. Same `COMPLIANCETOOL`
 toggle as the other compliance skills; no external feed API is required for
 the KG-native lookup (a live feed connector, if wired, is a separate
 `source_connector` concern — see Gotchas).
+
+## Steps
+
+1. List the available vocabulary with `legal_list_compliance_domains`. Verify `domain_regulatory.ttl` appears among the modules.
+2. Narrow to the org's practice with `legal_lookup_sector`(sector="Medical"). Verify the returned regulations match the sector.
+3. For each changed item reported by a live feed connector, call `legal_get_regulation`(regulation="HIPAA") with the affected regulation. Verify the affected obligations are listed.
+4. Report the open comment deadline and the regulation it amends via `:RegulatoryChangeNotice`. Verify the report separates ontology facts from live feed data.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| No live changes reported | No feed connector wired | State that only the ontology is searched and wire a connector via `source_connector` |
+| Sector lookup empty | Sector label not recognized | Retry with a label returned by `legal_list_compliance_domains` |
+| Compliance tools missing | `COMPLIANCETOOL` disabled or `rdflib` missing | Enable `COMPLIANCETOOL` and install `legal-peripherals-mcp[ontology]` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

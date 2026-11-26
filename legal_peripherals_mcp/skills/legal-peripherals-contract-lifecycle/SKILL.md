@@ -2,13 +2,7 @@
 name: legal-peripherals-contract-lifecycle
 skill_type: skill
 description: >-
-  Trace a contract's amendment history (full change summary or a
-  provision-level trace) and show contracts with upcoming cancel-by/renewal
-  deadlines before the notice window closes, grounded in the commercial
-  domain ontology's ContractAmendment and RenewalDeadline classes. Use when tracking how a contract has changed
-  over time or which contracts need action before auto-renewal. Do NOT use
-  for the initial playbook review (legal-peripherals-contract-review) or for
-  routing a finding to an approver (legal-peripherals-contract-escalation).
+  Trace a contract's amendment history (full change summary or a provision-level trace) and show contracts with upcoming cancel-by/renewal deadlines before the notice window closes, grounded in the commercial domain ontology's ContractAmendment and RenewalDeadline classes. Use when tracking how a contract has changed over time or which contracts need action before auto-renewal.
 license: MIT
 tags: [legal-peripherals, commercial, contract-lifecycle, renewal, amendment, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Contract Amendment History & Renewal Tracking
+
+Scope: Trace a contract's amendment history (full change summary or a provision-level trace) and show contracts with upcoming cancel-by/renewal deadlines before the notice window closes, grounded in the commercial domain ontology's ContractAmendment and RenewalDeadline classes. Use when tracking how a contract has changed over time or which contracts need action before auto-renewal. Do NOT use for the initial playbook review (legal-peripherals-contract-review) or for routing a finding to an approver (legal-peripherals-contract-escalation).
 
 Grounded in `domain_commercial.ttl`'s `:ContractAmendment`
 (`:amendsContract`) and `:RenewalDeadline` (`:cancelByDate`,
@@ -39,6 +35,22 @@ guidance grounded in the ontology's `:ContractAmendment`/`:RenewalDeadline`
 shape; no external tool call is required for the trace itself (this composes
 with a real contract-repository connector — Ironclad, DocuSign CLM, etc. —
 once one is wired via `source_connector`).
+
+## Steps
+
+1. Identify the base `:Contract` and gather every `:ContractAmendment` linked by `:amendsContract`. Verify amendments are ordered chronologically and the total count is stated.
+2. For a provision-level trace, filter to amendments touching the target `:ContractClause`. Verify the report says "N amendments total, M touched this clause".
+3. Find contracts with a `:hasRenewalDeadline` using `graph_query` over `:RenewalDeadline`. Verify each row carries `:cancelByDate` and `:noticeWindowDays`.
+4. Compute the notice-must-be-sent-by date as `:cancelByDate` minus `:noticeWindowDays`. Verify both dates are shown for every flagged contract.
+5. Report only contracts whose notice date is approaching or passed. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the list is not a full repository dump.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| No renewal deadlines found | No contract-repository connector has populated `:RenewalDeadline` nodes | Report the gap and wire a connector via `source_connector` before re-querying |
+| Amendment chain looks incomplete | An amendment lacks an `:amendsContract` link | List the unlinked amendment and ask the owner to link it to the base contract |
+| Notice date is off by one | Only the cancel-by date was reported | Recompute and show both `:cancelByDate` and the send-by date |
 
 ## Recipes
 **Amendment history:** for a full summary, walk every `:ContractAmendment`

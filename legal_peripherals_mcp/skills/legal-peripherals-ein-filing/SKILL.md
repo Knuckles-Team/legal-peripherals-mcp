@@ -2,13 +2,7 @@
 name: legal-peripherals-ein-filing
 skill_type: skill
 description: >-
-  Draft an IRS Form SS-4 (Employer Identification Number application) over the
-  legal-peripherals-mcp MCP server, with IRS off-hours filing-window compliance,
-  and natively ingest the draft into the knowledge graph as an :EINApplication
-  filing linked to its :BusinessEntity. Use when the agent must prepare an EIN
-  application for a new LLC / corporation / trust and schedule its submission. Do
-  NOT use for looking up an existing company (legal-peripherals-entity-lookup) or
-  reading statutory rules / charter templates (legal-peripherals-statute-lookup).
+  Draft an IRS Form SS-4 (Employer Identification Number application) over the legal-peripherals-mcp MCP server, with IRS off-hours filing-window compliance, and natively ingest the draft into the knowledge graph as an :EINApplication filing linked to its :BusinessEntity. Use when the agent must prepare an EIN application for a new LLC / corporation / trust and schedule its submission.
 license: MIT
 tags: [legal-peripherals, ein, ss4, irs, filing, kg-ingest, mcp]
 metadata:
@@ -17,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — EIN (Form SS-4) Filing
+
+Scope: Draft an IRS Form SS-4 (Employer Identification Number application) over the legal-peripherals-mcp MCP server, with IRS off-hours filing-window compliance, and natively ingest the draft into the knowledge graph as an :EINApplication filing linked to its :BusinessEntity. Use when the agent must prepare an EIN application for a new LLC / corporation / trust and schedule its submission. Do NOT use for looking up an existing company (legal-peripherals-entity-lookup) or reading statutory rules / charter templates (legal-peripherals-statute-lookup).
 
 Prepare and schedule an IRS **Form SS-4** Employer Identification Number application
 via the **`legal-peripherals-mcp`** MCP server. The tool renders a masked SS-4 draft
@@ -43,6 +39,22 @@ Connect via the `mcp-client` skill against the **`legal-peripherals-mcp`** MCP s
 | `BYPASS_IRS_FILING_HOURS` | optional | `true` forces "file immediately" regardless of the clock (testing) |
 | `EIN_TIMEOUT_SECONDS` | optional | Per-draft timeout (default 30) |
 | `LEGAL_KG_INGEST` | optional | `true` (default) auto-ingests each draft into the KG; set `false` to disable |
+
+## Steps
+
+1. Collect the required `legal_name` and a valid `business_type` (LLC, Corporation, S Corporation, Partnership, Sole Proprietor, Trust, Estate, Non-Profit, Church, Government, Other). Verify the type is one of the accepted values.
+2. Call `draft_ein_form`(legal_name, business_type, responsible_party_name, responsible_party_ssn, county_state, reason_for_applying). Verify the draft is returned with the SSN masked.
+3. Read the filing status in the result. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify it is either filed immediately (Mon-Fri 7:00 AM-10:00 PM ET) or queued for the next window.
+4. Persist the rendered draft with `legal_ingest_filing_file`(file_path="drafts/ein_ss4_draft.txt", filing_type="ss4_ein"). Verify the response reports a blob and a `:MediaAsset`.
+5. Hand the draft to an authorized IRS submission channel. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the user confirms transmission, since the tool only drafts and schedules.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Validation error on `business_type` | Value not an accepted SS-4 type | Resubmit `draft_ein_form` with one of the listed accepted values |
+| Filing queued unexpectedly | Call made outside IRS hours in `America/New_York` | Leave it queued, or set `BYPASS_IRS_FILING_HOURS=true` only in a test environment |
+| KG ingestion error propagates | Engine or validation failure with `LEGAL_KG_INGEST=true` | Fix the reported engine error, or set `LEGAL_KG_INGEST=false` to draft without ingestion |
 
 ## Tools & actions
 | Tool | Purpose |

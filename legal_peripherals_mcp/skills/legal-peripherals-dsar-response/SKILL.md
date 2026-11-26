@@ -2,14 +2,7 @@
 name: legal-peripherals-dsar-response
 skill_type: skill
 description: >-
-  Walk through a Data Subject Access Request (or deletion/portability/
-  correction request) and draft the response — verify identity, locate data
-  system-by-system, and meet the statutory deadline — grounded in the
-  privacy domain ontology's DataSubjectRequest class cross-linked to GDPR's
-  30-day / CCPA's 45-day response clocks. Use whenever a data-subject rights
-  request comes in. Do NOT use for a DPA review
-  (legal-peripherals-privacy-agreement-review) or a PIA
-  (legal-peripherals-privacy-impact-assessment).
+  Walk through a Data Subject Access Request (or deletion/portability/ correction request) and draft the response — verify identity, locate data system-by-system, and meet the statutory deadline — grounded in the privacy domain ontology's DataSubjectRequest class cross-linked to GDPR's 30-day / CCPA's 45-day response clocks. Use whenever a data-subject rights request comes in.
 license: MIT
 tags: [legal-peripherals, privacy, dsar, gdpr, ccpa, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — DSAR Response
+
+Scope: Walk through a Data Subject Access Request (or deletion/portability/ correction request) and draft the response — verify identity, locate data system-by-system, and meet the statutory deadline — grounded in the privacy domain ontology's DataSubjectRequest class cross-linked to GDPR's 30-day / CCPA's 45-day response clocks. Use whenever a data-subject rights request comes in. Do NOT use for a DPA review (legal-peripherals-privacy-agreement-review) or a PIA (legal-peripherals-privacy-impact-assessment).
 
 Grounded in
 `domain_privacy.ttl`'s `:DataSubjectRequest` (`:requestType`,
@@ -37,6 +32,22 @@ Grounded in
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) to confirm the applicable deadline.
+
+## Steps
+
+1. Determine the governing regime (GDPR for EU/EEA subjects, CCPA for California consumers) with `legal_get_regulation`(regulation="GDPR") and `legal_get_regulation`(regulation="CCPA"). Verify the response lists the `DSARFulfillmentControl`.
+2. Confirm the requester's identity with a documented, proportionate method and log it with `grep -n "^- " drafts/review-notes.md`. Verify no more identifying data than necessary was requested.
+3. Locate the requester's data system by system, not only the primary CRM. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify each system is listed as searched with a result.
+4. Draft the response for the request type (access, deletion, portability, correction). Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify any deletion exception such as a legal hold is documented.
+5. Record the request as a `:DataSubjectRequest` with `:requestDeadline` and `:concernsDataSubject`. Verify the deadline matches the regime's clock (30 days GDPR, 45 days CCPA).
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Regime unclear | Requester location not established | Ask the requester for their residence and apply the stricter clock until confirmed |
+| Identity cannot be verified | Proof offered is insufficient | Request one additional proportionate proof and pause the clock note in the record |
+| `legal_get_regulation` returns no regulation | `regulation` id is case-sensitive | Pass `GDPR` or `CCPA` exactly, or list ids with `legal_list_regulations` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

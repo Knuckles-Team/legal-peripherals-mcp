@@ -2,15 +2,7 @@
 name: legal-peripherals-contract-review
 skill_type: skill
 description: >-
-  Review an inbound NDA, vendor agreement, or SaaS/MSA subscription against
-  the team playbook, auto-routing to the right sub-review by agreement type
-  and flagging deviations GREEN/YELLOW/RED — grounded in the commercial
-  domain ontology's NDAAgreement/VendorAgreement/MSAAgreement classes and
-  cross-linked to compliance Attestations when the contract touches
-  classified data. Use when reviewing any inbound commercial
-  contract. Do NOT use for tracking amendment history or renewal deadlines
-  (legal-peripherals-contract-lifecycle) or for routing a flagged finding to
-  an approver (legal-peripherals-contract-escalation).
+  Review an inbound NDA, vendor agreement, or SaaS/MSA against the team playbook, flag deviations GREEN/YELLOW/RED, and link data-classified contracts to compliance attestations. Use for any inbound commercial contract. Do NOT use for amendments or renewals (contract-lifecycle) or routing findings (contract-escalation).
 license: MIT
 tags: [legal-peripherals, commercial, contract-review, nda, msa, saas, mcp]
 metadata:
@@ -19,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Contract Review (NDA / Vendor / SaaS-MSA)
+
+Scope: Review an inbound NDA, vendor agreement, or SaaS/MSA subscription against the team playbook, auto-routing to the right sub-review by agreement type and flagging deviations GREEN/YELLOW/RED — grounded in the commercial domain ontology's NDAAgreement/VendorAgreement/MSAAgreement classes and cross-linked to compliance Attestations when the contract touches classified data. Use when reviewing any inbound commercial contract. Do NOT use for tracking amendment history or renewal deadlines (legal-peripherals-contract-lifecycle) or for routing a flagged finding to an approver (legal-peripherals-contract-escalation).
 
 Grounded in `domain_commercial.ttl`'s `:Contract` hierarchy
 (`:NDAAgreement`, `:VendorAgreement`, `:MSAAgreement`) and its
@@ -40,6 +34,22 @@ Grounded in `domain_commercial.ttl`'s `:Contract` hierarchy
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`) when the contract touches classified data
 (PHI/PII/PCI/FinancialData).
+
+## Steps
+
+1. Identify the agreement type from its title and structure (NDA, vendor agreement, or SaaS/MSA). Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the type is stated before the review starts.
+2. Review the type-specific focus points from the Recipe section. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify every point is marked present, absent, or deviating.
+3. If the contract handles PHI, PII, PCI, or financial data, call `legal_lookup_data_class`(data_class). Verify the response names the Regulation and the required Attestation.
+4. Pull the specific obligation with `legal_get_regulation`(regulation), for example HIPAA for a BAA. Verify whether the signed BAA or DPA is actually on file.
+5. Rate GREEN, YELLOW, or RED and record each deviation as a `:ContractReviewFinding` with `:deviatesFromClause`. Verify RED items are marked for attorney sign-off.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| `legal_lookup_data_class` returns nothing | Data class label not recognized | Use one of PHI, PII, PCI, or FinancialData exactly as spelled |
+| Attestation assumed present | Signed BAA/DPA was not checked | Request the signed document and mark the finding open until it is seen |
+| Compliance tools unavailable | `COMPLIANCETOOL` disabled or `rdflib` missing | Enable `COMPLIANCETOOL` and install `legal-peripherals-mcp[ontology]` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

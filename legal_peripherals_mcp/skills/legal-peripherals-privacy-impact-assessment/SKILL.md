@@ -2,14 +2,7 @@
 name: legal-peripherals-privacy-impact-assessment
 skill_type: skill
 description: >-
-  Triage whether a new processing activity needs a PIA, a mandatory GDPR
-  DPIA, or can proceed as-is, then generate the assessment in house format —
-  grounded in the privacy domain ontology's ProcessingActivity and
-  PrivacyImpactAssessment classes (the latter a subclass of the compliance
-  suite's Assessment). Use when a new feature/
-  product/processing activity needs privacy review before launch. Do NOT use
-  for a DSAR (legal-peripherals-dsar-response) or a DPA review
-  (legal-peripherals-privacy-agreement-review).
+  Triage whether a new processing activity needs a PIA, a mandatory GDPR DPIA, or can proceed as-is, then generate the assessment in house format — grounded in the privacy domain ontology's ProcessingActivity and PrivacyImpactAssessment classes (the latter a subclass of the compliance suite's Assessment). Use when a new feature/ product/processing activity needs privacy review before launch.
 license: MIT
 tags: [legal-peripherals, privacy, pia, dpia, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Privacy Impact Assessment (PIA / DPIA)
+
+Scope: Triage whether a new processing activity needs a PIA, a mandatory GDPR DPIA, or can proceed as-is, then generate the assessment in house format — grounded in the privacy domain ontology's ProcessingActivity and PrivacyImpactAssessment classes (the latter a subclass of the compliance suite's Assessment). Use when a new feature/ product/processing activity needs privacy review before launch. Do NOT use for a DSAR (legal-peripherals-dsar-response) or a DPA review (legal-peripherals-privacy-agreement-review).
 
 Grounded in `domain_privacy.ttl`'s `:ProcessingActivity`
 (`:processesDataClass`) and `:PrivacyImpactAssessment` (declared
@@ -38,6 +33,21 @@ Grounded in `domain_privacy.ttl`'s `:ProcessingActivity`
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
+
+## Steps
+
+1. Classify the data the activity touches and call `legal_lookup_data_class`(data_class="PII"). Verify the response names the applicable regulations.
+2. Pull the DPIA trigger language with `legal_get_regulation`(regulation="GDPR"). Verify the Article 35 high-risk criteria are returned.
+3. Triage to no review, a house-format PIA, or a mandatory DPIA. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the outcome is justified and low-risk activities are not over-triggered.
+4. Type the activity as a `:ProcessingActivity` with `:processesDataClass` and the assessment as a `:PrivacyImpactAssessment` with `:assessesActivity`. Verify the assessment covers purpose, data flows, legal basis, risk, mitigations, and residual-risk sign-off.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Data class not recognized | Label not in the ontology | Use PII, PHI, or FinancialData exactly, or list with `legal_list_compliance_domains` |
+| Activity changed after assessment | PIA is point in time | Create an updated assessment and cite the change |
+| `legal_get_regulation` returns no regulation | Regulation id mistyped | Pass `GDPR` exactly |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

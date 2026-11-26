@@ -2,15 +2,7 @@
 name: legal-peripherals-privacy-gap-monitor
 skill_type: skill
 description: >-
-  Diff a new or changed privacy regulation against current policy/practice
-  (outputting a gap list and remediation plan with owners/dates), and keep
-  the privacy policy current via a weekly sweep of PIAs/DPA reviews/triage
-  results or a direct query — grounded in the GDPR/CCPA Regulation
-  individuals in the privacy domain module. Use when a
-  privacy regulation changes or the privacy policy needs a drift check. Do
-  NOT use for the general regulatory gap tracker
-  (legal-peripherals-regulatory-gap-tracker, non-privacy frameworks) or a
-  single PIA (legal-peripherals-privacy-impact-assessment).
+  Diff a changed privacy regulation (GDPR, CCPA) against current policy to produce a gap list and remediation plan, and sweep PIAs, DPA reviews, and DSAR results for policy drift. Use when a privacy rule changes or the policy needs a drift check. Do NOT use for non-privacy rules (regulatory-gap-tracker).
 license: MIT
 tags: [legal-peripherals, privacy, gap-analysis, policy-monitor, mcp]
 metadata:
@@ -19,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Privacy Gap Analysis & Policy Monitor
+
+Scope: Diff a new or changed privacy regulation against current policy/practice (outputting a gap list and remediation plan with owners/dates), and keep the privacy policy current via a weekly sweep of PIAs/DPA reviews/triage results or a direct query — grounded in the GDPR/CCPA Regulation individuals in the privacy domain module. Use when a privacy regulation changes or the privacy policy needs a drift check. Do NOT use for the general regulatory gap tracker (legal-peripherals-regulatory-gap-tracker, non-privacy frameworks) or a single PIA (legal-peripherals-privacy-impact-assessment).
 
 The privacy-specific counterpart of
 `legal-peripherals-regulatory-gap-tracker`, grounded in `domain_privacy.ttl`'s
@@ -40,6 +34,21 @@ The privacy-specific counterpart of
 ## Prerequisites & environment
 Connect via `mcp-client` against `legal-peripherals-mcp`; `COMPLIANCETOOL`
 for the compliance lookup tools (`legal_list_compliance_domains`, `legal_list_regulations`, `legal_get_regulation`, `legal_lookup_sector`, `legal_lookup_data_class`, `legal_gate_requirements`).
+
+## Steps
+
+1. Choose the mode: gap analysis, weekly monitor, or direct query. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify the chosen mode is stated so the two are not mixed.
+2. For gap analysis, pull the obligations with `legal_get_regulation`(regulation="CCPA"). Verify the controls are listed.
+3. Diff each `obligations[].controls[]` against current policy and add missing items with an owner and target date. Verify no date is invented, and ask when none exists.
+4. For the weekly monitor, sweep saved PIAs, DPA reviews, and DSAR triage for policy drift, or use `legal_gate_requirements`(data_classes) for cross-regulation scope. Verify only genuine drift is surfaced.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| Owner or date missing | Process has no target | Ask the requester for the owner and date before recording the gap |
+| Direct query triggers a full sweep | Modes were mixed | Answer only the question asked using `legal_get_regulation` |
+| `legal_get_regulation` returns no regulation | Regulation id mistyped | Pass the exact local id such as `GDPR` or `CCPA` |
 
 ## Tools & actions
 | Tool | Arguments | Purpose |

@@ -22,6 +22,22 @@ agent entry points. Shared connector contracts and transports belong to
 their owning repositories. Read `AGENTS.md` before changing code and keep
 provider credentials and endpoints out of source, logs, and skill content.
 
+## Steps
+
+1. Find the owning spec row with `git grep -n "<term>" -- specs`. Verify exactly one row owns the change before editing code.
+2. Read `AGENTS.md` and confirm the change belongs to this connector and not the SDK or Arbora. Verify no shared contract is being duplicated.
+3. Implement one small slice reusing existing SDK clients and tool factories. Inspect the change with `git diff --stat`. Verify provider credentials and endpoints are absent from source, logs, and skill content.
+4. Add a bound test for the requirement and run it with `pytest -q`. Verify the new test passes.
+5. Commit one logical change with the `Spec:` trailer adjacent to the agent trailer. Verify `git log -1` shows both lines in the final paragraph.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| No spec row matches the term | Requirement not yet written | Extend the nearest spec row before coding |
+| Change belongs elsewhere | Shared contract or transport | Open it in the owning repository instead |
+| Hand-edited `status.json` flagged | Generated file was edited | Revert it and regenerate with `pipelines-hook spec-status` |
+
 ## Rapid delivery: the 5-minute contract
 
 Specs are already designed. Deliver small, reviewable slices and cite the

@@ -2,14 +2,7 @@
 name: legal-peripherals-statute-lookup
 skill_type: skill
 description: >-
-  Query US state statutory default rules and retrieve corporate / LLC charter
-  templates over the legal-peripherals-mcp MCP server. Use when the agent must
-  find the default voting, governance, allocation, or distribution rules for an
-  entity type in a given state, or generate a starter Articles of Incorporation /
-  Operating Agreement, and optionally ingest the summary into the knowledge graph
-  as a searchable :Document. Do NOT use for looking up a registered company
-  (legal-peripherals-entity-lookup) or drafting an EIN application
-  (legal-peripherals-ein-filing).
+  Query US state statutory default rules for an entity type and topic, and fetch a starter charter or operating-agreement template. Use for default voting, governance, or distribution rules before drafting. Do NOT use to look up a registered company (entity-lookup) or draft an EIN application (ein-filing).
 license: MIT
 tags: [legal-peripherals, statute, charter, templates, governance, mcp]
 metadata:
@@ -18,6 +11,8 @@ metadata:
 ---
 
 # Legal Peripherals — Statute & Charter-Template Lookup
+
+Scope: Query US state statutory default rules and retrieve corporate / LLC charter templates over the legal-peripherals-mcp MCP server. Use when the agent must find the default voting, governance, allocation, or distribution rules for an entity type in a given state, or generate a starter Articles of Incorporation / Operating Agreement, and optionally ingest the summary into the knowledge graph as a searchable :Document. Do NOT use for looking up a registered company (legal-peripherals-entity-lookup) or drafting an EIN application (legal-peripherals-ein-filing).
 
 Query state statutory default rules and pull corporate/LLC charter templates via the
 **`legal-peripherals-mcp`** MCP server. Returns a statutory summary for a
@@ -44,6 +39,21 @@ Connect via the `mcp-client` skill against the **`legal-peripherals-mcp`** MCP s
 | `STATUTE_TIMEOUT_SECONDS` | optional | Per-lookup timeout (default 30) |
 
 No external API token is required — statutory defaults + templates are served locally.
+
+## Steps
+
+1. Gather `state`, `entity_type`, and `topic` (voting, distributions, management). Verify the state is a two-letter code.
+2. Call `lookup_statute_rules`(state="DE", entity_type="LLC", topic="voting"). Verify the response includes a summary and a template.
+3. Check whether the answer is a curated entry or the general fallback. Inspect the working notes with `grep -n "^- " drafts/review-notes.md`. Verify fallbacks are labelled as starting points.
+4. Optionally persist the summary through `legal_peripherals_mcp.kg_ingest.ingest_filing_document`. Verify the document id starts with `legal:document:`.
+
+## Failure recovery
+
+| Failure | Cause | Recovery |
+|---------|-------|----------|
+| General fallback returned | State has no curated entry | Present it as a starting point and verify against the primary statute |
+| Unknown topic | Topic not recognized | Use voting, governance, allocations, distributions, or management |
+| Timeout | Lookup exceeded `STATUTE_TIMEOUT_SECONDS` | Raise `STATUTE_TIMEOUT_SECONDS` in the server environment |
 
 ## Tools & actions
 | Tool | Purpose |
