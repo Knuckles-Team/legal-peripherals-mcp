@@ -1,19 +1,38 @@
-# ⚖️ Legal Peripherals MCP Server
+# Legal Peripherals MCP Server
+## MCP
 
-<p align="center">
-  <img src="https://img.shields.io/badge/FastMCP-Server-4A154B?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastMCP Server">
-  <img src="https://img.shields.io/badge/Compliance-IRS%20%7C%2050%20States-20639B?style=for-the-badge" alt="Compliance">
-  <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Version">
-</p>
+![PyPI - Version](https://img.shields.io/pypi/v/legal-peripherals-mcp)
+![MCP Server](https://badge.mcpx.dev?type=server 'MCP Server')
+![PyPI - Downloads](https://img.shields.io/pypi/dd/legal-peripherals-mcp)
+![GitHub Repo stars](https://img.shields.io/github/stars/Knuckles-Team/legal-peripherals-mcp)
+![GitHub forks](https://img.shields.io/github/forks/Knuckles-Team/legal-peripherals-mcp)
+![GitHub contributors](https://img.shields.io/github/contributors/Knuckles-Team/legal-peripherals-mcp)
+![PyPI - License](https://img.shields.io/pypi/l/legal-peripherals-mcp)
+![GitHub](https://img.shields.io/github/license/Knuckles-Team/legal-peripherals-mcp)
+![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/Knuckles-Team/legal-peripherals-mcp)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/Knuckles-Team/legal-peripherals-mcp)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Knuckles-Team/legal-peripherals-mcp)
+![GitHub issues](https://img.shields.io/github/issues/Knuckles-Team/legal-peripherals-mcp)
+![GitHub top language](https://img.shields.io/github/languages/top/Knuckles-Team/legal-peripherals-mcp)
+![GitHub language count](https://img.shields.io/github/languages/count/Knuckles-Team/legal-peripherals-mcp)
+![GitHub repo size](https://img.shields.io/github/repo-size/Knuckles-Team/legal-peripherals-mcp)
+![GitHub repo file count (file type)](https://img.shields.io/github/directory-file-count/Knuckles-Team/legal-peripherals-mcp)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/legal-peripherals-mcp)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/legal-peripherals-mcp)
 
-A premium Model Context Protocol (MCP) server powered by **FastMCP** that exposes highly robust tools for automating legal operations and filing compliance. This server handles state-level Secretary of State (SOS) entities, off-hours compliant IRS Form SS-4 EIN drafting/scheduling, and corporate/LLC charter templates lookup.
-
-> **Documentation** — Installation, deployment, usage across the API and MCP
+> **Documentation** — Installation, deployment, and usage across the API, CLI, MCP,
+> and A2A agent interfaces are maintained in the
 > [official documentation](https://knuckles-team.github.io/legal-peripherals-mcp/).
 
 ---
 
-## 🗺️ System Architecture
+## Overview
+
+A premium Model Context Protocol (MCP) server powered by **FastMCP** that exposes highly robust tools for automating legal operations and filing compliance. This server handles state-level Secretary of State (SOS) entities, off-hours compliant IRS Form SS-4 EIN drafting/scheduling, and corporate/LLC charter templates lookup.
+
+---
+
+## System Architecture
 
 The following diagram illustrates how the `Legal Peripherals MCP Server` coordinates between external LLM clients, state Secretary of State (SOS) databases, the IRS Form SS-4 preparation engine, and local template resources:
 
@@ -55,7 +74,9 @@ graph TD
 
 ---
 
-## 🛠️ MCP Tools Mapping
+## MCP
+
+### MCP Tools Mapping
 
 The server registers the following standard FastMCP tools, which can be dynamically enabled or disabled via environment toggles:
 
@@ -91,7 +112,7 @@ _6 action-routed tool(s) · 2 verbose 1:1 tool(s). Each is enabled unless its `<
 
 ---
 
-### MCP Configuration Examples
+#### MCP Configuration Examples
 
 <!-- MCP-CONFIG-EXAMPLES:START -->
 
@@ -231,26 +252,7 @@ the detailed transport contract.
   `MCP_ALLOWED_HOSTS` in `AgentConfig`.
 <!-- END GENERATED: additional-deployment-options -->
 
-<!-- BEGIN scion-sdk-deployment (generated; do not edit between markers) -->
-
-## Deploy with `scion-sdk-deployment`
-
-Provision this package with the consolidated **`scion-sdk-deployment`**
-workflow. It selects an installed-package, editable-source, or immutable-container
-path; records only runtime secret and TLS-profile references in `AgentConfig`; and
-runs doctor, registration, policy, observability, and rollback gates. Ask your agent
-to **"deploy `legal-peripherals-mcp` with scion-sdk-deployment"**.
-
-| Install mode | Command |
-|------|---------|
-| Installed package | `uv tool install "legal-peripherals-mcp[mcp]"`, then run `legal-peripherals-mcp` |
-| Immutable container | deploy `registry.example.invalid/legal-peripherals-mcp@sha256:<digest>` through the operator-selected orchestrator |
-
-The repository embeds no deployment profile, credential value, certificate path, or
-environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
-configured secret provider.
-
-<!-- END scion-sdk-deployment -->
+---
 
 ## Environment Variables
 
@@ -306,6 +308,63 @@ configured secret provider.
 
 _15 package + 24 inherited variable(s). Auto-generated from `.env.example` + the shared scion-sdk set — do not edit._
 <!-- ENV-VARS-TABLE:END -->
+
+---
+
+## Installation
+
+```bash
+uv pip install "legal-peripherals-mcp[mcp]"
+uv pip install "legal-peripherals-mcp[all]"
+```
+
+---
+
+## Documentation
+
+The complete documentation is published as the
+[official documentation site](https://knuckles-team.github.io/legal-peripherals-mcp/) and is
+the recommended reference for installation, deployment, and day-to-day operation.
+
+---
+
+## Repository Owners
+
+<img width="100%" height="180em" src="https://github-readme-stats.vercel.app/api?username=example&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true" />
+
+![GitHub followers](https://img.shields.io/github/followers/example)
+![GitHub User's stars](https://img.shields.io/github/stars/example)
+
+---
+
+## Contribute
+
+Contributions are welcome! Please ensure code quality by running local checks before submitting pull requests:
+- Format code using `ruff format .`
+- Lint code using `ruff check .`
+- Validate type-safety with `mypy .`
+- Run test suites using `pytest`
+
+<!-- BEGIN scion-sdk-deployment (generated; do not edit between markers) -->
+
+## Deploy with `scion-sdk-deployment`
+
+Provision this package with the consolidated **`scion-sdk-deployment`**
+workflow. It selects an installed-package, editable-source, or immutable-container
+path; records only runtime secret and TLS-profile references in `AgentConfig`; and
+runs doctor, registration, policy, observability, and rollback gates. Ask your agent
+to **"deploy `legal-peripherals-mcp` with scion-sdk-deployment"**.
+
+| Install mode | Command |
+|------|---------|
+| Installed package | `uv tool install "legal-peripherals-mcp[mcp]"`, then run `legal-peripherals-mcp` |
+| Immutable container | deploy `registry.example.invalid/legal-peripherals-mcp@sha256:<digest>` through the operator-selected orchestrator |
+
+The repository embeds no deployment profile, credential value, certificate path, or
+environment-specific endpoint. Supply those at runtime through `AgentConfig` and the
+configured secret provider.
+
+<!-- END scion-sdk-deployment -->
 
 <!-- GOVERNED-CAPABILITY:START -->
 ## Governed capability contract
